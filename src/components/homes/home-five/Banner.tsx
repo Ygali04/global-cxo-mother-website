@@ -194,8 +194,8 @@ const Banner = () => {
                     }
                     .hero-aurora-wrap {
                         min-height: 100vh !important;
-                        padding-top: 80px !important;
-                        padding-bottom: 40px !important;
+                        padding-top: 52px !important;
+                        padding-bottom: 36px !important;
                         background: transparent !important;
                     }
                     .hero-content-wrap {
@@ -309,7 +309,7 @@ const Banner = () => {
                 
                 @media (max-width: 360px) {
                     .hero-aurora-wrap {
-                        padding-top: 70px !important;
+                        padding-top: 40px !important;
                     }
                     .hero-title {
                         font-size: 24px !important;

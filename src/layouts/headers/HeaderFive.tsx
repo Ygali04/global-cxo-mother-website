@@ -54,6 +54,29 @@ const HeaderFive = () => {
          </div>
          <MobileSidebar sidebar={sidebar} setSidebar={setSidebar} />
 
+         <style jsx>{`
+            @media (max-width: 991px) {
+               .tg-header__area-seven {
+                  padding: 12px 0 !important;
+               }
+
+               .tg-header__area-seven .tgmenu__nav .logo img {
+                  height: 52px !important;
+                  width: auto !important;
+               }
+            }
+
+            @media (max-width: 480px) {
+               .tg-header__area-seven {
+                  padding: 10px 0 !important;
+               }
+
+               .tg-header__area-seven .mobile-nav-toggler {
+                  margin-left: 16px !important;
+               }
+            }
+         `}</style>
+
       </header>
    )
 }
