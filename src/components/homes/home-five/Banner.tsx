@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 
 const Banner = () => {
     return (
-        <section className="hero-section" style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
+        <section className="hero-section" style={{ minHeight: "100vh", position: "relative", overflow: "hidden", marginTop: "-90px" }}>
             {/* Mobile gradient blobs - hidden on desktop, animated on mobile */}
             <div className="mobile-blobs">
                 <div className="mobile-blob mobile-blob--1"></div>
@@ -34,27 +34,28 @@ const Banner = () => {
                                     WebkitTextFillColor: "transparent",
                                     fontWeight: 700,
                                     textTransform: "uppercase",
-                                    letterSpacing: "1.5px",
-                                    fontSize: "11px",
-                                    marginBottom: "16px",
+                                    letterSpacing: "2.5px",
+                                    fontSize: "12px",
+                                    marginBottom: "18px",
                                     display: "inline-block",
-                                    padding: "4px 12px",
-                                    borderRadius: "20px"
+                                    padding: "6px 16px",
+                                    borderRadius: "20px",
+                                    border: "1px solid rgba(10, 60, 194, 0.15)"
                                 }}>
                                     ONE GLOBAL ECOSYSTEM
                                 </span>
                                 <h1 className="hero-title" style={{ fontSize: "clamp(28px, 4vw, 48px)", lineHeight: "1.2", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "20px", marginInline: "auto", maxWidth: "800px", textTransform: "none" }}>
                                     Where CXO Conversations Turn Into <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", display: "block", marginTop: "4px" }}>Enterprise Outcomes</span>
                                 </h1>
-                                <p className="hero-desc" style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.6, marginBottom: "32px", marginInline: "auto", maxWidth: "600px" }}>
+                                <p className="hero-desc" style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "36px", marginInline: "auto", maxWidth: "600px" }}>
                                     Global CXO Circle is a CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships across a global ecosystem.
                                 </p>
                                 
                                 <div className="hero-btn-group">
-                                    <Link href="/apply" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "12px 28px", fontSize: "14px", background: "var(--tg-color-gradient)", color: "#fff", border: "none" }}>
+                                    <Link href="/apply" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", background: "var(--tg-color-gradient)", color: "#fff", border: "none" }}>
                                         Request Access <Arrow />
                                     </Link>
-                                    <Link href="/circles" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "12px 28px", fontSize: "14px", background: "var(--tg-color-gradient)", color: "#fff", border: "none" }}>
+                                    <Link href="/circles" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", background: "var(--tg-color-gradient)", color: "#fff", border: "none" }}>
                                         Explore Circles
                                     </Link>
                                 </div>
@@ -87,8 +88,54 @@ const Banner = () => {
                     </div>
                 </motion.div>
             </AuroraBackground>
+
+            {/* Scroll indicator */}
+            <div
+                onClick={() => {
+                    const hero = document.querySelector('.hero-section');
+                    if (hero && hero.nextElementSibling) {
+                        (hero.nextElementSibling as HTMLElement).scrollIntoView({ behavior: 'smooth' });
+                    }
+                }}
+                style={{
+                    position: "absolute",
+                    bottom: "32px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "6px",
+                    cursor: "pointer",
+                    zIndex: 10,
+                    opacity: 0.4,
+                }}
+            >
+                <span style={{
+                    fontSize: "10px",
+                    fontWeight: 500,
+                    letterSpacing: "1.5px",
+                    textTransform: "uppercase",
+                    color: "var(--tg-body-color)",
+                }}>Scroll to explore</span>
+                <div className="scroll-arrow-bounce" style={{ color: "var(--tg-body-color)" }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 5v14M19 12l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
             
             <style jsx>{`
+                .hero-section {
+                    margin-top: -90px;
+                }
+                .scroll-arrow-bounce {
+                    animation: scroll-bounce 2s ease-in-out infinite;
+                }
+                @keyframes scroll-bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(6px); }
+                }
                 .hero-btn-group {
                     display: flex;
                     justify-content: center;
@@ -134,81 +181,150 @@ const Banner = () => {
                 }
                 
                 /* Mobile Responsive Styles */
+                @media (max-width: 991px) {
+                    .hero-section {
+                        margin-top: 0 !important;
+                    }
+                }
                 @media (max-width: 768px) {
                     .hero-section {
-                        min-height: auto !important;
+                        min-height: 100vh !important;
+                        margin-top: 0 !important;
+                        background: linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #f0f2ff 100%);
                     }
                     .hero-aurora-wrap {
                         min-height: 100vh !important;
-                        padding-top: 100px;
-                        padding-bottom: 40px;
+                        padding-top: 80px !important;
+                        padding-bottom: 40px !important;
+                        background: transparent !important;
+                    }
+                    .hero-content-wrap {
+                        padding: 0 4px;
                     }
                     .hero-subtitle {
-                        font-size: 9px !important;
-                        letter-spacing: 1px !important;
-                        margin-bottom: 10px !important;
+                        font-size: 10px !important;
+                        letter-spacing: 2px !important;
+                        margin-bottom: 14px !important;
+                        padding: 5px 14px !important;
+                        border: 1px solid rgba(10, 60, 194, 0.2) !important;
+                        background: linear-gradient(90deg, #0A3CC2, #B300B9) !important;
+                        -webkit-background-clip: text !important;
+                        -webkit-text-fill-color: transparent !important;
                     }
                     .hero-title {
-                        font-size: 24px !important;
+                        font-size: 30px !important;
                         text-align: center !important;
                         max-width: 100% !important;
-                        line-height: 1.25 !important;
-                        margin-bottom: 14px !important;
+                        line-height: 1.2 !important;
+                        margin-bottom: 16px !important;
+                        color: #0f172a !important;
+                        -webkit-text-fill-color: #0f172a !important;
+                    }
+                    .hero-title span {
+                        font-size: 32px !important;
+                        margin-top: 2px !important;
+                        -webkit-text-fill-color: transparent !important;
                     }
                     .hero-desc {
-                        font-size: 14px !important;
-                        margin-bottom: 24px !important;
+                        font-size: 15px !important;
+                        margin-bottom: 28px !important;
                         text-align: center !important;
+                        color: #475569 !important;
+                        line-height: 1.65 !important;
+                        padding: 0 8px;
                     }
                     .hero-btn-group {
                         flex-direction: row !important;
                         flex-wrap: nowrap;
                         width: auto;
-                        gap: 10px;
+                        gap: 12px;
                         justify-content: center;
                     }
                     .hero-btn-main {
                         width: auto !important;
-                        padding: 10px 20px !important;
+                        padding: 12px 22px !important;
                         font-size: 13px !important;
                         white-space: nowrap;
+                        border-radius: 10px !important;
+                        box-shadow: 0 4px 15px rgba(10, 60, 194, 0.25) !important;
                     }
                     .stats-band {
-                        padding: 16px 12px;
+                        padding: 18px 16px;
                         gap: 0;
                         flex-wrap: nowrap !important;
+                        background: rgba(255,255,255,0.85) !important;
+                        border: 1px solid rgba(10, 60, 194, 0.08) !important;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+                        border-radius: 14px !important;
                     }
                     .stats-item {
                         flex: 1 1 0 !important;
-                        padding: 4px 6px;
+                        padding: 4px 8px;
                         min-width: 0;
                     }
                     .stats-item h3 {
-                        font-size: 18px !important;
+                        font-size: 20px !important;
                     }
                     .stats-item span {
                         font-size: 9px !important;
+                        letter-spacing: 0.5px !important;
                     }
                     .stats-divider {
                         display: block !important;
                         height: 28px;
+                        background: rgba(0,0,0,0.06) !important;
                     }
                 }
                 
                 @media (max-width: 480px) {
+                    .hero-title {
+                        font-size: 26px !important;
+                    }
+                    .hero-title span {
+                        font-size: 28px !important;
+                    }
+                    .hero-desc {
+                        font-size: 14px !important;
+                    }
                     .hero-btn-main {
-                        padding: 10px 16px !important;
+                        padding: 11px 18px !important;
                         font-size: 12px !important;
                     }
                     .stats-band {
                         flex-wrap: wrap !important;
-                        gap: 12px 0;
+                        gap: 8px 0 !important;
+                        padding: 14px 12px !important;
                     }
                     .stats-item {
                         flex: 0 0 50% !important;
+                        padding: 6px 4px !important;
+                    }
+                    .stats-item h3 {
+                        font-size: 18px !important;
                     }
                     .stats-divider {
                         display: none !important;
+                    }
+                }
+                
+                @media (max-width: 360px) {
+                    .hero-aurora-wrap {
+                        padding-top: 70px !important;
+                    }
+                    .hero-title {
+                        font-size: 24px !important;
+                    }
+                    .hero-title span {
+                        font-size: 26px !important;
+                    }
+                    .hero-btn-group {
+                        flex-direction: column !important;
+                        gap: 10px !important;
+                    }
+                    .hero-btn-main {
+                        width: 100% !important;
+                        text-align: center;
+                        justify-content: center;
                     }
                 }
             `}</style>

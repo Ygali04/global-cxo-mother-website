@@ -49,7 +49,7 @@
     height: 100vh;
     display: flex;
     align-items: center;
-    background: #FFFFFF;
+    background: transparent;
     overflow: hidden;
 }
 
@@ -149,12 +149,12 @@
     padding: 16px 36px !important;
     font-weight: 600 !important;
     text-transform: none !important;
-    background: var(--tg-theme-primary) !important;
+    background: linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%) !important;
     font-size: 16px !important;
 }
 
 .hero-btn-main:hover {
-    background: #003ACC !important;
+    background: linear-gradient(90deg, #7B1FFF 0%, #B300B9 100%) !important;
 }
 
 @media (max-width: 1199px) {
@@ -167,36 +167,37 @@
     .hero-section {
         height: auto !important;
         min-height: 100vh;
-        padding: 100px 0 60px;
-        align-items: flex-start;
+        padding: 0;
+        align-items: center;
+        background: transparent !important;
     }
 
     .hero-content-wrap {
-        text-align: left;
+        text-align: center;
         padding: 0 10px;
     }
 
     .hero-subtitle {
-        display: none;
+        display: inline-block;
     }
 
     .hero-desc {
-        margin-left: 0;
-        margin-right: 0;
+        margin-left: auto;
+        margin-right: auto;
         max-width: 100%;
     }
 
     .hero-title {
-        text-transform: uppercase;
-        color: #0A0A0A;
-        font-weight: 900;
+        text-transform: none;
+        color: #0f172a;
+        font-weight: 800;
         font-size: 32px !important;
         letter-spacing: -0.5px;
-        line-height: 1.15;
+        line-height: 1.2;
     }
 
     .hero-title span {
-        color: #0A0A0A;
+        color: inherit;
     }
 
     .mobile-hero-image-wrap {
@@ -210,25 +211,27 @@
     .hero-btn-main {
         padding: 14px 28px !important;
         font-size: 15px !important;
+        background: linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%) !important;
     }
 }
 
 @media (max-width: 767px) {
     .hero-section {
-        padding: 80px 0 40px;
+        padding: 0;
+        background: linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #f0f2ff 100%) !important;
     }
 
     .hero-content-wrap {
-        padding: 0;
+        padding: 0 4px;
     }
 
     .hero-title {
-        font-size: 36px !important;
+        font-size: 30px !important;
     }
 
     .hero-desc {
-        font-size: 16px !important;
-        margin-bottom: 24px;
+        font-size: 15px !important;
+        margin-bottom: 28px;
     }
 
     .mobile-hero-image-wrap {
@@ -237,6 +240,7 @@
     }
 
     .hero-btn-main {
-        padding: 12px 24px !important;
+        padding: 12px 22px !important;
+        background: linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%) !important;
     }
 }

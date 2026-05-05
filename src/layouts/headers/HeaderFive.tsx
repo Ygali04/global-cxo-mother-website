@@ -21,7 +21,7 @@ const HeaderFive = () => {
 
    return (
       <header>
-         <div id="header-fixed-height"></div>
+         <div id="header-fixed-height" style={{ display: "none" }}></div>
          <div id="sticky-header" className={`tg-header__area tg-header__area-seven ${sticky ? "sticky-menu" : ""}`}>
             <div className="container custom-container">
                <div className="tgmenu__wrap">
@@ -29,7 +29,11 @@ const HeaderFive = () => {
                      <div className="tgmenu__nav-left">
                         <div className="logo">
                            <Link href="/">
-                              <img src="/cxo-circle-logo.png" alt="Global CXO Circle" style={{ height: "80px", width: "auto" }} />
+                              <img
+                                 src="/cxo-circle-logo.png"
+                                 alt="Global CXO Circle"
+                                 style={{ height: "60px", width: "auto", maxHeight: "none" }}
+                              />
                            </Link>
                         </div>
                      </div>
@@ -39,7 +43,7 @@ const HeaderFive = () => {
                      <div className="tgmenu__action tgmenu__action-seven">
                         <ul className="list-wrap">
                            <li className="header-btn">
-                              <Link href="/apply" className="tg-btn tg-btn-seven">Apply for Membership</Link>
+                              <Link href="/apply" className="tg-btn tg-btn-seven" style={{ background: "linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%)", color: "#fff", border: "none" }}>Apply for Membership</Link>
                            </li>
                         </ul>
                      </div>

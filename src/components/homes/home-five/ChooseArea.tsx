@@ -4,9 +4,9 @@ import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
 const framework_data = [
     { title: "Circle", desc: "A trusted community of executive leaders united by function and purpose.", icon: "flaticon-partner", watermark: "C" },
-    { title: "Global", desc: "A worldwide ecosystem driving impact across 40+ countries and sectors.", icon: "flaticon-target", watermark: "O" },
-    { title: "Cross-functional", desc: "Intersecting perspectives across CXO roles that create aligned outcomes.", icon: "flaticon-statistics", watermark: "X" },
-    { title: "Connection", desc: "Entry points that unify individual circles into one cohesive ecosystem.", icon: "flaticon-handshake", watermark: "●" },
+    { title: "Global", desc: "A worldwide ecosystem driving impact across 40+ countries and sectors.", icon: "flaticon-target", watermark: "X" },
+    { title: "Cross-functional", desc: "Intersecting perspectives across CXO roles that create aligned outcomes.", icon: "flaticon-statistics", watermark: "O" },
+    { title: "Connection", desc: "Entry points that unify individual circles into one cohesive ecosystem.", icon: "flaticon-handshake", watermark: "." },
 ];
 
 const ChooseArea = () => {
@@ -83,9 +83,9 @@ const ChooseArea = () => {
                                         }}>
                                             <div style={{
                                                 position: "absolute",
-                                                top: item.watermark === "●" ? "-20px" : "-10px",
-                                                right: item.watermark === "●" ? "-20px" : "10px",
-                                                fontSize: item.watermark === "●" ? "140px" : "120px",
+                                                top: item.watermark === "." ? "-40px" : "-10px",
+                                                right: item.watermark === "." ? "10px" : "10px",
+                                                fontSize: item.watermark === "." ? "180px" : "120px",
                                                 fontWeight: 800,
                                                 lineHeight: 1,
                                                 color: "var(--tg-theme-magenta)",

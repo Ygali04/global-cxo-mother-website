@@ -54,8 +54,8 @@ const FooterThree = () => {
                <div className="col-lg-2 col-md-6 col-6">
                   <h4 style={{ fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.9)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "1px" }}>Legal</h4>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-                     <li><Link href="/privacy" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }} className="footer-link">Privacy Policy</Link></li>
-                     <li><Link href="/terms" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }} className="footer-link">Terms of Service</Link></li>
+                     <li><Link href="/privacy-policy" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }} className="footer-link">Privacy Policy</Link></li>
+                     <li><Link href="/terms-of-service" style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none" }} className="footer-link">Terms of Service</Link></li>
                   </ul>
                </div>
             </div>

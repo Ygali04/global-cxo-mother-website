@@ -62,8 +62,13 @@
 }
 
 @media (max-width: 768px) {
+    .aurora-bg-container {
+        background-color: transparent !important;
+        background: transparent !important;
+    }
+
     .aurora-bg-overflow {
-        display: none;
+        display: none !important;
     }
 }
 
@@ -85,16 +90,16 @@
     .mobile-blob {
         position: absolute;
         border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.4;
+        filter: blur(90px);
+        opacity: 0.18;
         will-change: transform;
     }
 
     .mobile-blob--1 {
         width: 280px;
         height: 280px;
-        background: radial-gradient(circle, #0A3CC2 0%, transparent 70%);
-        top: -5%;
+        background: radial-gradient(circle, #1d4ed8 0%, transparent 70%);
+        top: 10%;
         left: -15%;
         animation: blob-float-1 12s ease-in-out infinite;
     }
@@ -102,7 +107,7 @@
     .mobile-blob--2 {
         width: 220px;
         height: 220px;
-        background: radial-gradient(circle, #7B1FFF 0%, transparent 70%);
+        background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
         top: 25%;
         right: -10%;
         animation: blob-float-2 14s ease-in-out infinite;
@@ -111,7 +116,7 @@
     .mobile-blob--3 {
         width: 200px;
         height: 200px;
-        background: radial-gradient(circle, #B300B9 0%, transparent 70%);
+        background: radial-gradient(circle, #6366f1 0%, transparent 70%);
         bottom: 10%;
         left: 5%;
         animation: blob-float-3 16s ease-in-out infinite;

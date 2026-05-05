@@ -17,8 +17,10 @@ const Brand = () => {
                     <div className="row justify-content-center text-center mb-60">
                         <div className="col-lg-8">
                             <span style={{
-                                color: "var(--tg-theme-primary)",
-                                fontWeight: 600,
+                                background: "linear-gradient(90deg, #0A3CC2, #B300B9)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                                fontWeight: 700,
                                 textTransform: "uppercase",
                                 letterSpacing: "2px",
                                 fontSize: "12px",
@@ -55,15 +57,16 @@ const Brand = () => {
                                     <div className="partner-icon" style={{
                                         width: "64px",
                                         height: "64px",
-                                        background: "rgba(0,71,255,0.08)",
-                                        color: "var(--tg-theme-primary)",
+                                        background: "linear-gradient(135deg, #0A3CC2, #B300B9)",
+                                        color: "#fff",
                                         borderRadius: "50%",
                                         display: "inline-flex",
                                         alignItems: "center",
                                         justifyContent: "center",
                                         fontSize: "32px",
                                         marginBottom: "24px",
-                                        transition: "transform 0.3s ease"
+                                        transition: "transform 0.3s ease",
+                                        boxShadow: "0 4px 16px rgba(123, 31, 255, 0.2)"
                                     }}>
                                         <i className={item.icon}></i>
                                     </div>
@@ -83,15 +86,17 @@ const Brand = () => {
                     <div className="text-center mt-5">
                         <Link href="/apply" style={{
                             display: "inline-block",
-                            border: "2px solid var(--tg-theme-primary)",
-                            color: "var(--tg-theme-primary)",
-                            padding: "14px 32px",
-                            borderRadius: "8px",
+                            background: "linear-gradient(90deg, #0A3CC2, #B300B9)",
+                            color: "#fff",
+                            padding: "16px 36px",
+                            borderRadius: "100px",
                             fontWeight: 700,
                             fontSize: "15px",
                             textDecoration: "none",
                             transition: "all 0.3s ease",
-                            marginBottom: "16px"
+                            marginBottom: "16px",
+                            border: "none",
+                            boxShadow: "0 4px 20px rgba(10, 60, 194, 0.25)"
                         }} className="partner-cta-btn">
                             Become a Partner <span>→</span>
                         </Link>
@@ -111,8 +116,10 @@ const Brand = () => {
                     transform: scale(1.1);
                 }
                 .partner-cta-btn:hover {
-                    background: var(--tg-theme-primary);
+                    background: linear-gradient(90deg, #7B1FFF, #B300B9) !important;
                     color: #fff !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 24px rgba(123, 31, 255, 0.3) !important;
                 }
             `}</style>
         </section>
