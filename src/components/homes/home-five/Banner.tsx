@@ -369,16 +369,22 @@ const Banner = () => {
                     .hero-content-wrap {
                         padding: 0 6px;
                     }
-                    .hero-subtitle {
+                     .hero-subtitle {
                         font-size: 10px !important;
                         letter-spacing: 2px !important;
                         margin-bottom: 14px !important;
                         padding: 5px 14px !important;
                         border: 1px solid rgba(10, 60, 194, 0.2) !important;
-                        background: var(--tg-color-gradient) !important;
-                        -webkit-background-clip: text !important;
-                        -webkit-text-fill-color: transparent !important;
-                    }
+                        color: #0A3CC2 !important; /* Fallback */
+                     }
+                     @supports (background-clip: text) or (-webkit-background-clip: text) {
+                        .hero-subtitle {
+                           background: var(--tg-color-gradient) !important;
+                           -webkit-background-clip: text !important;
+                           background-clip: text !important;
+                           -webkit-text-fill-color: transparent !important;
+                        }
+                     }
                     .hero-title {
                         font-size: 30px !important;
                         text-align: center !important;
@@ -386,13 +392,15 @@ const Banner = () => {
                         line-height: 1.2 !important;
                         margin-bottom: 16px !important;
                         color: #0f172a !important;
-                        -webkit-text-fill-color: #0f172a !important;
-                    }
-                    .hero-title span {
-                        font-size: 32px !important;
+                     }
+                     .hero-title .hero-title-gradient {
+                        display: inline-block;
                         margin-top: 2px !important;
+                        background: var(--tg-color-gradient) !important;
+                        -webkit-background-clip: text !important;
+                        background-clip: text !important;
                         -webkit-text-fill-color: transparent !important;
-                    }
+                     }
                     .hero-title-line-one,
                     .hero-title-line-two {
                         white-space: normal;
@@ -453,12 +461,12 @@ const Banner = () => {
                         padding-top: 42px !important;
                         padding-bottom: 28px !important;
                     }
-                    .hero-title {
+                     .hero-title {
                         font-size: 26px !important;
-                    }
-                    .hero-title span {
+                     }
+                     .hero-title .hero-title-gradient {
                         font-size: 28px !important;
-                    }
+                     }
                     .hero-desc {
                         font-size: 14px !important;
                     }
@@ -487,12 +495,12 @@ const Banner = () => {
                     .hero-aurora-wrap {
                         padding-top: 36px !important;
                     }
-                    .hero-title {
+                     .hero-title {
                         font-size: 24px !important;
-                    }
-                    .hero-title span {
+                     }
+                     .hero-title .hero-title-gradient {
                         font-size: 26px !important;
-                    }
+                     }
                     .hero-btn-group {
                         flex-direction: column !important;
                         gap: 10px !important;
