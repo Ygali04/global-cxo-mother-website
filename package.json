@@ -1,0 +1,56 @@
+{
+  "name": "100exnextgen",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
+    "@reduxjs/toolkit": "^2.9.0",
+    "bootstrap": "^5.3.8",
+    "circletype": "^2.3.0",
+    "framer-motion": "^12.38.0",
+    "next": "^16.2.1",
+    "nodemailer": "^7.0.6",
+    "react": "19.1.0",
+    "react-countup": "^6.5.3",
+    "react-dom": "19.1.0",
+    "react-fast-marquee": "^1.6.5",
+    "react-intersection-observer": "^9.16.0",
+    "react-paginate": "^8.3.0",
+    "react-player": "^3.3.2",
+    "react-range": "^1.10.0",
+    "react-redux": "^9.2.0",
+    "react-responsive-modal": "^7.0.0",
+    "react-simple-star-rating": "^5.1.7",
+    "react-toastify": "^11.0.5",
+    "react-use": "^17.6.0",
+    "sass": "^1.92.0",
+    "swiper": "^11.2.10",
+    "tailwind-merge": "^3.5.0",
+    "vivus": "^0.4.6",
+    "yet-another-react-lightbox": "^3.25.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/nodemailer": "^7.0.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/vivus": "^0.4.7",
+    "eslint": "^9",
+    "eslint-config-next": "^16.2.1",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom",
+    "circletype": {
+      "core-js": "^3.0.0"
+    }
+  }
+}
