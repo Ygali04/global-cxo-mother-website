@@ -9,7 +9,7 @@
 .tg-btn {
     user-select: none;
     -moz-user-select: none;
-    background: var(--tg-theme-primary) none repeat scroll 0 0;
+    background: var(--tg-color-gradient) none repeat scroll 0 0;
     color: var(--tg-color-white-default);
     cursor: pointer;
     display: inline-flex;
@@ -59,7 +59,7 @@
         height: 200%;
         top: 110%;
         left: 50%;
-        background: var(--tg-theme-secondary);
+        background: var(--tg-color-gradient);
         -webkit-transform: translateX(-50%);
         -moz-transform: translateX(-50%);
         -ms-transform: translateX(-50%);
@@ -74,9 +74,9 @@
     }
     &:hover,
     &:focus-visible {
-        background: var(--tg-theme-primary);
+        background: var(--tg-color-gradient);
         color: var(--tg-color-white-default);
-        border-color: var(--tg-theme-primary);
+        border-color: transparent;
         & svg {
             & path {
                 &:nth-of-type(1) {
@@ -189,7 +189,7 @@
 
 
 .tg-btn-six {
-    background: var(--tg-theme-primary);
+    background: var(--tg-color-gradient);
     border: none;
     gap: 40px;
     padding: 18px 24px;
@@ -211,6 +211,8 @@
 
 .tg-btn-seven {
     @include border-radius(4px 12px);
+    background: var(--tg-color-gradient);
+    color: var(--tg-color-white-default);
 }
 
 .tg-btn-eight {

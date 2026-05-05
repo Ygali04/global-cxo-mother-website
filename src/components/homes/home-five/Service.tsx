@@ -1,16 +1,17 @@
 "use client"
 import Link from "next/link"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
+import Image from "next/image"
 
 const Service = () => {
    const circles = [
-      { id: 1, title: "Global CIO Circle", desc: "Chief Information Officers", icon: "flaticon-database" },
-      { id: 2, title: "Global CTO Circle", desc: "Chief Technology Officers", icon: "flaticon-mobile-app" },
-      { id: 3, title: "Global CISO Circle", desc: "Chief Information Security Officers", icon: "flaticon-protection" },
-      { id: 4, title: "Global CFO Circle", desc: "Chief Financial Officers", icon: "flaticon-calculator" },
-      { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers", icon: "flaticon-growth" },
-      { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers", icon: "flaticon-briefcase" },
-      { id: 7, title: "Global Founder Circle", desc: "Founders & Entrepreneurs", icon: "flaticon-startup" },
+      { id: 1, title: "Global CIO Circle", desc: "Chief Information Officers", logo: "/logos/cio.png", badge: "CIO" },
+      { id: 2, title: "Global CTO Circle", desc: "Chief Technology Officers", logo: "/logos/cto.png", badge: "CTO" },
+      { id: 3, title: "Global CISO Circle", desc: "Chief Information Security Officers", logo: "/logos/ciso.png", badge: "CISO" },
+      { id: 4, title: "Global CFO Circle", desc: "Chief Financial Officers", logo: "/logos/cfo.png", badge: "CFO" },
+      { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers", logo: "/logos/cro.png", badge: "CRO" },
+      { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers", logo: "", badge: "CEO" },
+      { id: 7, title: "Global Founder Circle", desc: "Founders & Entrepreneurs", logo: "", badge: "F" },
    ];
 
    return (
@@ -40,8 +41,12 @@ const Service = () => {
                               height: "3px", background: "var(--tg-color-gradient)"
                            }} />
 
-                           <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "40px", transition: "transform 0.3s ease", display: "inline-block" }} className="icon-wrap">
-                              <i className={item.icon}></i>
+                           <div className="circle-logo-wrap">
+                              {item.logo ? (
+                                 <Image src={item.logo} alt={item.title} width={74} height={74} className="circle-logo-img" />
+                              ) : (
+                                 <div className="circle-logo-fallback">{item.badge}</div>
+                              )}
                            </div>
                            <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "var(--tg-heading-color)", lineHeight: 1.3 }}>{item.title}</h3>
                            <p style={{ fontSize: "13px", color: "var(--tg-body-color)", marginBottom: 0 }}>{item.desc}</p>
@@ -78,8 +83,41 @@ const Service = () => {
                   box-shadow: 0 12px 40px rgba(11,26,74,0.12) !important;
                   border-color: var(--tg-theme-primary) !important;
                }
-               .circle-card:hover .icon-wrap {
+               .circle-card:hover .circle-logo-wrap {
                    transform: scale(1.1);
+               }
+               .circle-logo-wrap {
+                  margin-bottom: 18px;
+                  width: 84px;
+                  height: 84px;
+                  margin-inline: auto;
+                  border-radius: 20px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(242,246,255,0.92));
+                  border: 1px solid rgba(11,26,74,0.08);
+                  box-shadow: 0 6px 24px rgba(11,26,74,0.08);
+                  transition: transform 0.3s ease;
+               }
+               .circle-logo-img {
+                  width: 74px;
+                  height: 74px;
+                  object-fit: contain;
+                  border-radius: 14px;
+               }
+               .circle-logo-fallback {
+                  width: 64px;
+                  height: 64px;
+                  border-radius: 16px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 20px;
+                  font-weight: 800;
+                  letter-spacing: 0.5px;
+                  color: #fff;
+                  background: var(--tg-color-gradient);
                }
                .cta-card:hover {
                    filter: brightness(1.1);

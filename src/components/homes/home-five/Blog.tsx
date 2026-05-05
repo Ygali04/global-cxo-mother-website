@@ -17,7 +17,7 @@ const Blog = () => {
             <AnimateOnScroll>
                <div className="row justify-content-center text-center mb-60">
                   <div className="col-lg-8">
-                     <span style={{ background: "linear-gradient(90deg, #0A3CC2, #B300B9)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "12px", display: "inline-block" }}>Events & Programs</span>
+                     <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "12px", display: "inline-block" }}>Events & Programs</span>
                      <h2 style={{ fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "16px" }}>Not Events. Curated Environments.</h2>
                      <p style={{ fontSize: "17px", color: "var(--tg-body-color)" }}>Not events. Curated environments for meaningful outcomes.</p>
                   </div>
@@ -32,7 +32,7 @@ const Blog = () => {
                            background: "#fff", borderRadius: "16px", padding: "28px", border: "1px solid var(--tg-border-1)",
                            transition: "all 0.35s ease", height: "100%", display: "flex", flexDirection: "column",
                         }}>
-                           <div style={{ width: "56px", height: "56px", background: "linear-gradient(135deg, #0A3CC2, #B300B9)", color: "#fff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", marginBottom: "20px", transition: "transform 0.3s ease", boxShadow: "0 4px 16px rgba(123, 31, 255, 0.2)" }} className="event-icon">
+                           <div style={{ width: "56px", height: "56px", background: "var(--tg-color-gradient)", color: "#fff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", marginBottom: "20px", transition: "transform 0.3s ease", boxShadow: "0 4px 16px rgba(11, 26, 74, 0.2)" }} className="event-icon">
                               <i className={item.icon}></i>
                            </div>
                            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>{item.title}</h3>
@@ -54,7 +54,7 @@ const Blog = () => {
                            background: "#fff", borderRadius: "16px", padding: "28px", border: "1px solid var(--tg-border-1)",
                            transition: "all 0.35s ease", height: "100%", display: "flex", flexDirection: "column",
                         }}>
-                           <div style={{ width: "56px", height: "56px", background: "linear-gradient(135deg, #0A3CC2, #B300B9)", color: "#fff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", marginBottom: "20px", transition: "transform 0.3s ease", boxShadow: "0 4px 16px rgba(123, 31, 255, 0.2)" }} className="event-icon">
+                           <div style={{ width: "56px", height: "56px", background: "var(--tg-color-gradient)", color: "#fff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", marginBottom: "20px", transition: "transform 0.3s ease", boxShadow: "0 4px 16px rgba(11, 26, 74, 0.2)" }} className="event-icon">
                               <i className={item.icon}></i>
                            </div>
                            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>{item.title}</h3>

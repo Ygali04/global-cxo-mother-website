@@ -17,7 +17,7 @@ const Brand = () => {
                     <div className="row justify-content-center text-center mb-60">
                         <div className="col-lg-8">
                             <span style={{
-                                background: "linear-gradient(90deg, #0A3CC2, #B300B9)",
+                                background: "var(--tg-color-gradient)",
                                 WebkitBackgroundClip: "text",
                                 WebkitTextFillColor: "transparent",
                                 fontWeight: 700,
@@ -57,7 +57,7 @@ const Brand = () => {
                                     <div className="partner-icon" style={{
                                         width: "64px",
                                         height: "64px",
-                                        background: "linear-gradient(135deg, #0A3CC2, #B300B9)",
+                                        background: "var(--tg-color-gradient)",
                                         color: "#fff",
                                         borderRadius: "50%",
                                         display: "inline-flex",
@@ -86,7 +86,7 @@ const Brand = () => {
                     <div className="text-center mt-5">
                         <Link href="/apply" style={{
                             display: "inline-block",
-                            background: "linear-gradient(90deg, #0A3CC2, #B300B9)",
+                            background: "var(--tg-color-gradient)",
                             color: "#fff",
                             padding: "16px 36px",
                             borderRadius: "100px",
@@ -116,7 +116,7 @@ const Brand = () => {
                     transform: scale(1.1);
                 }
                 .partner-cta-btn:hover {
-                    background: linear-gradient(90deg, #7B1FFF, #B300B9) !important;
+                    background: var(--tg-color-gradient) !important;
                     color: #fff !important;
                     transform: translateY(-2px);
                     box-shadow: 0 6px 24px rgba(123, 31, 255, 0.3) !important;

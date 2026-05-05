@@ -149,12 +149,12 @@
     padding: 16px 36px !important;
     font-weight: 600 !important;
     text-transform: none !important;
-    background: linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%) !important;
+    background: var(--tg-color-gradient) !important;
     font-size: 16px !important;
 }
 
 .hero-btn-main:hover {
-    background: linear-gradient(90deg, #7B1FFF 0%, #B300B9 100%) !important;
+    background: var(--tg-color-gradient) !important;
 }
 
 @media (max-width: 1199px) {
@@ -211,7 +211,7 @@
     .hero-btn-main {
         padding: 14px 28px !important;
         font-size: 15px !important;
-        background: linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%) !important;
+        background: var(--tg-color-gradient) !important;
     }
 }
 
@@ -241,6 +241,6 @@
 
     .hero-btn-main {
         padding: 12px 22px !important;
-        background: linear-gradient(90deg, #0A3CC2 0%, #B300B9 100%) !important;
+        background: var(--tg-color-gradient) !important;
     }
 }

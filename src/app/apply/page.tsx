@@ -31,7 +31,7 @@ const ApplyPage = () => {
                         <div className="col-lg-10">
                             <div className="row align-items-center bg-white" style={{ borderRadius: "24px", overflow: "hidden", boxShadow: "0 20px 40px rgba(0,0,0,0.08)" }}>
                                 {/* Left Side: Trust Stats */}
-                                <div className="col-lg-5 p-0" style={{ height: "100%", background: "linear-gradient(160deg, #0A3CC2 0%, #4A1FB8 50%, #B300B9 100%)", color: "#fff", padding: "60px 40px" }}>
+                                <div className="col-lg-5 p-0" style={{ height: "100%", background: "var(--tg-color-gradient)", color: "#fff", padding: "60px 40px" }}>
                                     <div style={{ padding: "60px 40px" }}>
                                         <h2 style={{ fontSize: "36px", fontWeight: 700, color: "#fff", marginBottom: "24px" }}>Request Membership</h2>
                                         <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.8)", marginBottom: "40px", lineHeight: 1.6 }}>
@@ -91,7 +91,7 @@ const ApplyPage = () => {
                                                     </select>
                                                 </div>
                                                 <div className="col-12">
-                                                    <button type="submit" style={{ width: "100%", padding: "16px", background: "linear-gradient(90deg, #0A3CC2, #B300B9)", color: "#fff", border: "none", borderRadius: "100px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 20px rgba(10, 60, 194, 0.25)", transition: "all 0.3s ease" }}>
+                                                    <button type="submit" style={{ width: "100%", padding: "16px", background: "var(--tg-color-gradient)", color: "#fff", border: "none", borderRadius: "100px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 20px rgba(10, 60, 194, 0.25)", transition: "all 0.3s ease" }}>
                                                         Submit Application
                                                     </button>
                                                 </div>

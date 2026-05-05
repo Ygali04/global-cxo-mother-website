@@ -16,7 +16,7 @@ const FooterThree = () => {
 
    return (
       <footer style={{
-         backgroundColor: "#0A0D14",
+         backgroundColor: "#0B1A4A",
          paddingTop: "80px",
          color: "#fff",
       }}>
