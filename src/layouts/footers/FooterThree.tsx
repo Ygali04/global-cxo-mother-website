@@ -24,7 +24,7 @@ const FooterThree = () => {
             <div className="row gutter-y-40" style={{ paddingBottom: "60px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
                <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
                   <Link href="/" style={{ display: "inline-block", marginBottom: "16px" }}>
-                     <img src="/cxo-circle-logo.png" alt="Global CXO Circle" style={{ height: "72px", width: "auto", filter: "brightness(0) invert(1)" }} />
+                     <img src="/cxo-circle-white.png" alt="Global CXO Circle" style={{ height: "72px", width: "auto" }} />
                   </Link>
                   <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.6)", lineHeight: 1.7, maxWidth: "320px" }}>
                      The premier ecosystem for executive alignment and enterprise outcomes.
