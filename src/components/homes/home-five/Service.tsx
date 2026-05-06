@@ -9,7 +9,7 @@ const Service = () => {
       { id: 2, title: "Global CTO Circle", desc: "Chief Technology Officers", logo: "/logos/cto.png", badge: "CTO" },
       { id: 3, title: "Global CISO Circle", desc: "Chief Information Security Officers", logo: "/logos/ciso.png", badge: "CISO" },
       { id: 4, title: "Global CFO Circle", desc: "Chief Financial Officers", logo: "/logos/cfo.png", badge: "CFO" },
-      { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers", logo: "/logos/cro-v2.png", badge: "CRO" },
+      { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers", logo: "/logos/cro-v3.png", badge: "CRO" },
       { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers", logo: "/logos/ceo.png", badge: "CEO" },
       { id: 7, title: "Global Startup Circle", desc: "Founders & Entrepreneurs", logo: "/logos/startup.png", badge: "F" },
    ];
