@@ -9,9 +9,9 @@ const Service = () => {
       { id: 2, title: "Global CTO Circle", desc: "Chief Technology Officers", logo: "/logos/cto.png", badge: "CTO" },
       { id: 3, title: "Global CISO Circle", desc: "Chief Information Security Officers", logo: "/logos/ciso.png", badge: "CISO" },
       { id: 4, title: "Global CFO Circle", desc: "Chief Financial Officers", logo: "/logos/cfo.png", badge: "CFO" },
-      { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers", logo: "/logos/cro.png", badge: "CRO" },
-      { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers", logo: "", badge: "CEO" },
-      { id: 7, title: "Global Founder Circle", desc: "Founders & Entrepreneurs", logo: "", badge: "F" },
+      { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers", logo: "/logos/cro-v2.png", badge: "CRO" },
+      { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers", logo: "/logos/ceo.png", badge: "CEO" },
+      { id: 7, title: "Global Startup Circle", desc: "Founders & Entrepreneurs", logo: "/logos/startup.png", badge: "F" },
    ];
 
    return (
@@ -54,29 +54,29 @@ const Service = () => {
                      </AnimateOnScroll>
                   </div>
                ))}
-               
+
                {/* Featured CTA Card */}
                <div className="col-xl-3 col-lg-4 col-md-6">
                   <AnimateOnScroll delay={0.6}>
                      <div className="circle-card cta-card" style={{
-                          background: "var(--tg-color-gradient)", padding: "32px 24px", borderRadius: "20px",
-                          transition: "all 0.35s ease", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-                          textAlign: "center"
-                       }}>
-                          <Link href="/circles" style={{ color: "#fff", fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
-                              Explore CIO Circle <span>→</span>
-                          </Link>
+                        background: "var(--tg-color-gradient)", padding: "32px 24px", borderRadius: "20px",
+                        transition: "all 0.35s ease", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                        textAlign: "center"
+                     }}>
+                        <Link href="/circles" style={{ color: "#fff", fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
+                           Explore CIO Circle <span>→</span>
+                        </Link>
                      </div>
                   </AnimateOnScroll>
                </div>
             </div>
-            
+
             <AnimateOnScroll delay={0.3}>
                <div className="text-center mt-5">
-                   <p style={{ fontSize: "18px", background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700 }}>One Global Ecosystem. Many Leadership Circles. Infinite Impact.</p>
+                  <p style={{ fontSize: "18px", background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700 }}>One Global Ecosystem. Many Leadership Circles. Infinite Impact.</p>
                </div>
             </AnimateOnScroll>
-            
+
             <style jsx>{`
                .circle-card:hover {
                   transform: translateY(-4px);

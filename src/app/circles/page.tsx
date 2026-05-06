@@ -10,9 +10,9 @@ const circles_data = [
     { id: 2, title: "Global CTO Circle", desc: "Chief Technology Officers building scalable, future-proof product ecosystems.", logo: "/logos/cto.png", badge: "CTO", focus: ["Product Strategy", "Engineering Excellence", "Emerging Tech"] },
     { id: 3, title: "Global CISO Circle", desc: "Chief Information Security Officers safeguarding data and managing enterprise risk.", logo: "/logos/ciso.png", badge: "CISO", focus: ["Cybersecurity", "Risk Management", "Compliance"] },
     { id: 4, title: "Global CFO Circle", desc: "Chief Financial Officers orchestrating capital allocation and financial growth.", logo: "/logos/cfo.png", badge: "CFO", focus: ["Capital Allocation", "Financial Strategy", "M&A"] },
-    { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers scaling revenue engines and market expansion.", logo: "/logos/cro.png", badge: "CRO", focus: ["Revenue Operations", "Go-to-Market Strategy", "Sales Scaling"] },
-    { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers defining vision, culture, and ultimate enterprise value.", logo: "", badge: "CEO", focus: ["Corporate Strategy", "Organizational Culture", "Board Relations"] },
-    { id: 7, title: "Global Founder Circle", desc: "Founders and Entrepreneurs building the next generation of category leaders.", logo: "", badge: "F", focus: ["Venture Building", "Fundraising", "Early-Stage Scaling"] },
+    { id: 5, title: "Global CRO Circle", desc: "Chief Revenue Officers scaling revenue engines and market expansion.", logo: "/logos/cro-v2.png", badge: "CRO", focus: ["Revenue Operations", "Go-to-Market Strategy", "Sales Scaling"] },
+    { id: 6, title: "Global CEO Circle", desc: "Chief Executive Officers defining vision, culture, and ultimate enterprise value.", logo: "/logos/ceo.png", badge: "CEO", focus: ["Corporate Strategy", "Organizational Culture", "Board Relations"] },
+    { id: 7, title: "Global Startup Circle", desc: "Founders and Entrepreneurs building the next generation of category leaders.", logo: "/logos/startup.png", badge: "F", focus: ["Venture Building", "Fundraising", "Early-Stage Scaling"] },
 ];
 
 const CirclesPage = () => {
@@ -80,7 +80,7 @@ const CirclesPage = () => {
                                     <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.6, marginBottom: "24px", flex: 1 }}>
                                         {item.desc}
                                     </p>
-                                    
+
                                     <div>
                                         <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", color: "#888", marginBottom: "12px", fontWeight: 600 }}>Core Focus Areas</h4>
                                         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>

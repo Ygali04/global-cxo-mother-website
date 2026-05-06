@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 
 const Banner = () => {
     return (
-        <section className="hero-section" style={{ minHeight: "clamp(760px, 100vh, 1040px)", position: "relative", overflow: "hidden", marginTop: "-90px" }}>
+        <section className="hero-section" style={{ minHeight: "clamp(760px, 100vh, 1040px)", position: "relative", overflow: "hidden", marginTop: "0" }}>
             {/* Mobile gradient blobs - hidden on desktop, animated on mobile */}
             <div className="mobile-blobs">
                 <div className="mobile-blob mobile-blob--1"></div>
@@ -141,7 +141,7 @@ const Banner = () => {
             
             <style jsx>{`
                 .hero-section {
-                    margin-top: -90px;
+                    margin-top: 0;
                     min-height: clamp(760px, 100vh, 1040px);
                 }
                 .orbit-scene {
@@ -341,6 +341,11 @@ const Banner = () => {
                     .orbit-scene {
                         opacity: 0.48;
                     }
+                    .orbit-core {
+                        top: 52%;
+                        width: 76px;
+                        height: 76px;
+                    }
                     .orbit-ring-one {
                         --orbit-size: 340px;
                     }
@@ -358,7 +363,30 @@ const Banner = () => {
                         background: linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #f0f2ff 100%);
                     }
                     .orbit-scene {
-                        display: none;
+                        display: block;
+                        opacity: 0.3;
+                    }
+                    .orbit-core {
+                        top: 50%;
+                        width: 60px;
+                        height: 60px;
+                    }
+                    .orbit-ring {
+                        top: 50%;
+                    }
+                    .orbit-ring-one {
+                        --orbit-size: 260px;
+                    }
+                    .orbit-ring-two {
+                        --orbit-size: 360px;
+                    }
+                    .orbit-ring-three {
+                        --orbit-size: 480px;
+                    }
+                    .planet {
+                        width: 9px;
+                        height: 9px;
+                        box-shadow: 0 0 0 2px rgba(255,255,255,0.14), 0 0 14px rgba(10, 60, 194, 0.22);
                     }
                     .hero-aurora-wrap {
                         min-height: 100vh !important;

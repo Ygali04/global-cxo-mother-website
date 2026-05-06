@@ -20,20 +20,12 @@ const HeaderFive = () => {
    };
 
    return (
-      <header>
+      <header className="transparent-header">
          <div id="header-fixed-height" style={{ display: "none" }}></div>
          <div id="sticky-header" className={`tg-header__area tg-header__area-seven ${sticky ? "sticky-menu" : ""} ${sticky ? "" : "aurora-nav"}`}>
             <div className="container custom-container">
                <div
                   className="tgmenu__wrap"
-                  style={{
-                     background: sticky
-                        ? "rgba(255, 255, 255, 0.98)"
-                        : "transparent",
-                     backdropFilter: sticky ? "blur(10px)" : "none",
-                     borderBottom: sticky ? "1px solid rgba(11, 26, 74, 0.08)" : "1px solid transparent",
-                     boxShadow: sticky ? "0 8px 24px rgba(11, 26, 74, 0.06)" : "none",
-                  }}
                >
                   <nav className="tgmenu__nav">
                      <div className="logo">
@@ -80,7 +72,7 @@ const HeaderFive = () => {
             }
 
             .logo-icon img {
-               height: clamp(38px, 4.5vw, 52px) !important;
+               height: clamp(30px, 3.5vw, 40px) !important;
                width: auto !important;
                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                filter: drop-shadow(0 4px 8px rgba(0, 71, 255, 0.1));
@@ -99,7 +91,7 @@ const HeaderFive = () => {
 
             .logo-text {
                font-family: 'Plus Jakarta Sans', var(--tg-heading-font-family), sans-serif;
-               font-size: clamp(16px, 1.6vw, 24px);
+               font-size: clamp(14px, 1.4vw, 20px);
                font-weight: 700;
                letter-spacing: -0.03em;
                text-transform: uppercase;
@@ -133,13 +125,88 @@ const HeaderFive = () => {
                align-items: center;
                justify-content: space-between;
                width: 100%;
-               gap: 20px;
+               gap: clamp(10px, 1vw, 22px);
             }
 
             .tgmenu__navbar-wrap {
-               flex-grow: 1;
+               flex: 1 1 auto;
+               min-width: 0;
                display: flex;
+               justify-content: flex-end;
+            }
+
+            .tgmenu__navbar-wrap :global(.navigation) {
+               display: flex;
+               align-items: center;
                justify-content: center;
+               flex-wrap: nowrap;
+               width: 100%;
+               margin: 0 !important;
+               padding: 0;
+               gap: clamp(4px, 0.5vw, 12px);
+            }
+
+            .tgmenu__navbar-wrap :global(.navigation > li) {
+               flex: 0 0 auto;
+            }
+
+            .tgmenu__navbar-wrap :global(.navigation > li > a) {
+               padding: clamp(16px, 1.8vw, 22px) clamp(6px, 0.7vw, 12px) !important;
+               font-size: clamp(11px, 0.82vw, 13px) !important;
+            }
+
+             .logo {
+                padding: 12px 0;
+             }
+
+             :global(.transparent-header) {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                z-index: 1000;
+             }
+
+             :global(#sticky-header) {
+                background: transparent !important;
+                z-index: 1000;
+                padding: 0 !important;
+                transition: background 0.3s ease, box-shadow 0.3s ease;
+             }
+
+            :global(#sticky-header .container.custom-container),
+            :global(#sticky-header .tgmenu__wrap),
+            :global(#sticky-header .tgmenu__nav) {
+               background: transparent !important;
+            }
+
+            :global(#sticky-header .tgmenu__wrap) {
+               border-bottom: 1px solid transparent;
+               box-shadow: none;
+               backdrop-filter: none;
+            }
+
+            :global(#sticky-header.sticky-menu) {
+               background: #ffffff !important;
+               backdrop-filter: blur(10px);
+               border-bottom: 1px solid rgba(11, 26, 74, 0.08);
+               box-shadow: 0 8px 24px rgba(11, 26, 74, 0.06);
+               z-index: 1000;
+               top: 0 !important;
+               margin-top: 0 !important;
+               padding: 0 !important;
+               animation: none !important;
+            }
+
+            :global(#sticky-header.sticky-menu .container.custom-container),
+            :global(#sticky-header.sticky-menu .tgmenu__wrap),
+            :global(#sticky-header.sticky-menu .tgmenu__nav) {
+               background: transparent !important;
+               backdrop-filter: none !important;
+            }
+
+            :global(#sticky-header .tgmenu__nav) {
+               padding: 10px 0 !important;
             }
 
             @media (max-width: 1400px) {
@@ -149,22 +216,28 @@ const HeaderFive = () => {
                .logo-text {
                   font-size: clamp(15px, 1.2vw, 19px);
                }
-               /* Prevent wrapping by shrinking menu items */
-               :global(.navigation > li > a) {
-                  padding-left: 10px !important;
-                  padding-right: 10px !important;
-                  font-size: 13px !important;
+               .logo-icon img {
+                  height: clamp(36px, 3.4vw, 48px) !important;
                }
+               .logo-tagline {
+                  display: none;
+               }
+               .tgmenu__navbar-wrap :global(.navigation > li > a) {
+                  padding-left: 8px !important;
+                  padding-right: 8px !important;
+                  font-size: 12px !important;
+               }
+                .tgmenu__action-seven :global(.tg-btn) {
+                   padding: 8px 12px !important;
+                   font-size: 11px !important;
+                }
             }
 
             @media (max-width: 1200px) {
                .tgmenu__nav {
                   gap: 10px;
                }
-               .logo-tagline {
-                  display: none;
-               }
-               :global(.navigation > li > a) {
+               .tgmenu__navbar-wrap :global(.navigation > li > a) {
                   padding-left: 8px !important;
                   padding-right: 8px !important;
                   font-size: 12px !important;
@@ -182,9 +255,9 @@ const HeaderFive = () => {
             }
 
             @media (max-width: 991px) {
-               .tg-header__area-seven {
-                  padding: 12px 0 !important;
-               }
+                .tg-header__area-seven {
+                   padding: 12px 0 !important;
+                }
                .logo-text {
                   font-size: 19px;
                   /* Ensure solid color on mobile if gradient fails */
@@ -202,9 +275,9 @@ const HeaderFive = () => {
             }
 
             @media (max-width: 480px) {
-               .tg-header__area-seven {
-                  padding: 8px 0 !important;
-               }
+                .tg-header__area-seven {
+                   padding: 10px 0 !important;
+                }
                .logo-text {
                   font-size: 16px;
                }

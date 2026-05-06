@@ -86,7 +86,7 @@ const ApplyPage = () => {
                                                         <option value="cfo">Global CFO Circle</option>
                                                         <option value="cro">Global CRO Circle</option>
                                                         <option value="ceo">Global CEO Circle</option>
-                                                        <option value="founder">Global Founder Circle</option>
+                                                        <option value="founder">Global Startup Circle</option>
                                                         <option value="partner">Partnership Inquiry</option>
                                                     </select>
                                                 </div>
