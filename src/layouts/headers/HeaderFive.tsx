@@ -133,6 +133,13 @@ const HeaderFive = () => {
                min-width: 0;
                display: flex;
                justify-content: flex-end;
+               margin-left: clamp(16px, 2vw, 34px);
+               margin-right: clamp(10px, 1.1vw, 18px);
+            }
+
+            .tgmenu__action-seven {
+               margin-left: auto;
+               flex-shrink: 0;
             }
 
             .tgmenu__navbar-wrap :global(.navigation) {
@@ -227,6 +234,10 @@ const HeaderFive = () => {
                   padding-right: 8px !important;
                   font-size: 12px !important;
                }
+               .tgmenu__navbar-wrap {
+                  margin-left: 16px;
+                  margin-right: 12px;
+               }
                 .tgmenu__action-seven :global(.tg-btn) {
                    padding: 8px 12px !important;
                    font-size: 11px !important;
@@ -237,10 +248,21 @@ const HeaderFive = () => {
                .tgmenu__nav {
                   gap: 10px;
                }
+               .logo-text {
+                  font-size: 14px;
+               }
                .tgmenu__navbar-wrap :global(.navigation > li > a) {
-                  padding-left: 8px !important;
-                  padding-right: 8px !important;
-                  font-size: 12px !important;
+                  padding-left: 6px !important;
+                  padding-right: 6px !important;
+                  font-size: 11px !important;
+               }
+               .tgmenu__navbar-wrap {
+                  margin-left: 12px;
+                  margin-right: 10px;
+               }
+               .tgmenu__action-seven :global(.tg-btn) {
+                  padding: 7px 10px !important;
+                  font-size: 10px !important;
                }
             }
 
