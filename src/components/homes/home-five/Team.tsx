@@ -121,7 +121,7 @@ const Team = () => {
                                 transition: "all 0.3s ease"
                             }}>
                                 <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "32px" }}>
-                                    <i className="flaticon-target"></i>
+                                    <i className="flaticon-idea"></i>
                                 </div>
                                 <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "24px" }}>Application Process</h3>
                                 
