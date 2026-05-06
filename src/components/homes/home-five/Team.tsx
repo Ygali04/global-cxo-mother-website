@@ -33,7 +33,7 @@ const Team = () => {
                 <div className="row">
                     {/* Column 1 - Who Can Join */}
                     <div className="col-lg-4 mb-4">
-                        <AnimateOnScroll delay={0.1} direction="left">
+                        <AnimateOnScroll delay={0.1} direction="left" className="h-100">
                             <div className="membership-card" style={{
                                 background: "#fff",
                                 borderRadius: "16px",
@@ -64,7 +64,7 @@ const Team = () => {
 
                     {/* Column 2 - What Members Get (Featured) */}
                     <div className="col-lg-4 mb-4">
-                        <AnimateOnScroll delay={0.2}>
+                        <AnimateOnScroll delay={0.2} className="h-100">
                             <div className="membership-card featured-card" style={{
                                 background: "var(--tg-color-gradient)", borderRadius: "16px", padding: "32px", boxShadow: "0 12px 40px rgba(11,26,74,0.12)",
                                 height: "100%",
@@ -110,7 +110,7 @@ const Team = () => {
 
                     {/* Column 3 - Application Process */}
                     <div className="col-lg-4 mb-4">
-                        <AnimateOnScroll delay={0.3} direction="right">
+                        <AnimateOnScroll delay={0.3} direction="right" className="h-100">
                             <div className="membership-card" style={{
                                 background: "#fff",
                                 borderRadius: "16px",
@@ -120,6 +120,9 @@ const Team = () => {
                                 border: "1px solid var(--tg-border-1)",
                                 transition: "all 0.3s ease"
                             }}>
+                                <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "32px" }}>
+                                    <i className="flaticon-target"></i>
+                                </div>
                                 <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "24px" }}>Application Process</h3>
                                 
                                 <div style={{ display: "flex", flexDirection: "column", gap: "20px", position: "relative" }}>
