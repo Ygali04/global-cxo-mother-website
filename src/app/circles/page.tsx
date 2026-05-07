@@ -1,12 +1,12 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import HeaderFive from "@/layouts/headers/HeaderFive"
 import FooterThree from "@/layouts/footers/FooterThree"
 import Link from "next/link"
 import Image from "next/image"
 
 const circles_data = [
-    { id: 1, title: "Global CIO Circle", desc: "Chief Information Officers driving digital transformation and enterprise IT strategy.", logo: "/logos/cio.png", badge: "CIO", focus: ["Digital Transformation", "IT Architecture", "Enterprise Systems"] },
+    { id: 1, title: "Global CIO Circle", desc: "Chief Information Officers driving digital transformation and enterprise IT strategy.", logo: "/logos/cio.png", badge: "CIO", focus: ["Digital Transformation", "IT Architecture", "Enterprise Systems"], href: "https://globalciocircle.com" },
     { id: 2, title: "Global CTO Circle", desc: "Chief Technology Officers building scalable, future-proof product ecosystems.", logo: "/logos/cto.png", badge: "CTO", focus: ["Product Strategy", "Engineering Excellence", "Emerging Tech"] },
     { id: 3, title: "Global CISO Circle", desc: "Chief Information Security Officers safeguarding data and managing enterprise risk.", logo: "/logos/ciso.png", badge: "CISO", focus: ["Cybersecurity", "Risk Management", "Compliance"] },
     { id: 4, title: "Global CFO Circle", desc: "Chief Financial Officers orchestrating capital allocation and financial growth.", logo: "/logos/cfo.png", badge: "CFO", focus: ["Capital Allocation", "Financial Strategy", "M&A"] },
@@ -15,7 +15,56 @@ const circles_data = [
     { id: 7, title: "Global Startup Circle", desc: "Founders and Entrepreneurs building the next generation of category leaders.", logo: "/logos/startup.png", badge: "F", focus: ["Venture Building", "Fundraising", "Early-Stage Scaling"] },
 ];
 
+const cardStyle: React.CSSProperties = {
+    background: "#fff",
+    padding: "40px",
+    borderRadius: "18px",
+    border: "1px solid var(--tg-border-1)",
+    boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
+    height: "100%",
+    transition: "all 0.3s ease",
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    overflow: "hidden",
+    cursor: "pointer",
+}
+
+function CardContent({ item }: { item: typeof circles_data[0] }) {
+    return (
+        <>
+            <div className="circle-top-accent"></div>
+            <div className="circle-logo-shell">
+                {item.logo ? (
+                    <Image src={item.logo} alt={item.title} width={90} height={90} className="circle-logo-img" />
+                ) : (
+                    <div className="circle-logo-fallback">{item.badge}</div>
+                )}
+            </div>
+            <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>
+                {item.title}
+            </h3>
+            <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.6, marginBottom: "24px", flex: 1 }}>
+                {item.desc}
+            </p>
+            <div>
+                <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", color: "#888", marginBottom: "12px", fontWeight: 600 }}>Core Focus Areas</h4>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                    {item.focus.map((focusItem, idx) => (
+                        <li key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--tg-heading-color)", marginBottom: "8px", fontWeight: 500 }}>
+                            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--tg-color-gradient)" }}></span>
+                            {focusItem}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </>
+    )
+}
+
 const CirclesPage = () => {
+    const [modalCircle, setModalCircle] = useState<string | null>(null)
+
     return (
         <>
             <HeaderFive />
@@ -53,52 +102,23 @@ const CirclesPage = () => {
                     <div className="row gutter-y-30 justify-content-center">
                         {circles_data.map((item) => (
                             <div key={item.id} className="col-lg-4 col-md-6">
-                                <div className="circle-detail-card" style={{
-                                    background: "#fff",
-                                    padding: "40px",
-                                    borderRadius: "18px",
-                                    border: "1px solid var(--tg-border-1)",
-                                    boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
-                                    height: "100%",
-                                    transition: "all 0.3s ease",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    position: "relative",
-                                    overflow: "hidden"
-                                }}>
-                                    <div className="circle-top-accent"></div>
-                                    <div className="circle-logo-shell">
-                                        {item.logo ? (
-                                            <Image src={item.logo} alt={item.title} width={90} height={90} className="circle-logo-img" />
-                                        ) : (
-                                            <div className="circle-logo-fallback">{item.badge}</div>
-                                        )}
+                                {item.href ? (
+                                    <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
+                                        <div className="circle-detail-card" style={cardStyle}>
+                                            <CardContent item={item} />
+                                        </div>
+                                    </a>
+                                ) : (
+                                    <div className="circle-detail-card" style={cardStyle} onClick={() => setModalCircle(item.title)}>
+                                        <CardContent item={item} />
                                     </div>
-                                    <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>
-                                        {item.title}
-                                    </h3>
-                                    <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.6, marginBottom: "24px", flex: 1 }}>
-                                        {item.desc}
-                                    </p>
-
-                                    <div>
-                                        <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "1px", color: "#888", marginBottom: "12px", fontWeight: 600 }}>Core Focus Areas</h4>
-                                        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                                            {item.focus.map((focusItem, idx) => (
-                                                <li key={idx} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--tg-heading-color)", marginBottom: "8px", fontWeight: 500 }}>
-                                                    <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--tg-color-gradient)" }}></span>
-                                                    {focusItem}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
+                                )}
                             </div>
                         ))}
                     </div>
 
                     <div className="text-center mt-60">
-                        <Link href="/apply" style={{
+                        <Link href="/waitlist" style={{
                             display: "inline-block",
                             background: "var(--tg-color-gradient)",
                             color: "#fff",
@@ -114,6 +134,41 @@ const CirclesPage = () => {
                         </Link>
                     </div>
                 </div>
+
+                {modalCircle && (
+                    <div onClick={() => setModalCircle(null)} style={{
+                        position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center",
+                        background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)"
+                    }}>
+                        <div onClick={(e) => e.stopPropagation()} style={{
+                            background: "#fff", borderRadius: "20px", padding: "40px 32px", maxWidth: "420px", width: "90%",
+                            textAlign: "center", boxShadow: "0 24px 48px rgba(0,0,0,0.15)"
+                        }}>
+                            <div style={{ fontSize: "48px", marginBottom: "16px" }}>🚀</div>
+                            <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>
+                                {modalCircle} is Coming Soon
+                            </h3>
+                            <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "24px" }}>
+                                Our team is building something exceptional. {modalCircle} will launch with the same world-class experience our CIO Circle members already enjoy. Join the waitlist to be the first to know.
+                            </p>
+                            <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+                                <Link href="/waitlist" style={{
+                                    background: "var(--tg-color-gradient)", color: "#fff", padding: "12px 24px", borderRadius: "10px",
+                                    fontWeight: 600, fontSize: "14px", textDecoration: "none"
+                                }}>
+                                    Join Waitlist
+                                </Link>
+                                <button onClick={() => setModalCircle(null)} style={{
+                                    background: "#f1f5f9", color: "var(--tg-heading-color)", padding: "12px 24px", borderRadius: "10px",
+                                    fontWeight: 600, fontSize: "14px", border: "none", cursor: "pointer"
+                                }}>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <style jsx>{`
                     .circle-detail-card:hover {
                         transform: translateY(-6px);

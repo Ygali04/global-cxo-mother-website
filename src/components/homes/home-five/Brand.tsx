@@ -84,7 +84,7 @@ const Brand = () => {
 
                 <AnimateOnScroll delay={0.2}>
                     <div className="text-center mt-5">
-                        <Link href="/apply" style={{
+                        <Link href="/waitlist" style={{
                             display: "inline-block",
                             background: "var(--tg-color-gradient)",
                             color: "#fff",
