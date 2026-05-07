@@ -44,5 +44,5 @@ jobs:
           port: 21
           protocol: ftps
           local-dir: ./out/
-          server-dir: ./
+          server-dir: ./globalcxocircle.com/
           security: loose
