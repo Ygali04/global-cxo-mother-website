@@ -4,7 +4,7 @@ import { useState, useRef, type ReactNode } from "react"
 import Link from "next/link"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 
-const WEB3FORMS_ACCESS_KEY = "e2f3426f-24fd-472c-b564-50bac442e030"
+const API_BASE_URL = "https://gcio-backend-production.up.railway.app/api"
 
 /* ------------------------------------------------------------------ */
 /* Motion helpers                                                      */
@@ -50,23 +50,28 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" })
     if (!canSubmit) return
     setSubmitting(true)
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch(`${API_BASE_URL}/membership-requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
           name: name.trim(),
           email: email.trim(),
           linkedin: linkedin.trim(),
+          company: "",
+          role: "",
           tier,
-          subject: `Waitlist Request from ${name.trim()} (${tier.toUpperCase()})`,
+          source: "waitlist",
         }),
       })
-      const data = (await res.json()) as { success?: boolean; message?: string }
-      if (res.ok && data.success) {
+      const contentType = res.headers.get("content-type") ?? ""
+      const parsed = contentType.includes("application/json") ? await res.json() : await res.text()
+      if (res.ok) {
         setSubmitted(true)
+      } else if (res.status === 409) {
+        setError(typeof parsed === "object" && parsed?.detail ? String(parsed.detail) : "You are already on the waitlist.")
       } else {
-        setError(data.message || "Something went wrong.")
+        setError(typeof parsed === "object" && parsed?.detail ? String(parsed.detail) : "Something went wrong.")
       }
     } catch {
       setError("Service is temporarily unavailable. Please try again shortly.")
