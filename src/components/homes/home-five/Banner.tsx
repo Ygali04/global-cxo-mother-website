@@ -66,7 +66,7 @@ const Banner = () => {
                                 </p>
                                 
                                 <div className="hero-btn-group">
-                                    <Link href="/apply" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", color: "#fff", border: "none" }}>
+                                    <Link href="/waitlist" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", color: "#fff", border: "none" }}>
                                         Request Access <Arrow />
                                     </Link>
                                     <Link href="/circles" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", color: "#fff", border: "none" }}>

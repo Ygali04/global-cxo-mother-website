@@ -89,7 +89,7 @@ const Team = () => {
                                     ))}
                                 </ul>
                                 <div style={{ marginTop: "24px" }}>
-                                    <Link href="/apply" style={{
+                                    <Link href="/waitlist" style={{
                                         display: "block",
                                         textAlign: "center",
                                         background: "#fff",
