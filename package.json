@@ -11,6 +11,7 @@
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@reduxjs/toolkit": "^2.9.0",
+    "@tailwindcss/postcss": "^4.2.4",
     "bootstrap": "^5.3.8",
     "circletype": "^2.3.0",
     "framer-motion": "^12.38.0",
@@ -32,6 +33,7 @@
     "sass": "^1.92.0",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.4",
     "vivus": "^0.4.6",
     "yet-another-react-lightbox": "^3.25.0"
   },
