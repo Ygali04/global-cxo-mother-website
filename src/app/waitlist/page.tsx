@@ -292,16 +292,16 @@ export default function WaitlistPage() {
         </FadeUp>
 
         <div className="grid gap-6 sm:grid-cols-2">
-          <FadeUp delay={0.1}>
+          <FadeUp delay={0.1} className="h-full">
             <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300">
+              className="h-full flex flex-col group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300">
               <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Advisory Circle Program</h3>
-              <p className="text-sm leading-relaxed text-gray-500 mb-5">
+              <p className="text-sm leading-relaxed text-gray-500 mb-5 flex-1">
                 Structured access to enterprise CXOs for validation, go-to-market strategy, and enterprise readiness. Build your custom advisory circle.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -312,16 +312,16 @@ export default function WaitlistPage() {
             </motion.div>
           </FadeUp>
 
-          <FadeUp delay={0.2}>
+          <FadeUp delay={0.2} className="h-full">
             <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+              className="h-full flex flex-col group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
               <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Introductions & Deal Flow</h3>
-              <p className="text-sm leading-relaxed text-gray-500 mb-5">
+              <p className="text-sm leading-relaxed text-gray-500 mb-5 flex-1">
                 CXO-endorsed warm introductions and structured deal conversion. From qualified referrals to closed enterprise contracts.
               </p>
               <div className="flex flex-wrap gap-2">
