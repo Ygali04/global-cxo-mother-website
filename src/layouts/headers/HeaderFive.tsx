@@ -50,7 +50,7 @@ const HeaderFive = () => {
                      <div className="tgmenu__action tgmenu__action-seven">
                         <ul className="list-wrap">
                            <li className="header-btn">
-                              <button type="button" className="tg-btn tg-btn-seven" style={{ border: "none" }}>Sign in</button>
+                              <Link href="/waitlist" className="tg-btn tg-btn-seven" style={{ border: "none", textDecoration: "none" }}>Sign in</Link>
                            </li>
                         </ul>
                      </div>
