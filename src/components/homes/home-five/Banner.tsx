@@ -15,6 +15,14 @@ const Banner = () => {
                 <div className="mobile-blob mobile-blob--4"></div>
             </div>
 
+            {/* Event promo card — one side of the hero, links to event details */}
+            <Link href="/events/mlc-oakland" className="hero-event-card" aria-label="Major League Cricket Season 04 Final VIP Experience — view event details">
+                <span className="hero-event-badge">Upcoming Event</span>
+                <span className="hero-event-title">Major League Cricket — Season 04 Final</span>
+                <span className="hero-event-meta">VIP Experience · 18 Jul 2026 · Oakland Coliseum</span>
+                <span className="hero-event-cta">View event details <Arrow /></span>
+            </Link>
+
             <div className="orbit-scene" aria-hidden="true">
                 <div className="orbit-core"></div>
                 <div className="orbit-ring orbit-ring-one">
@@ -150,6 +158,79 @@ const Banner = () => {
                     z-index: 1;
                     pointer-events: none;
                     opacity: 0.52;
+                }
+                .hero-event-card {
+                    position: absolute;
+                    top: 50%;
+                    right: clamp(16px, 3vw, 48px);
+                    transform: translateY(-50%);
+                    z-index: 6;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    width: clamp(240px, 22vw, 300px);
+                    padding: 20px 22px;
+                    border-radius: 16px;
+                    background: rgba(255,255,255,0.82);
+                    backdrop-filter: blur(14px);
+                    border: 1px solid rgba(10,60,194,0.14);
+                    box-shadow: 0 10px 36px rgba(11,26,74,0.14);
+                    text-decoration: none;
+                    transition: transform 0.25s ease, box-shadow 0.25s ease;
+                }
+                .hero-event-card:hover {
+                    transform: translateY(-50%) translateX(-4px);
+                    box-shadow: 0 16px 48px rgba(11,26,74,0.22);
+                }
+                .hero-event-badge {
+                    align-self: flex-start;
+                    font-size: 10px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1.5px;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    color: #fff;
+                    background: var(--tg-color-gradient);
+                }
+                .hero-event-title {
+                    font-size: 16px;
+                    font-weight: 800;
+                    line-height: 1.3;
+                    color: var(--tg-heading-color);
+                }
+                .hero-event-meta {
+                    font-size: 12px;
+                    color: var(--tg-body-color);
+                    line-height: 1.5;
+                }
+                .hero-event-cta {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 13px;
+                    font-weight: 700;
+                    margin-top: 2px;
+                    background: var(--tg-color-gradient);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                /* On narrow screens, drop it to a slim full-width banner at the top */
+                @media (max-width: 1199px) {
+                    .hero-event-card {
+                        position: static;
+                        transform: none;
+                        width: min(92%, 560px);
+                        margin: 88px auto 0;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        gap: 6px 14px;
+                        padding: 12px 16px;
+                    }
+                    .hero-event-card:hover { transform: none; }
+                    .hero-event-meta { width: 100%; }
                 }
                 .orbit-core {
                     position: absolute;
