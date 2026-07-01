@@ -3,6 +3,7 @@
 import { useState, useRef, type ReactNode } from "react"
 import Link from "next/link"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
+import HeaderFive from "@/layouts/headers/HeaderFive"
 
 const API_BASE_URL = "https://gcio-backend-production.up.railway.app/api"
 
@@ -153,21 +154,13 @@ export default function WaitlistPage() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
-      {/* ── Sticky nav ── */}
-      <motion.nav initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}
-        className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-100 bg-white/80 backdrop-blur-xl px-6 py-4 sm:px-12">
-        <Link href="/" className="flex items-center gap-3">
-          <img src="/cxo-circle-logo.png" alt="Global CXO Circle" className="h-8 w-8" />
-          <span className="text-sm font-semibold tracking-tight text-gray-900">Global CXO Circle</span>
-        </Link>
-        <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Home</Link>
-      </motion.nav>
+      <HeaderFive hideSignIn />
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* HERO                                                          */}
       {/* ══════════════════════════════════════════════════════════════ */}
       <motion.section ref={heroRef} style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative mx-auto max-w-5xl px-6 pt-24 pb-32 sm:px-12 sm:pt-32">
+        className="relative mx-auto max-w-5xl px-6 pt-[150px] pb-32 sm:px-12 sm:pt-[170px]">
         <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-gradient-to-br from-blue-100 via-indigo-50 to-transparent blur-3xl opacity-60" />
 
         <div className="relative text-center">

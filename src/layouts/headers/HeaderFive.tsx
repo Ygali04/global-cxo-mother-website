@@ -4,9 +4,10 @@ import NavMenu from "./menu/NavMenu"
 import Link from "next/link"
 import MobileSidebar from "./menu/MobileSidebar"
 import UseSticky from "@/hooks/UseSticky"
+import Arrow from "@/components/common/Arrow"
 import { useState } from "react"
 
-const HeaderFive = () => {
+const HeaderFive = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
 
    const { sticky } = UseSticky();
    const [sidebar, setSidebar] = useState<boolean>(false);
@@ -50,7 +51,11 @@ const HeaderFive = () => {
                      <div className="tgmenu__action tgmenu__action-seven">
                         <ul className="list-wrap">
                            <li className="header-btn">
-                              <Link href="/waitlist" className="tg-btn tg-btn-seven" style={{ border: "none", textDecoration: "none" }}>Sign in</Link>
+                              {hideSignIn ? (
+                                 <Link href="/" className="tg-btn tg-btn-seven" style={{ border: "none", textDecoration: "none" }}>Go Home <Arrow /></Link>
+                              ) : (
+                                 <Link href="/waitlist" className="tg-btn tg-btn-seven" style={{ border: "none", textDecoration: "none" }}>Sign in</Link>
+                              )}
                            </li>
                         </ul>
                      </div>
