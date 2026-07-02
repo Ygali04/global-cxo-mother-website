@@ -40,12 +40,17 @@ function useDownloadCounts() {
     return { counts, increment }
 }
 
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+// Locale-independent so server and client render identically (avoids hydration mismatch).
 function formatDate(iso: string) {
-    try {
-        return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
-    } catch {
-        return iso
-    }
+    const d = new Date(iso)
+    if (isNaN(d.getTime())) return iso
+    return `${MONTHS_SHORT[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`
+}
+
+// Locale-independent thousands separator (avoids hydration mismatch from toLocaleString).
+function formatCount(n: number) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
 const CalendarIcon = () => (
@@ -158,7 +163,7 @@ function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: Resou
                         <div style={{ fontSize: "13px", color: "var(--tg-body-color)", marginBottom: "6px" }}>By {item.author}</div>
                         <div style={{ display: "flex", alignItems: "center", gap: "14px", fontSize: "12.5px", color: "#8a90a0", marginBottom: "18px" }}>
                             <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><CalendarIcon /> {formatDate(item.publishedAt)}</span>
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><DownloadIcon /> {downloads.toLocaleString()} downloads</span>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><DownloadIcon /> {formatCount(downloads)} downloads</span>
                         </div>
                         <p style={{ fontSize: "14.5px", color: "var(--tg-body-color)", lineHeight: 1.65, marginBottom: "24px" }}>
                             {item.description}
@@ -339,7 +344,7 @@ const ResourcesPage = () => {
                                                     </p>
                                                     <div style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: "12px", fontSize: "11.5px", color: "#8a90a0" }}>
                                                         <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><CalendarIcon /> {formatDate(item.publishedAt)}</span>
-                                                        <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><DownloadIcon /> {downloads.toLocaleString()}</span>
+                                                        <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}><DownloadIcon /> {formatCount(downloads)}</span>
                                                     </div>
                                                 </div>
                                             </button>
