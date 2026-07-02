@@ -29,44 +29,44 @@ const menu_data: MenuItem[] = [
    {
       id: 3,
       has_dropdown: false,
-      title: "Framework",
-      link: "/#cxo-concept",
-   },
-   {
-      id: 4,
-      has_dropdown: false,
       title: "Circles",
       link: "/circles",
    },
    {
-      id: 5,
-      has_dropdown: false,
-      title: "Platform",
-      link: "/#platform",
-   },
-   {
-      id: 6,
+      id: 4,
       has_dropdown: false,
       title: "Pricing",
       link: "/pricing",
    },
    {
-      id: 7,
+      id: 5,
       has_dropdown: false,
       title: "Events",
       link: "/events",
    },
    {
+      id: 6,
+      has_dropdown: false,
+      title: "Gallery",
+      link: "/gallery",
+   },
+   {
+      id: 7,
+      has_dropdown: false,
+      title: "Resources",
+      link: "/resources",
+   },
+   {
       id: 8,
       has_dropdown: false,
-      title: "Partners",
-      link: "/#partners",
+      title: "Awards",
+      link: "/awards",
    },
    {
       id: 9,
       has_dropdown: false,
       title: "Contact",
-      link: "/#contact",
+      link: "/contact",
    },
 ];
 export default menu_data;

@@ -28,12 +28,6 @@ const MobileSidebar = ({ sidebar, setSidebar }: MobileSidebarProps) => {
                      </span>
                   </Link>
                </div>
-               <div className="tgmobile__search">
-                  <form onSubmit={(e) => e.preventDefault()}>
-                     <input type="text" placeholder="Search here..." />
-                     <button><i className="fas fa-search"></i></button>
-                  </form>
-               </div>
                <div className="tgmobile__menu-outer">
                   <MobileMenus />
                </div>

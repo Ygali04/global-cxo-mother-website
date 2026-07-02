@@ -32,18 +32,18 @@ const FooterThree = () => {
                </div>
                
                <div className="col-lg-2 col-md-3 col-6">
-                  <h4 style={{ fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.9)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "1px" }}>Platform</h4>
+                  <h4 style={{ fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.9)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "1px" }}>Explore</h4>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-                     {[{ label: "How it Works", href: "/#how-it-works" }, { label: "The Framework", href: "/#cxo-concept" }, { label: "Circles", href: "/#circles" }].map((item, i) => (
+                     {[{ label: "About Us", href: "/about-us" }, { label: "Circles", href: "/circles" }, { label: "Pricing", href: "/pricing" }, { label: "Contact", href: "/contact" }].map((item, i) => (
                         <li key={i}><Link href={item.href} onClick={(e) => handleScroll(e, item.href)} style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.3s" }} className="footer-link">{item.label}</Link></li>
                      ))}
                   </ul>
                </div>
-               
+
                <div className="col-lg-2 col-md-3 col-6">
                   <h4 style={{ fontSize: "13px", fontWeight: 700, color: "rgba(255,255,255,0.9)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "1px" }}>Ecosystem</h4>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-                     {[{ label: "Events", href: "/#events" }, { label: "Partners", href: "/#partners" }, { label: "Membership", href: "/#membership" }].map((item, i) => (
+                     {[{ label: "Events", href: "/events" }, { label: "Gallery", href: "/gallery" }, { label: "Resources", href: "/resources" }, { label: "Awards", href: "/awards" }].map((item, i) => (
                         <li key={i}><Link href={item.href} onClick={(e) => handleScroll(e, item.href)} style={{ fontSize: "14px", color: "rgba(255,255,255,0.5)", textDecoration: "none", transition: "color 0.3s" }} className="footer-link">{item.label}</Link></li>
                      ))}
                   </ul>
