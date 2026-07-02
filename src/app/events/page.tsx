@@ -1,6 +1,7 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import HeaderFive from "@/layouts/headers/HeaderFive"
 import FooterThree from "@/layouts/footers/FooterThree"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
@@ -138,9 +139,14 @@ function EventCard({ ev }: { ev: EventCardData }) {
     )
 }
 
-const EventsPage = () => {
+const EventsPageContent = () => {
+    const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
     const list = tab === "upcoming" ? upcomingEvents : pastEvents
+
+    useEffect(() => {
+        if (searchParams.get("tab") === "past") setTab("past")
+    }, [searchParams])
 
     return (
         <>
@@ -248,5 +254,11 @@ const EventsPage = () => {
         </>
     )
 }
+
+const EventsPage = () => (
+    <React.Suspense fallback={null}>
+        <EventsPageContent />
+    </React.Suspense>
+)
 
 export default EventsPage
