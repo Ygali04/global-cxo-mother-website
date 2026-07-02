@@ -7,7 +7,7 @@ const sfSpeakerPhotoPath = `${sfBasePath}/Speakers Photos`;
 const sfSponsorPath = `${sfBasePath}/Site Logos`;
 
 export const sfConferenceImages = {
-    hero: `${sfBasePath}/NEW Event Image wt Logo.png`,
+    hero: `${sfBasePath}/NEW Event Image wt Logo.webp`,
     heroMobile: `${sfBasePath}/Event Image no Logo.webp`,
     card: `${sfBasePath}/Event Image no Logo.webp`,
     banner: `${sfBasePath}/NEW Partners Banner wt Image.png`,

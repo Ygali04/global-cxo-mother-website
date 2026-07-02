@@ -7,9 +7,9 @@ const dubaiSpeakerPath = `${dubaiBasePath}/Speakers Photos & Info`;
 const dubaiSponsorPath = `${dubaiBasePath}/Partner Logos for scroll`;
 
 export const dubaiSummitImages = {
-  hero: `${dubaiBasePath}/Event Image wt Logo.png`,
-  heroMobile: `${dubaiBasePath}/Event Image no Logo.png`,
-  card: `${dubaiBasePath}/Event Image no Logo.png`,
+  hero: `${dubaiBasePath}/Event Image wt Logo.webp`,
+  heroMobile: `${dubaiBasePath}/Event Image no Logo.webp`,
+  card: `${dubaiBasePath}/Event Image no Logo.webp`,
   banner: `${dubaiBasePath}/Partners Banner wt Image.png`,
   venue: `${dubaiBasePath}/Venue 1.jpg`,
   gallery: [
