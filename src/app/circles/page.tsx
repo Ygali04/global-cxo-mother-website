@@ -36,7 +36,7 @@ function CardContent({ item }: { item: typeof circles_data[0] }) {
             <div className="circle-top-accent"></div>
             <div className="circle-logo-shell">
                 {item.logo ? (
-                    <Image src={item.logo} alt={item.title} width={90} height={90} className="circle-logo-img" />
+                    <Image src={item.logo} alt={item.title} width={90} height={90} className="circle-logo-img" style={{ width: "90px", height: "90px" }} />
                 ) : (
                     <div className="circle-logo-fallback">{item.badge}</div>
                 )}

@@ -22,7 +22,7 @@ export default function RootLayout({
   const isDev = process.env.NODE_ENV === 'development'
 
   return (
-    <html lang="en" suppressHydrationWarning={isDev}>
+    <html lang="en" suppressHydrationWarning={isDev} data-scroll-behavior="smooth">
       <head>
         <meta name="keywords" content="Global CXO Circle, executive ecosystem, CXO network, CIO circle, leadership, enterprise outcomes" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />

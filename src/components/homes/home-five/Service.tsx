@@ -44,7 +44,7 @@ const Service = () => {
                                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "var(--tg-color-gradient)" }} />
                                  <div className="circle-logo-wrap">
                                     {item.logo ? (
-                                       <Image src={item.logo} alt={item.title} width={74} height={74} className="circle-logo-img" />
+                                       <Image src={item.logo} alt={item.title} width={74} height={74} className="circle-logo-img" style={{ width: "74px", height: "74px" }} />
                                     ) : (
                                        <div className="circle-logo-fallback">{item.badge}</div>
                                     )}
@@ -64,7 +64,7 @@ const Service = () => {
                               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: "var(--tg-color-gradient)" }} />
                               <div className="circle-logo-wrap">
                                  {item.logo ? (
-                                    <Image src={item.logo} alt={item.title} width={74} height={74} className="circle-logo-img" />
+                                    <Image src={item.logo} alt={item.title} width={74} height={74} className="circle-logo-img" style={{ width: "74px", height: "74px" }} />
                                  ) : (
                                     <div className="circle-logo-fallback">{item.badge}</div>
                                  )}
