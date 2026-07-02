@@ -257,6 +257,7 @@ function AwardeeModal({ awardee, highlightsLabel, categoryLabel, onClose }: { aw
 const AwardsPage = () => {
     const [activeCategory, setActiveCategory] = useState(awardsData[0].slug)
     const [selected, setSelected] = useState<{ awardee: Awardee; highlightsLabel: string; categoryLabel: string } | null>(null)
+    const [catMenuOpen, setCatMenuOpen] = useState(false)
 
     const category = awardsData.find((c) => c.slug === activeCategory)!
 
@@ -294,19 +295,21 @@ const AwardsPage = () => {
                 {/* Category tabs + grid */}
                 <section style={{ backgroundColor: "#f8f9fa", padding: "20px 0 120px" }}>
                     <div className="container">
-                        <div className="d-flex justify-content-center flex-wrap" style={{ marginBottom: "56px" }}>
-                            <div style={{
+                        {/* Wide screens: inline pill toggle */}
+                        <div className="d-flex justify-content-center awards-toggle-pills" style={{ marginBottom: "56px" }}>
+                            <div className="awards-toggle" style={{
                                 background: "#fff", borderRadius: "100px", padding: "6px",
-                                boxShadow: "0 6px 24px rgba(11,26,74,0.08)", display: "flex", gap: "4px", flexWrap: "wrap",
+                                boxShadow: "0 6px 24px rgba(11,26,74,0.08)", display: "flex", gap: "4px",
                                 border: "1px solid var(--tg-border-1)",
                             }}>
                                 {awardsData.map((c) => (
                                     <button
                                         key={c.slug}
                                         onClick={() => setActiveCategory(c.slug)}
+                                        className="awards-toggle-btn"
                                         style={{
-                                            border: "none", cursor: "pointer", padding: "12px 26px", borderRadius: "100px",
-                                            fontWeight: 700, fontSize: "14.5px", transition: "all 0.3s ease", whiteSpace: "nowrap",
+                                            border: "none", cursor: "pointer", padding: "9px 18px", borderRadius: "100px",
+                                            fontWeight: 700, fontSize: "13px", transition: "all 0.3s ease", whiteSpace: "nowrap",
                                             background: activeCategory === c.slug ? "var(--tg-color-gradient)" : "transparent",
                                             color: activeCategory === c.slug ? "#fff" : "var(--tg-body-color)",
                                             boxShadow: activeCategory === c.slug ? "0 6px 18px rgba(10,60,194,0.28)" : "none",
@@ -316,6 +319,58 @@ const AwardsPage = () => {
                                     </button>
                                 ))}
                             </div>
+                        </div>
+
+                        {/* Phones: dropdown select — click to reveal the category list */}
+                        <div className="awards-toggle-select" style={{ position: "relative", maxWidth: "320px", margin: "0 auto 48px" }}>
+                            <button
+                                onClick={() => setCatMenuOpen((o) => !o)}
+                                aria-haspopup="listbox"
+                                aria-expanded={catMenuOpen}
+                                style={{
+                                    width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px",
+                                    background: "#fff", border: "1px solid var(--tg-border-1)", borderRadius: "12px",
+                                    padding: "13px 18px", cursor: "pointer", fontWeight: 700, fontSize: "14px",
+                                    color: "var(--tg-heading-color)", boxShadow: "0 4px 18px rgba(11,26,74,0.06)",
+                                }}
+                            >
+                                {category.label}
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                                    style={{ transform: catMenuOpen ? "rotate(180deg)" : "none", transition: "transform 0.25s ease", color: "var(--tg-theme-primary)" }}>
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </button>
+
+                            {catMenuOpen && (
+                                <>
+                                    <div onClick={() => setCatMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
+                                    <ul role="listbox" style={{
+                                        position: "absolute", top: "calc(100% + 8px)", left: 0, right: 0, zIndex: 41,
+                                        listStyle: "none", margin: 0, padding: "6px", background: "#fff",
+                                        border: "1px solid var(--tg-border-1)", borderRadius: "12px",
+                                        boxShadow: "0 14px 34px rgba(11,26,74,0.16)",
+                                    }}>
+                                        {awardsData.map((c) => {
+                                            const active = activeCategory === c.slug
+                                            return (
+                                                <li key={c.slug} role="option" aria-selected={active}>
+                                                    <button
+                                                        onClick={() => { setActiveCategory(c.slug); setCatMenuOpen(false) }}
+                                                        style={{
+                                                            width: "100%", textAlign: "left", border: "none", cursor: "pointer",
+                                                            padding: "11px 14px", borderRadius: "8px", fontWeight: 700, fontSize: "14px",
+                                                            background: active ? "var(--tg-color-gradient)" : "transparent",
+                                                            color: active ? "#fff" : "var(--tg-body-color)",
+                                                        }}
+                                                    >
+                                                        {c.label}
+                                                    </button>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </>
+                            )}
                         </div>
 
                         <AnimateOnScroll key={`head-${category.slug}`}>
@@ -471,6 +526,19 @@ const AwardsPage = () => {
                 .nominate-btn:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 12px 32px rgba(0,0,0,0.22);
+                }
+                /* Wide screens use the inline pill toggle; phones use the dropdown select
+                   (which reveals the category list on tap) so nothing overflows. */
+                .awards-toggle-select {
+                    display: none;
+                }
+                @media (max-width: 575px) {
+                    .awards-toggle-pills {
+                        display: none !important;
+                    }
+                    .awards-toggle-select {
+                        display: block;
+                    }
                 }
             `}</style>
         </>

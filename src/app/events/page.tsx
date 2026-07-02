@@ -193,8 +193,8 @@ const EventsPageContent = () => {
                                         key={t}
                                         onClick={() => setTab(t)}
                                         style={{
-                                            border: "none", cursor: "pointer", padding: "12px 30px", borderRadius: "100px",
-                                            fontWeight: 700, fontSize: "15px", transition: "all 0.3s ease", whiteSpace: "nowrap",
+                                            border: "none", cursor: "pointer", padding: "9px 22px", borderRadius: "100px",
+                                            fontWeight: 700, fontSize: "13.5px", transition: "all 0.3s ease", whiteSpace: "nowrap",
                                             background: tab === t ? "var(--tg-color-gradient)" : "transparent",
                                             color: tab === t ? "#fff" : "var(--tg-body-color)",
                                             boxShadow: tab === t ? "0 6px 18px rgba(10,60,194,0.28)" : "none",
