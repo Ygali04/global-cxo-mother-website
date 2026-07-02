@@ -10,7 +10,7 @@ export const globalInnovationSummitSpeakers: Speaker[] = [
     name: "His Excellency Santosh Jha",
     title: "High Commissioner of India to Sri Lanka",
     company: "High Commission of India, Colombo",
-    image: "https://pbs.twimg.com/profile_images/1726500893988737024/Rvsnu5ds_400x400.jpg",
+    image: "/assets/events/SriLanka/speakers/Santosh_Jha.jpg",
   },
   {
     name: "Honorable Dr. Hans Wijayasuriya",
