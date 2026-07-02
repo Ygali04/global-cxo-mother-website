@@ -165,13 +165,13 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     <div className="event-hero-content">
                       <div className="container">
                         <div style={{ maxWidth: "820px", color: "#fff" }}>
-                            <h1 style={{ fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 800, color: "#fff", lineHeight: 1.12, marginBottom: "16px" }}>
+                            <h1 className="event-hero-h1" style={{ fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 800, color: "#fff", lineHeight: 1.12, marginBottom: "16px" }}>
                                 {event.title}
                             </h1>
                             {event.tagline && (
-                                <p style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
+                                <p className="event-hero-tagline" style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
                             )}
-                            <div style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)" }}>
+                            <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)" }}>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><CalendarIcon s={20} />{event.date}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
@@ -408,10 +408,12 @@ const EventDetail = ({ slug }: { slug: string }) => {
             <FooterThree />
 
             <style jsx>{`
-                /* Hero: mobile shows the image at its natural aspect; desktop fills the screen */
-                .event-hero { height: auto; }
-                .event-hero-pic { display: block; width: 100%; line-height: 0; }
-                .event-hero-img { display: block; width: 100%; height: auto; }
+                /* Hero fills a defined tall area and crops as a cover image at every size, so the
+                   bottom-anchored title always sits well clear of the floating transparent navbar.
+                   Mobile uses a shorter fixed height; desktop fills the viewport. */
+                .event-hero { height: clamp(420px, 64vh, 560px); }
+                .event-hero-pic { position: absolute; inset: 0; height: 100%; width: 100%; line-height: 0; }
+                .event-hero-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
                 .event-hero-overlay {
                     position: absolute; inset: 0; pointer-events: none;
                     background: linear-gradient(to top, rgba(6,12,34,0.92) 0%, rgba(6,12,34,0.55) 42%, rgba(6,12,34,0) 78%);
@@ -420,11 +422,16 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     position: absolute; top: 0; left: 0; right: 0; height: 150px; pointer-events: none;
                     background: linear-gradient(to bottom, #f8f9fa 0%, rgba(248,249,250,0.6) 42%, rgba(248,249,250,0) 100%);
                 }
-                .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 42px; }
+                .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
+                /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */
+                @media (max-width: 767px) {
+                    .event-hero-h1 { font-size: 27px !important; margin-bottom: 10px !important; }
+                    .event-hero-tagline { font-size: 14px !important; margin-bottom: 12px !important; }
+                    .event-hero-meta { gap: 7px 16px !important; font-size: 13px !important; }
+                    .event-hero-meta :global(svg) { width: 16px; height: 16px; }
+                }
                 @media (min-width: 992px) {
                     .event-hero { height: 100vh; }
-                    .event-hero-pic { position: absolute; inset: 0; height: 100%; }
-                    .event-hero-img { height: 100%; object-fit: cover; object-position: center; }
                     .event-hero-content { padding-bottom: 64px; }
                 }
                 .detail-hl-card:hover, .detail-speaker-card:hover {
