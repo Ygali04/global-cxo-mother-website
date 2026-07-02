@@ -64,11 +64,11 @@ const DownloadIcon = () => (
     </svg>
 )
 
-const labelStyle: CSSProperties = { display: "block", fontSize: "12.5px", fontWeight: 600, color: "var(--tg-heading-color)", marginBottom: "5px" }
+const labelStyle: CSSProperties = { display: "block", fontSize: "11.5px", fontWeight: 600, color: "var(--tg-heading-color)", marginBottom: "3px" }
 const inputStyle: CSSProperties = {
-    width: "100%", padding: "12px 14px", borderRadius: "10px", border: "1px solid var(--tg-border-1)",
-    background: "#fff", fontSize: "14px", color: "var(--tg-heading-color)",
-    boxShadow: "0 2px 8px rgba(11,26,74,0.04)", transition: "all 0.3s ease",
+    width: "100%", height: "40px", padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--tg-border-1)",
+    background: "#fff", fontSize: "13.5px", color: "var(--tg-heading-color)",
+    boxShadow: "none", transition: "all 0.3s ease",
 }
 const errorStyle: CSSProperties = { borderColor: "#DC2626", boxShadow: "0 0 0 3px rgba(220,38,38,0.1)" }
 const Required = () => <span style={{ color: "#DC2626" }}> *</span>
@@ -79,7 +79,7 @@ const emptyForm: FormState = { firstName: "", lastName: "", company: "", occupat
 const LINKEDIN_RE = /^(https?:\/\/(www\.)?linkedin\.com\/(in|company)\/[^\s/?#]+\/?|https?:\/\/lnkd\.in\/[^\s/?#]+)$/
 const GMAIL_RE = /@(gmail\.com|googlemail\.com)$/i
 
-function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: ResourceItem; downloads: number; onClose: () => void; onDownloaded: () => void }) {
+function ResourceModal({ item, onClose, onDownloaded }: { item: ResourceItem; onClose: () => void; onDownloaded: () => void }) {
     const [form, setForm] = useState<FormState>(emptyForm)
     const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof FormState, boolean>>>({})
     const [consent, setConsent] = useState(false)
@@ -133,7 +133,7 @@ function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: Resou
             background: "rgba(11,26,74,0.6)", backdropFilter: "blur(5px)", padding: "24px",
         }}>
             <div onClick={(e) => e.stopPropagation()} className="resource-modal" style={{
-                background: "#fff", borderRadius: "20px", maxWidth: "980px", width: "100%",
+                background: "#fff", borderRadius: "20px", maxWidth: "520px", width: "100%",
                 maxHeight: "90vh", overflowY: "auto", overflowX: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.3)", position: "relative",
                 boxSizing: "border-box",
             }}>
@@ -145,36 +145,17 @@ function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: Resou
                     ×
                 </button>
 
-                <div className="resource-modal-body" style={{ display: "flex", alignItems: "stretch", minWidth: 0 }}>
-                    <div className="resource-modal-cover" style={{
-                        flexShrink: 0, width: "280px", background: "#eef2fb",
-                        display: "flex", alignItems: "center", justifyContent: "center", padding: "36px 30px",
-                    }}>
-                        <div style={{ width: "100%", maxWidth: "210px", aspectRatio: "3 / 4", borderRadius: "10px", overflow: "hidden", boxShadow: "0 14px 34px rgba(11,26,74,0.18)", flexShrink: 0 }}>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={item.coverImage} alt={item.title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                        </div>
-                    </div>
-
-                    <div style={{ padding: "34px 34px 38px", flex: "1 1 0%", minWidth: 0, boxSizing: "border-box" }}>
-                        <h2 style={{ fontSize: "22px", fontWeight: 800, color: "var(--tg-heading-color)", lineHeight: 1.3, marginBottom: "10px" }}>
+                <div className="resource-modal-body" style={{ minWidth: 0 }}>
+                    <div className="resource-modal-content" style={{ padding: "30px 28px 30px", minWidth: 0, boxSizing: "border-box" }}>
+                        <h2 style={{ fontSize: "19px", fontWeight: 800, color: "var(--tg-heading-color)", lineHeight: 1.3, marginBottom: "6px" }}>
                             {item.title}
                         </h2>
-                        <div style={{ fontSize: "13px", color: "var(--tg-body-color)", marginBottom: "6px" }}>By {item.author}</div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "14px", fontSize: "12.5px", color: "#8a90a0", marginBottom: "18px" }}>
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><CalendarIcon /> {formatDate(item.publishedAt)}</span>
-                            <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}><DownloadIcon /> {formatCount(downloads)} downloads</span>
-                        </div>
-                        <p style={{ fontSize: "14.5px", color: "var(--tg-body-color)", lineHeight: 1.65, marginBottom: "24px" }}>
-                            {item.description}
-                        </p>
-
-                        <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "14px" }}>
-                            Enter your details to download
+                        <p style={{ fontSize: "12.5px", color: "var(--tg-body-color)", lineHeight: 1.55, marginBottom: "18px" }}>
+                            Enter your details below to download this resource.
                         </p>
 
                         <form onSubmit={handleSubmit} noValidate style={{ minWidth: 0 }}>
-                            <div className="resource-form-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: "12px", marginBottom: "12px" }}>
+                            <div className="resource-form-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: "10px", marginBottom: "9px" }}>
                                 <div>
                                     <label style={labelStyle}>First Name<Required /></label>
                                     <input type="text" value={form.firstName} onChange={(e) => setField("firstName", e.target.value)}
@@ -186,7 +167,7 @@ function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: Resou
                                         placeholder="Doe" style={{ ...inputStyle, ...(fieldErrors.lastName ? errorStyle : {}) }} />
                                 </div>
                             </div>
-                            <div className="resource-form-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: "12px", marginBottom: "12px" }}>
+                            <div className="resource-form-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: "10px", marginBottom: "9px" }}>
                                 <div>
                                     <label style={labelStyle}>Company<Required /></label>
                                     <input type="text" value={form.company} onChange={(e) => setField("company", e.target.value)}
@@ -198,18 +179,18 @@ function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: Resou
                                         placeholder="Chief Information Officer" style={{ ...inputStyle, ...(fieldErrors.occupation ? errorStyle : {}) }} />
                                 </div>
                             </div>
-                            <div style={{ marginBottom: "12px" }}>
+                            <div style={{ marginBottom: "9px" }}>
                                 <label style={labelStyle}>LinkedIn URL<Required /></label>
                                 <input type="text" value={form.linkedin} onChange={(e) => setField("linkedin", e.target.value)}
                                     placeholder="https://www.linkedin.com/in/your-profile" style={{ ...inputStyle, ...(fieldErrors.linkedin ? errorStyle : {}) }} />
                             </div>
-                            <div style={{ marginBottom: "16px" }}>
+                            <div style={{ marginBottom: "12px" }}>
                                 <label style={labelStyle}>Gmail Address<Required /></label>
                                 <input type="email" value={form.gmail} onChange={(e) => setField("gmail", e.target.value)}
                                     placeholder="you@gmail.com" style={{ ...inputStyle, ...(fieldErrors.gmail ? errorStyle : {}) }} />
                             </div>
 
-                            <label style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12.5px", color: "var(--tg-body-color)", cursor: "pointer", marginBottom: "18px", minWidth: 0 }}>
+                            <label style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "12px", color: "var(--tg-body-color)", cursor: "pointer", marginBottom: "14px", minWidth: 0 }}>
                                 <input type="checkbox" checked={consent}
                                     onChange={(e) => { setConsent(e.target.checked); if (consentError) setConsentError(false) }}
                                     style={{
@@ -246,16 +227,9 @@ function ResourceModal({ item, downloads, onClose, onDownloaded }: { item: Resou
                     filter: brightness(1.06);
                     box-shadow: 0 12px 28px rgba(10,60,194,0.32);
                 }
-                @media (max-width: 640px) {
-                    .resource-modal-body {
-                        flex-direction: column;
-                    }
-                    .resource-modal-cover {
-                        width: 100% !important;
-                        height: 220px !important;
-                    }
-                    .resource-form-grid {
-                        grid-template-columns: 1fr !important;
+                @media (max-width: 480px) {
+                    .resource-modal-content {
+                        padding: 24px 20px 24px !important;
                     }
                 }
             `}</style>
@@ -305,7 +279,7 @@ const ResourcesPage = () => {
                 {/* Grid */}
                 <section style={{ backgroundColor: "#f8f9fa", padding: "20px 0 120px" }}>
                     <div className="container">
-                        <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 gutter-y-30">
+                        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gutter-y-30">
                             {sorted.map((item, i) => {
                                 const downloads = DOWNLOAD_BASELINE + (counts[item.id] ?? 0)
                                 return (
@@ -361,7 +335,6 @@ const ResourcesPage = () => {
             {active && (
                 <ResourceModal
                     item={active}
-                    downloads={DOWNLOAD_BASELINE + (counts[active.id] ?? 0)}
                     onClose={() => setActive(null)}
                     onDownloaded={() => increment(active.id)}
                 />
