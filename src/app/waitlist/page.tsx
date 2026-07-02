@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useRef, type ReactNode } from "react"
+import { useState, useRef, type ReactNode, type CSSProperties } from "react"
 import Link from "next/link"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import HeaderFive from "@/layouts/headers/HeaderFive"
+import FooterThree from "@/layouts/footers/FooterThree"
 
 const API_BASE_URL = "https://gcio-backend-production.up.railway.app/api"
 
@@ -33,22 +34,45 @@ function ScaleIn({ children, delay = 0, className = "" }: { children: ReactNode;
 }
 
 /* ------------------------------------------------------------------ */
+/* Shared field styles                                                 */
+/* ------------------------------------------------------------------ */
+const labelStyle: CSSProperties = { display: "block", fontSize: "13px", fontWeight: 600, color: "var(--tg-heading-color)", marginBottom: "6px" }
+const inputStyle: CSSProperties = {
+  width: "100%", padding: "15px 18px", borderRadius: "12px", border: "1px solid var(--tg-border-1)",
+  background: "#fff", fontSize: "15px", color: "var(--tg-heading-color)",
+  boxShadow: "0 2px 10px rgba(11,26,74,0.05)", transition: "all 0.3s ease",
+}
+
+const Required = () => <span style={{ color: "#DC2626" }}> *</span>
+
+/* ------------------------------------------------------------------ */
 /* Waitlist form                                                       */
 /* ------------------------------------------------------------------ */
 function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" }) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [linkedin, setLinkedin] = useState("")
-  const [tier, setTier] = useState("cxo")
+  const [tier, setTier] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<{ name?: boolean; email?: boolean; linkedin?: boolean; tier?: boolean }>({})
 
-  const canSubmit = name.trim() && email.trim() && email.includes("@") && linkedin.trim()
+  const isHero = variant === "hero"
+
+  const validate = () => {
+    const errors: typeof fieldErrors = {}
+    if (!name.trim()) errors.name = true
+    if (!email.trim() || !email.includes("@")) errors.email = true
+    if (!linkedin.trim()) errors.linkedin = true
+    if (!tier) errors.tier = true
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!canSubmit) return
+    if (!validate()) return
     setSubmitting(true)
     try {
       const res = await fetch(`${API_BASE_URL}/membership-requests`, {
@@ -83,62 +107,78 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" })
 
   if (submitted) {
     return (
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center">
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
-          <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+        style={{ borderRadius: "16px", border: "1px solid #a7f3d0", background: "#ecfdf5", padding: "36px", textAlign: "center" }}>
+        <div style={{ margin: "0 auto 14px", display: "flex", height: "48px", width: "48px", alignItems: "center", justifyContent: "center", borderRadius: "50%", background: "#d1fae5" }}>
+          <svg style={{ height: "24px", width: "24px", color: "#059669" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900">You&apos;re on the list</h3>
-        <p className="mt-1 text-sm text-gray-500">We&apos;ll be in touch. CXO executives are prioritized.</p>
+        <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "4px" }}>You&apos;re on the list</h3>
+        <p style={{ fontSize: "14px", color: "var(--tg-body-color)", margin: 0 }}>We&apos;ll be in touch. CXO executives are prioritized.</p>
       </motion.div>
     )
   }
 
   if (error) {
     return (
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
-        <h3 className="text-lg font-semibold text-gray-900">Something went wrong</h3>
-        <p className="mt-1 text-sm text-gray-500">{error}</p>
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+        style={{ borderRadius: "16px", border: "1px solid #fde68a", background: "#fffbeb", padding: "36px", textAlign: "center" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "4px" }}>Something went wrong</h3>
+        <p style={{ fontSize: "14px", color: "var(--tg-body-color)", margin: 0 }}>{error}</p>
       </motion.div>
     )
   }
 
-  const inputClass = "w-full rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-sm"
-
-  if (variant === "hero") {
-    return (
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
-        <input type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={`${inputClass} sm:flex-1`} />
-        <input type="email" placeholder="Work email" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputClass} sm:flex-1`} />
-        <input type="url" placeholder="LinkedIn URL" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className={`${inputClass} sm:flex-1`} />
-        <select value={tier} onChange={(e) => setTier(e.target.value)} className={`${inputClass} sm:w-32`}>
-          <option value="cxo">CxO</option>
-          <option value="startup">Startup</option>
-          <option value="vc">VC</option>
-        </select>
-        <motion.button type="submit" disabled={!canSubmit || submitting} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-          className="rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 transition-colors disabled:opacity-40 whitespace-nowrap">
-          {submitting ? "..." : "Join Waitlist"}
-        </motion.button>
-      </form>
-    )
-  }
+  const errorStyle: CSSProperties = { borderColor: "#DC2626", boxShadow: "0 0 0 3px rgba(220,38,38,0.1)" }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <input type="text" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
-      <input type="email" placeholder="Work email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
-      <input type="url" placeholder="LinkedIn profile URL" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className={inputClass} />
-      <select value={tier} onChange={(e) => setTier(e.target.value)} className={inputClass}>
-        <option value="cxo">CxO Executive</option>
-        <option value="startup">Startup Founder</option>
-        <option value="vc">Venture Capital</option>
-      </select>
-      <motion.button type="submit" disabled={!canSubmit || submitting} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-        className="w-full rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 transition-colors disabled:opacity-40">
-        {submitting ? "Submitting..." : "Request Early Access"}
-      </motion.button>
+    <form onSubmit={handleSubmit} noValidate className="grid gap-3 sm:grid-cols-2">
+      <div>
+        <label style={labelStyle}>Full Name<Required /></label>
+        <input type="text" value={name}
+          onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: false })) }}
+          placeholder="John Doe" style={{ ...inputStyle, ...(fieldErrors.name ? errorStyle : {}) }} className="wl-input" />
+      </div>
+      <div>
+        <label style={labelStyle}>Work Email<Required /></label>
+        <input type="email" value={email}
+          onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: false })) }}
+          placeholder="john@company.com" style={{ ...inputStyle, ...(fieldErrors.email ? errorStyle : {}) }} className="wl-input" />
+      </div>
+      <div>
+        <label style={labelStyle}>LinkedIn Profile URL<Required /></label>
+        <input type="url" value={linkedin}
+          onChange={(e) => { setLinkedin(e.target.value); if (fieldErrors.linkedin) setFieldErrors((prev) => ({ ...prev, linkedin: false })) }}
+          placeholder="https://linkedin.com/in/yourname" style={{ ...inputStyle, ...(fieldErrors.linkedin ? errorStyle : {}) }} className="wl-input" />
+      </div>
+      <div>
+        <label style={labelStyle}>I am a...<Required /></label>
+        <select value={tier}
+          onChange={(e) => { setTier(e.target.value); if (fieldErrors.tier) setFieldErrors((prev) => ({ ...prev, tier: false })) }}
+          style={{ ...inputStyle, ...(fieldErrors.tier ? errorStyle : {}), color: tier ? "var(--tg-heading-color)" : "#9aa0ad" }} className="wl-input">
+          <option value="" disabled hidden>Select one</option>
+          <option value="cxo">CxO Executive</option>
+          <option value="startup">Startup Founder</option>
+          <option value="vc">Venture Capital</option>
+        </select>
+      </div>
+      <div className="sm:col-span-2">
+        <motion.button type="submit" disabled={submitting} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+          className="wl-submit-btn" style={{
+            width: "100%", background: "var(--tg-color-gradient)", color: "#fff", border: "none",
+            padding: "17px 24px", borderRadius: "100px", fontWeight: 700, fontSize: "15px",
+            cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.7 : 1,
+            boxShadow: "0 10px 30px rgba(10,60,194,0.2)", transition: "all 0.3s ease",
+          }}>
+          {submitting ? "Submitting..." : isHero ? "Join the Waitlist" : "Request Early Access"}
+        </motion.button>
+        {(fieldErrors.name || fieldErrors.email || fieldErrors.linkedin || fieldErrors.tier) && (
+          <p style={{ marginTop: "10px", textAlign: "center", fontSize: "13px", color: "#DC2626" }}>
+            Please fill in all required fields marked with *.
+          </p>
+        )}
+      </div>
     </form>
   )
 }
@@ -153,82 +193,94 @@ export default function WaitlistPage() {
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.97])
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <div className="overflow-x-hidden">
       <HeaderFive hideSignIn />
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* HERO                                                          */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <motion.section ref={heroRef} style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative mx-auto max-w-5xl px-6 pt-[150px] pb-32 sm:px-12 sm:pt-[170px]">
-        <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-gradient-to-br from-blue-100 via-indigo-50 to-transparent blur-3xl opacity-60" />
+      <motion.section ref={heroRef} style={{ opacity: heroOpacity, scale: heroScale, backgroundColor: "#f8f9fa", position: "relative", overflow: "hidden" }}
+        className="pt-[145px] pb-16 sm:pt-[160px]">
+        <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full blur-3xl opacity-50"
+          style={{ background: "radial-gradient(circle, rgba(10,60,194,0.14) 0%, rgba(179,0,185,0.08) 55%, transparent 80%)" }} />
 
-        <div className="relative text-center">
-          <FadeUp>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-xs font-medium text-blue-700 tracking-wide">Invite-Only Network</span>
+        <div className="container" style={{ position: "relative", zIndex: 2 }}>
+          <div className="row justify-content-center text-center">
+            <div className="col-lg-8">
+              <FadeUp>
+                <span style={{
+                  background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                  fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px",
+                  marginBottom: "12px", display: "inline-block",
+                }}>
+                  Invite-Only Network
+                </span>
+              </FadeUp>
+
+              <FadeUp delay={0.1}>
+                <h1 style={{ fontSize: "clamp(28px, 3.6vw, 42px)", fontWeight: 800, lineHeight: 1.15, color: "var(--tg-heading-color)", marginBottom: "16px" }}>
+                  From conversations
+                  <br />
+                  <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                    to enterprise outcomes
+                  </span>
+                </h1>
+              </FadeUp>
+
+              <FadeUp delay={0.2}>
+                <p style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.7, maxWidth: "560px", margin: "0 auto" }}>
+                  The CXO-led platform where enterprise technology leaders and startups
+                  build advisory relationships that convert into real deals.
+                </p>
+              </FadeUp>
             </div>
-          </FadeUp>
+          </div>
 
-          <FadeUp delay={0.1}>
-            <h1 className="text-5xl font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
-              From conversations
-              <br />
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                to enterprise outcomes
-              </span>
-            </h1>
-          </FadeUp>
-
-          <FadeUp delay={0.2}>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-gray-500">
-              The CXO-led platform where enterprise technology leaders and startups
-              build advisory relationships that convert into real deals.
-            </p>
-          </FadeUp>
-
-          <FadeUp delay={0.3}>
-            <div className="mx-auto mt-10 max-w-3xl">
-              <WaitlistForm variant="hero" />
-              <p className="mt-3 text-center text-xs text-gray-400">CXO executives are prioritized. No spam, ever.</p>
+          <div className="row justify-content-center" style={{ marginTop: "32px" }}>
+            <div className="col-lg-6">
+              <FadeUp delay={0.3}>
+                <WaitlistForm variant="hero" />
+                <p style={{ textAlign: "center", fontSize: "13px", color: "#8a90a0", marginTop: "14px" }}>CXO executives are prioritized. No spam, ever.</p>
+              </FadeUp>
             </div>
-          </FadeUp>
+          </div>
         </div>
       </motion.section>
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* STATS                                                         */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-4xl px-6 pb-32 sm:px-12">
-        <div className="flex items-center justify-center gap-6 sm:gap-12">
-          {[
-            { label: "Enterprise CXOs", value: "500+" },
-            { label: "Startups", value: "60+" },
-            { label: "Advisory Hours", value: "1,200+" },
-          ].map((stat, i) => (
-            <ScaleIn key={stat.label} delay={i * 0.1}>
-              <div className="text-center">
-                <p className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">{stat.value}</p>
-                <p className="mt-1 text-xs font-medium text-gray-400 uppercase tracking-widest">{stat.label}</p>
-              </div>
-            </ScaleIn>
-          ))}
+      <section style={{ backgroundColor: "#fff", padding: "90px 0 70px" }}>
+        <div className="container">
+          <div className="flex items-center justify-center gap-6 sm:gap-14">
+            {[
+              { label: "Enterprise CXOs", value: "500+" },
+              { label: "Startups", value: "60+" },
+              { label: "Advisory Hours", value: "1,200+" },
+            ].map((stat, i) => (
+              <ScaleIn key={stat.label} delay={i * 0.1}>
+                <div className="text-center">
+                  <p style={{ fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "4px" }}>{stat.value}</p>
+                  <p style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "#8a90a0" }}>{stat.label}</p>
+                </div>
+              </ScaleIn>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* LOGO CAROUSEL                                                 */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <section className="pb-24 overflow-hidden">
+      <section style={{ backgroundColor: "#fff", paddingBottom: "100px", overflow: "hidden" }}>
         <FadeUp>
-          <p className="text-center text-xs font-medium text-gray-400 uppercase tracking-widest mb-8">
+          <p style={{ textAlign: "center", fontSize: "12px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", color: "#8a90a0", marginBottom: "32px" }}>
             Leaders from these organizations have joined the network
           </p>
         </FadeUp>
         <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+          <div className="absolute left-0 top-0 bottom-0 w-24 z-10" style={{ background: "linear-gradient(to right, #fff, transparent)" }} />
+          <div className="absolute right-0 top-0 bottom-0 w-24 z-10" style={{ background: "linear-gradient(to left, #fff, transparent)" }} />
           <div className="flex animate-[scroll_45s_linear_infinite] hover:[animation-play-state:paused] w-max">
             {[...Array(2)].map((_, setIdx) => (
               <div key={setIdx} className="flex items-center gap-12 px-6 sm:gap-16">
@@ -275,85 +327,96 @@ export default function WaitlistPage() {
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* PROGRAMS                                                      */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-5xl px-6 pb-32 sm:px-12">
-        <FadeUp>
-          <div className="text-center mb-16">
-            <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">How It Works</p>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Two engines of enterprise value</h2>
-            <p className="mt-3 text-base text-gray-500 max-w-lg mx-auto">Structured programs that convert relationships into measurable outcomes.</p>
+      <section style={{ backgroundColor: "#f8f9fa", padding: "100px 0" }}>
+        <div className="container">
+          <FadeUp>
+            <div className="row justify-content-center text-center mb-60">
+              <div className="col-lg-7">
+                <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "12px", display: "inline-block" }}>
+                  How It Works
+                </span>
+                <h2 style={{ fontSize: "clamp(28px, 3.6vw, 40px)", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "14px" }}>
+                  Two engines of enterprise value
+                </h2>
+                <p style={{ fontSize: "16px", color: "var(--tg-body-color)", maxWidth: "500px", margin: "0 auto" }}>
+                  Structured programs that convert relationships into measurable outcomes.
+                </p>
+              </div>
+            </div>
+          </FadeUp>
+
+          <div className="row gutter-y-24 justify-content-center">
+            {[
+              {
+                title: "Advisory Circle Program",
+                desc: "Structured access to enterprise CXOs for validation, go-to-market strategy, and enterprise readiness. Build your custom advisory circle.",
+                tags: ["CXO Matching", "Session Tracking", "Hour Management"],
+                color: "#0A3CC2",
+              },
+              {
+                title: "Introductions & Deal Flow",
+                desc: "CXO-endorsed warm introductions and structured deal conversion. From qualified referrals to closed enterprise contracts.",
+                tags: ["Warm Intros", "Deal Attribution", "Boomerang AI"],
+                color: "#B300B9",
+              },
+            ].map((p, i) => (
+              <div key={p.title} className="col-lg-5">
+                <FadeUp delay={0.1 * (i + 1)} className="h-100">
+                  <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    style={{ height: "100%", display: "flex", flexDirection: "column", borderRadius: "20px", border: "1px solid var(--tg-border-1)", background: "#fff", padding: "36px", boxShadow: "0 4px 20px rgba(11,26,74,0.05)" }}>
+                    <div style={{ marginBottom: "22px", display: "inline-flex", height: "52px", width: "52px", alignItems: "center", justifyContent: "center", borderRadius: "14px", background: `${p.color}12`, color: p.color, fontSize: "24px" }}>
+                      <i className={i === 0 ? "flaticon-partner" : "flaticon-startup"}></i>
+                    </div>
+                    <h3 style={{ fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "10px" }}>{p.title}</h3>
+                    <p style={{ fontSize: "14.5px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "20px", flex: 1 }}>{p.desc}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.tags.map((tag) => (
+                        <span key={tag} style={{ borderRadius: "8px", background: "#f2f4f8", padding: "5px 12px", fontSize: "12.5px", fontWeight: 600, color: "var(--tg-body-color)" }}>{tag}</span>
+                      ))}
+                    </div>
+                  </motion.div>
+                </FadeUp>
+              </div>
+            ))}
           </div>
-        </FadeUp>
-
-        <div className="grid gap-6 sm:grid-cols-2">
-          <FadeUp delay={0.1} className="h-full">
-            <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="h-full flex flex-col group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300">
-              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Advisory Circle Program</h3>
-              <p className="text-sm leading-relaxed text-gray-500 mb-5 flex-1">
-                Structured access to enterprise CXOs for validation, go-to-market strategy, and enterprise readiness. Build your custom advisory circle.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {["CXO Matching", "Session Tracking", "Hour Management"].map((tag) => (
-                  <span key={tag} className="rounded-lg bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">{tag}</span>
-                ))}
-              </div>
-            </motion.div>
-          </FadeUp>
-
-          <FadeUp delay={0.2} className="h-full">
-            <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="h-full flex flex-col group rounded-3xl border border-gray-200 bg-white p-8 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
-              <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Introductions & Deal Flow</h3>
-              <p className="text-sm leading-relaxed text-gray-500 mb-5 flex-1">
-                CXO-endorsed warm introductions and structured deal conversion. From qualified referrals to closed enterprise contracts.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {["Warm Intros", "Deal Attribution", "Boomerang AI"].map((tag) => (
-                  <span key={tag} className="rounded-lg bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">{tag}</span>
-                ))}
-              </div>
-            </motion.div>
-          </FadeUp>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* MEMBERS                                                       */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-gray-50 py-32">
-        <div className="mx-auto max-w-5xl px-6 sm:px-12">
+      <section style={{ backgroundColor: "#fff", padding: "100px 0" }}>
+        <div className="container">
           <FadeUp>
-            <div className="text-center mb-16">
-              <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">The Network</p>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Built for enterprise leaders</h2>
+            <div className="row justify-content-center text-center mb-60">
+              <div className="col-lg-7">
+                <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "12px", display: "inline-block" }}>
+                  The Network
+                </span>
+                <h2 style={{ fontSize: "clamp(28px, 3.6vw, 40px)", fontWeight: 800, color: "var(--tg-heading-color)" }}>
+                  Built for enterprise leaders
+                </h2>
+              </div>
             </div>
           </FadeUp>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="row gutter-y-20">
             {[
-              { tier: "CXO", desc: "CIO, CTO, CISO, CRO, CFO", color: "bg-blue-500" },
-              { tier: "CXO-1", desc: "SVP, VP, Directors", color: "bg-indigo-500" },
-              { tier: "Startups", desc: "Founders & leadership teams", color: "bg-cyan-500" },
-              { tier: "Venture", desc: "VC firms & strategic partners", color: "bg-emerald-500" },
+              { tier: "CXO", desc: "CIO, CTO, CISO, CRO, CFO", color: "#0A3CC2" },
+              { tier: "CXO-1", desc: "SVP, VP, Directors", color: "#B300B9" },
+              { tier: "Startups", desc: "Founders & leadership teams", color: "#1565C0" },
+              { tier: "Venture", desc: "VC firms & strategic partners", color: "#2E7D32" },
             ].map((t, i) => (
-              <ScaleIn key={t.tier} delay={i * 0.08} className="h-full">
-                <motion.div whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                  className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className={`mb-4 h-2 w-8 rounded-full ${t.color}`} />
-                  <h3 className="text-base font-semibold text-gray-900">{t.tier}</h3>
-                  <p className="mt-1 text-sm text-gray-500">{t.desc}</p>
-                </motion.div>
-              </ScaleIn>
+              <div key={t.tier} className="col-lg-3 col-md-6">
+                <ScaleIn delay={i * 0.08} className="h-100">
+                  <motion.div whileHover={{ y: -2 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    style={{ height: "100%", borderRadius: "16px", border: "1px solid var(--tg-border-1)", background: "#fff", padding: "26px", boxShadow: "0 2px 10px rgba(11,26,74,0.04)" }}>
+                    <div style={{ marginBottom: "16px", height: "6px", width: "32px", borderRadius: "100px", background: t.color }} />
+                    <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "4px" }}>{t.tier}</h3>
+                    <p style={{ fontSize: "14px", color: "var(--tg-body-color)", margin: 0 }}>{t.desc}</p>
+                  </motion.div>
+                </ScaleIn>
+              </div>
             ))}
           </div>
         </div>
@@ -362,52 +425,70 @@ export default function WaitlistPage() {
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* QUOTE                                                         */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <section className="py-32">
-        <div className="mx-auto max-w-3xl px-6 sm:px-12">
-          <FadeUp>
-            <div className="text-center">
-              <div className="mx-auto mb-6 h-px w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
-              <p className="text-2xl font-medium leading-relaxed text-gray-700 sm:text-3xl">
-                The best enterprise deals start with a conversation between the right people.
-                <span className="text-gray-400"> We make sure that conversation happens.</span>
-              </p>
-              <div className="mx-auto mt-6 h-px w-12 bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
+      <section style={{ backgroundColor: "#f8f9fa", padding: "100px 0" }}>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-7">
+              <FadeUp>
+                <div className="text-center">
+                  <div className="mx-auto mb-6 h-px w-12" style={{ background: "var(--tg-color-gradient)" }} />
+                  <p style={{ fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 600, lineHeight: 1.6, color: "var(--tg-heading-color)" }}>
+                    The best enterprise deals start with a conversation between the right people.
+                    <span style={{ color: "#8a90a0" }}> We make sure that conversation happens.</span>
+                  </p>
+                  <div className="mx-auto mt-6 h-px w-12" style={{ background: "var(--tg-color-gradient)" }} />
+                </div>
+              </FadeUp>
             </div>
-          </FadeUp>
+          </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* BOTTOM CTA                                                    */}
       {/* ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-gray-50 py-32">
-        <div className="mx-auto max-w-xl px-6 sm:px-12">
-          <FadeUp>
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900">Ready to join?</h2>
-              <p className="mt-2 text-sm text-gray-500">CXO executives are prioritized for early access.</p>
+      <section style={{ backgroundColor: "#fff", padding: "100px 0" }}>
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-6">
+              <FadeUp>
+                <div className="text-center mb-8">
+                  <h2 style={{ fontSize: "clamp(26px, 3.2vw, 36px)", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "8px" }}>Ready to join?</h2>
+                  <p style={{ fontSize: "14.5px", color: "var(--tg-body-color)", margin: 0 }}>CXO executives are prioritized for early access.</p>
+                </div>
+              </FadeUp>
+              <FadeUp delay={0.1}>
+                <WaitlistForm />
+                <p style={{ marginTop: "20px", textAlign: "center", fontSize: "12.5px", color: "#8a90a0" }}>
+                  By joining, you agree to our <Link href="/terms-of-service" style={{ color: "var(--tg-theme-primary)", fontWeight: 600 }}>Terms</Link> and <Link href="/privacy-policy" style={{ color: "var(--tg-theme-primary)", fontWeight: 600 }}>Privacy Policy</Link>.
+                </p>
+              </FadeUp>
             </div>
-          </FadeUp>
-          <FadeUp delay={0.1}>
-            <WaitlistForm />
-            <p className="mt-4 text-center text-xs text-gray-400">
-              By joining, you agree to our <Link href="/terms-of-service" className="underline hover:text-gray-600">Terms</Link> and <Link href="/privacy-policy" className="underline hover:text-gray-600">Privacy Policy</Link>.
-            </p>
-          </FadeUp>
+          </div>
         </div>
       </section>
 
-      {/* Carousel keyframe */}
-      <style>{`
+      <FooterThree />
+
+      <style jsx global>{`
         @keyframes scroll {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
+        .wl-input::placeholder {
+          color: #9aa0ad;
+          opacity: 1;
+        }
+        .wl-input:focus {
+          outline: none;
+          border-color: var(--tg-theme-primary) !important;
+          box-shadow: 0 4px 16px rgba(10,60,194,0.12), 0 0 0 3px rgba(10,60,194,0.1) !important;
+        }
+        .wl-submit-btn:not(:disabled):hover {
+          filter: brightness(1.08);
+          box-shadow: 0 8px 24px rgba(10,60,194,0.25);
+        }
       `}</style>
-
-      <footer className="border-t border-gray-100 py-8 text-center">
-        <p className="text-xs text-gray-400">&copy; {new Date().getFullYear()} Global CXO Circle. All rights reserved.</p>
-      </footer>
     </div>
   )
 }
