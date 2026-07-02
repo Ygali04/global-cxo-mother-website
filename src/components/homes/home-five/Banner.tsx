@@ -358,7 +358,44 @@ const Banner = () => {
                 .mt-5 {
                     margin-top: clamp(0.9rem, 1.8vw, 1.6rem) !important;
                 }
-                
+
+                /* Short desktop/laptop viewports (e.g. a 13" MacBook, wide but only
+                   ~750-900px tall): scale the CONTENT down so the vertically-centered
+                   block stays compact and clears the absolute bottom-left promo card
+                   (which remains pinned/visible on wide screens). Deliberately touches
+                   only the inner elements — never .hero-section or .hero-aurora-wrap
+                   padding/min-height — so the aurora keeps filling the section and no
+                   white gap can appear. */
+                @media (min-width: 992px) and (max-height: 900px) {
+                    .hero-subtitle {
+                        margin-bottom: 16px !important;
+                    }
+                    .hero-title {
+                        font-size: clamp(30px, 4.2vw, 50px) !important;
+                        margin-bottom: 14px !important;
+                    }
+                    .hero-desc {
+                        font-size: 16px !important;
+                        margin-bottom: 20px !important;
+                    }
+                    .hero-btn-main {
+                        padding: 12px 26px !important;
+                        font-size: 13.5px !important;
+                    }
+                    .mt-5 {
+                        margin-top: 0.9rem !important;
+                    }
+                    .hero-stat-card {
+                        padding: 14px 16px !important;
+                    }
+                    .hero-stat-card h3 {
+                        font-size: 24px !important;
+                    }
+                    .hero-stat-card span {
+                        font-size: 12.5px !important;
+                    }
+                }
+
                 /* Mobile Responsive Styles */
                 @media (max-width: 991px) {
                     .hero-section {
