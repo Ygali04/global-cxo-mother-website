@@ -1,14 +1,15 @@
 import HeaderFive from "@/layouts/headers/HeaderFive"
 import Banner from "./Banner"
-import WorkArea from "./WorkArea"
+// import WorkArea from "./WorkArea"
 import About from "./About"
-import ChooseArea from "./ChooseArea"
+// import ChooseArea from "./ChooseArea"
 import Service from "./Service"
-import Estimate from "./Estimate"
+import UpcomingEvent from "./UpcomingEvent"
+// import Estimate from "./Estimate"
 import Team from "./Team"
-import Blog from "./Blog"
-import Brand from "./Brand"
-import Cta from "./Cta"
+// import Blog from "./Blog"
+// import Brand from "./Brand"
+import FAQ from "./FAQ"
 import FooterThree from "@/layouts/footers/FooterThree"
 
 const HomeFive = () => {
@@ -17,15 +18,16 @@ const HomeFive = () => {
          <HeaderFive />
          <main className="main-area fix">
             <Banner />
-            <WorkArea />
+            {/* <WorkArea /> */}
             <About />
-            <ChooseArea />
+            {/* <ChooseArea /> */}
             <Service />
-            <Estimate />
+            <UpcomingEvent />
+            {/* <Estimate /> */}
             <Team />
-            <Blog />
-            <Brand />
-            <Cta />
+            {/* <Blog /> */}
+            {/* <Brand /> */}
+            <FAQ />
          </main>
          <FooterThree />
       </>

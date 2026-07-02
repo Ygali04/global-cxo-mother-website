@@ -5,7 +5,7 @@ import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
 const Team = () => {
     return (
-        <section id="membership" className="section-py-130" style={{ backgroundColor: "#f7f8fc", position: "relative", overflow: "hidden" }}>
+        <section id="membership" className="section-py-130" style={{ backgroundColor: "#f7f8fc", position: "relative", overflow: "hidden", paddingBottom: "90px" }}>
             <div className="container" style={{ position: "relative", zIndex: 2 }}>
                 <AnimateOnScroll>
                     <div className="row justify-content-center text-center mb-60">
@@ -163,6 +163,25 @@ const Team = () => {
                                         </div>
                                     ))}
                                 </div>
+
+                                <Link href="/pricing" className="see-pricing-btn" style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: "8px",
+                                    marginTop: "28px",
+                                    background: "transparent",
+                                    color: "var(--tg-theme-primary)",
+                                    border: "1.5px solid var(--tg-theme-primary)",
+                                    padding: "13px 24px",
+                                    borderRadius: "8px",
+                                    fontWeight: 700,
+                                    fontSize: "15px",
+                                    textDecoration: "none",
+                                    transition: "all 0.3s ease"
+                                }}>
+                                    See Pricing <span aria-hidden="true">→</span>
+                                </Link>
                             </div>
                         </AnimateOnScroll>
                     </div>
@@ -179,6 +198,12 @@ const Team = () => {
                 }
                 .featured-card:hover {
                     box-shadow: 0 16px 48px rgba(11,26,74,0.18) !important;
+                }
+                .see-pricing-btn:hover {
+                    background: var(--tg-color-gradient) !important;
+                    color: #fff !important;
+                    border-color: transparent !important;
+                    box-shadow: 0 8px 22px rgba(10,60,194,0.25);
                 }
             `}</style>
         </section>
