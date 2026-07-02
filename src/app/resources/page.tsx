@@ -349,6 +349,14 @@ const ResourcesPage = () => {
                 .resource-card:hover .resource-card-img {
                     transform: scale(1.05);
                 }
+                /* Single-column phone view: keep the card compact and centered */
+                @media (max-width: 575px) {
+                    .resource-card {
+                        max-width: 260px;
+                        margin-left: auto !important;
+                        margin-right: auto !important;
+                    }
+                }
             `}</style>
         </>
     )
