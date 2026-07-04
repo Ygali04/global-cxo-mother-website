@@ -1,4 +1,5 @@
 import Providers from "@/layouts/Providers";
+import "../styles/tailwind.css";
 import "../styles/index.scss";
 import { Poppins } from 'next/font/google'
 
