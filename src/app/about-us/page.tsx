@@ -98,16 +98,16 @@ function Avatar({ src, name, size }: { src: string; name: string; size: number }
 }
 
 const SectionHeading = ({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) => (
-    <div className="row justify-content-center text-center mb-60">
+    <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
         <div className="col-lg-8">
             <span style={{
                 background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                 fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px",
-                marginBottom: "12px", display: "inline-block",
+                marginBottom: "6px", display: "inline-block",
             }}>
                 {eyebrow}
             </span>
-            <h2 style={{ fontSize: "clamp(30px, 3.8vw, 44px)", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "14px" }}>
+            <h2 style={{ fontSize: "clamp(30px, 3.8vw, 44px)", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "0" }}>
                 {title}
             </h2>
             <p style={{ fontSize: "17px", color: "var(--tg-body-color)", margin: 0 }}>

@@ -19,7 +19,7 @@ const ChooseArea = () => {
         }}>
             <div className="container">
                 <AnimateOnScroll>
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                         <div className="col-lg-8">
                             <span style={{
                                 color: "var(--tg-theme-accent)",

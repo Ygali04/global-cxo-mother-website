@@ -24,12 +24,12 @@ const UpcomingEvent = () => {
         <section className="section-py-130" style={{ backgroundColor: "#fff" }}>
             <div className="container">
                 <AnimateOnScroll>
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                         <div className="col-lg-7">
                             <span style={{
                                 background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                                 fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px",
-                                marginBottom: "12px", display: "inline-block",
+                                marginBottom: "6px", display: "inline-block",
                             }}>
                                 Upcoming Events
                             </span>
@@ -41,10 +41,11 @@ const UpcomingEvent = () => {
                 </AnimateOnScroll>
 
                 <AnimateOnScroll delay={0.1}>
-                    <Link href="/events/mlc-oakland" className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
+                    <Link href="/events/mlc-oakland" className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "900px", margin: "0 auto" }}>
                         <div className="upcoming-event-card" style={{
                             background: "#fff", borderRadius: "20px", overflow: "hidden",
                             border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
+                            maxWidth: "1200px",
                             transition: "all 0.3s ease",
                         }}>
                             <div className="row g-0 align-items-stretch">

@@ -39,11 +39,11 @@ const FAQAccordion = () => {
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
                         <AnimateOnScroll>
-                            <div className="text-center mb-60">
+                            <div className="text-center" style={{ marginBottom: "36px" }}>
                                 <span style={{
                                     background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                                     fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px",
-                                    marginBottom: "12px", display: "inline-block",
+                                    marginBottom: "6px", display: "inline-block",
                                 }}>
                                     FAQ
                                 </span>

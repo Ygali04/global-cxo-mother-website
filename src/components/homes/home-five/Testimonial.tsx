@@ -32,7 +32,7 @@ const Testimonial = () => {
             <div className="row justify-content-center">
                <div className="col-xl-8 col-lg-9">
                   <div className="text-center" style={{ marginBottom: "50px" }}>
-                     <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "12px", display: "inline-block" }}>Testimonials</span>
+                     <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "6px", display: "inline-block" }}>Testimonials</span>
                      <h2 style={{ fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 700, color: "#1A1A1A", letterSpacing: "-0.5px" }}>What Our Partners Say</h2>
                   </div>
                </div>

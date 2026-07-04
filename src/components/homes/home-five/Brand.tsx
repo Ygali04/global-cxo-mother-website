@@ -14,7 +14,7 @@ const Brand = () => {
         <section id="partners" className="section-py-130" style={{ backgroundColor: "#f7f8fc" }}>
             <div className="container">
                 <AnimateOnScroll>
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                         <div className="col-lg-8">
                             <span style={{
                                 background: "var(--tg-color-gradient)",

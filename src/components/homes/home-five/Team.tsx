@@ -8,13 +8,13 @@ const Team = () => {
         <section id="membership" className="section-py-130" style={{ backgroundColor: "#f7f8fc", position: "relative", overflow: "hidden", paddingBottom: "90px" }}>
             <div className="container" style={{ position: "relative", zIndex: 2 }}>
                 <AnimateOnScroll>
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                         <div className="col-lg-8">
                             <span style={{
                                 background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase",
                                 letterSpacing: "2px",
                                 fontSize: "12px",
-                                marginBottom: "12px",
+                                marginBottom: "6px",
                                 display: "inline-block",
                             }}>
                                 MEMBERSHIP
@@ -23,6 +23,7 @@ const Team = () => {
                                 fontSize: "clamp(28px, 3.5vw, 40px)",
                                 fontWeight: 700,
                                 color: "var(--tg-heading-color)",
+                                marginBottom: "0",
                             }}>
                                 Curated. Invite-Only. Outcome-Focused.
                             </h2>
@@ -30,9 +31,9 @@ const Team = () => {
                     </div>
                 </AnimateOnScroll>
 
-                <div className="row">
+                <div className="row justify-content-center">
                     {/* Column 1 - Who Can Join */}
-                    <div className="col-lg-4 mb-4">
+                    <div className="col-lg-3 mb-4">
                         <AnimateOnScroll delay={0.1} direction="left" className="h-100">
                             <div className="membership-card" style={{
                                 background: "#fff",
@@ -63,7 +64,7 @@ const Team = () => {
                     </div>
 
                     {/* Column 2 - What Members Get (Featured) */}
-                    <div className="col-lg-4 mb-4">
+                    <div className="col-lg-3 mb-4">
                         <AnimateOnScroll delay={0.2} className="h-100">
                             <div className="membership-card featured-card" style={{
                                 background: "var(--tg-color-gradient)", borderRadius: "16px", padding: "32px", boxShadow: "0 12px 40px rgba(11,26,74,0.12)",
@@ -109,7 +110,7 @@ const Team = () => {
                     </div>
 
                     {/* Column 3 - Application Process */}
-                    <div className="col-lg-4 mb-4">
+                    <div className="col-lg-3 mb-4">
                         <AnimateOnScroll delay={0.3} direction="right" className="h-100">
                             <div className="membership-card" style={{
                                 background: "#fff",

@@ -211,7 +211,7 @@ export default function WaitlistPage() {
                 <span style={{
                   background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                   fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px",
-                  marginBottom: "12px", display: "inline-block",
+                  marginBottom: "6px", display: "inline-block",
                 }}>
                   Invite-Only Network
                 </span>
@@ -332,7 +332,7 @@ export default function WaitlistPage() {
           <FadeUp>
             <div className="row justify-content-center text-center mb-60">
               <div className="col-lg-7">
-                <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "12px", display: "inline-block" }}>
+                <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "6px", display: "inline-block" }}>
                   How It Works
                 </span>
                 <h2 style={{ fontSize: "clamp(28px, 3.6vw, 40px)", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "14px" }}>
@@ -390,7 +390,7 @@ export default function WaitlistPage() {
           <FadeUp>
             <div className="row justify-content-center text-center mb-60">
               <div className="col-lg-7">
-                <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "12px", display: "inline-block" }}>
+                <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "6px", display: "inline-block" }}>
                   The Network
                 </span>
                 <h2 style={{ fontSize: "clamp(28px, 3.6vw, 40px)", fontWeight: 800, color: "var(--tg-heading-color)" }}>

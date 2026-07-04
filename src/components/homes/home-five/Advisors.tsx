@@ -27,7 +27,7 @@ const Advisors = () => {
             <span style={{
               color: "var(--tg-theme-primary)", fontWeight: 600,
               textTransform: "uppercase", letterSpacing: "2px",
-              fontSize: "13px", display: "inline-block", marginBottom: "12px",
+              fontSize: "13px", display: "inline-block", marginBottom: "6px",
             }}>
               Advisory Board
             </span>

@@ -21,11 +21,11 @@ const Service = () => {
       <section id="circles" className="section-py-130" style={{ backgroundColor: "#f7f8fc" }}>
          <div className="container">
             <AnimateOnScroll>
-               <div className="row justify-content-center mb-60">
+               <div className="row justify-content-center" style={{ marginBottom: "36px" }}>
                   <div className="col-lg-7">
                      <div className="text-center">
-                        <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "12px", display: "inline-block" }}>Our Ecosystem</span>
-                        <h2 style={{ fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "16px" }}>Many Leadership Circles. One Global Ecosystem.</h2>
+                        <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "6px", display: "inline-block" }}>Our Ecosystem</span>
+                        <h2 style={{ fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "0" }}>Many Leadership Circles. One Global Ecosystem.</h2>
                      </div>
                   </div>
                </div>

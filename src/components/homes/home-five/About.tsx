@@ -14,7 +14,7 @@ const About = () => {
          <div className="container">
             {/* Top Row: Image (left) + Description & Origin Story (right) */}
             <div className="row align-items-center">
-               <div className="col-lg-6 mb-4 mb-lg-0">
+               <div className="col-lg-5 mb-4 mb-lg-0">
                   <AnimateOnScroll direction="left">
                      <div style={{ position: "relative", borderRadius: "20px", overflow: "hidden", boxShadow: "0 14px 40px rgba(11,26,74,0.12)" }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -108,7 +108,7 @@ const About = () => {
       <section className="section-py-130" style={{ backgroundColor: "#eef2fb" }}>
          <div className="container">
             <div className="row justify-content-center text-center" style={{ marginBottom: "50px" }}>
-               <div className="col-lg-7">
+               <div className="col-lg-5">
                   <AnimateOnScroll>
                      <span style={{
                         background: "var(--tg-color-gradient)",
@@ -118,7 +118,7 @@ const About = () => {
                         textTransform: "uppercase",
                         letterSpacing: "2px",
                         fontSize: "13px",
-                        marginBottom: "12px",
+                        marginBottom: "6px",
                         display: "inline-block",
                      }}>Our Mission</span>
                      <h3 style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "16px", lineHeight: 1.25 }}>
@@ -131,9 +131,9 @@ const About = () => {
                </div>
             </div>
 
-            <div className="row gutter-y-30">
+            <div className="row gutter-y-30 justify-content-center">
                {mission_pillars.map((item, i) => (
-                  <div key={item.title} className="col-lg-4">
+                  <div key={item.title} className="col-lg-3">
                      <AnimateOnScroll delay={0.1 * i}>
                         <div className="pillar-card" style={{
                            background: "#fff",

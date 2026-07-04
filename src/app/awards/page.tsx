@@ -374,16 +374,16 @@ const AwardsPage = () => {
                         </div>
 
                         <AnimateOnScroll key={`head-${category.slug}`}>
-                            <div className="row justify-content-center text-center mb-60">
+                            <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                                 <div className="col-lg-7">
                                     <span style={{
                                         background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                                         fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.4px", fontSize: "12px",
-                                        marginBottom: "10px", display: "inline-block",
+                                        marginBottom: "6px", display: "inline-block",
                                     }}>
                                         {category.tagline}
                                     </span>
-                                    <h2 style={{ fontSize: "clamp(24px, 3vw, 30px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>
+                                    <h2 style={{ fontSize: "clamp(24px, 3vw, 30px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "0" }}>
                                         {category.label}
                                     </h2>
                                     <p style={{ fontSize: "15.5px", color: "var(--tg-body-color)", lineHeight: 1.7, margin: 0 }}>
@@ -409,7 +409,7 @@ const AwardsPage = () => {
                                     </div>
                                 </AnimateOnScroll>
 
-                                <div className="row row-cols-2 row-cols-md-3 row-cols-lg-5 gutter-y-30 justify-content-center">
+                                <div className="row row-cols-2 row-cols-md-3 row-cols-lg-6 gutter-y-30 justify-content-center">
                                     {awardees.map((a, i) => (
                                         <div key={`${category.slug}-${a.name}`} className="col">
                                             <AnimateOnScroll delay={0.06 * (i % 4)} className="h-100">
