@@ -1,0 +1,45 @@
+/* Tailwind entry — kept as plain CSS (NOT .scss) so the Tailwind v4 PostCSS
+   engine handles these imports itself. Sass chokes on the modern CSS syntax
+   (@property, @theme) inside tw-animate-css and the portal theme. */
+
+/* Pre-register the cascade layer order BEFORE Tailwind declares its own
+   (theme/base/components/utilities). CSS layer priority is decided by which
+   layer NAME appears first anywhere in the document — not by specificity or
+   source order within a layer.
+   index.scss wraps Bootstrap and the rest of the marketing site's legacy CSS
+   in `legacy-marketing`. Its position here is deliberate and load-bearing:
+
+     - ABOVE `base` (Tailwind Preflight): the marketing site was built with
+       zero Tailwind, so Preflight's global element resets (button →
+       transparent bg, h1 → unstyled, etc.) must NOT reach it, or its
+       Bootstrap buttons/headings lose their styling. Sitting above Preflight
+       means the marketing pages render exactly as they did pre-Tailwind.
+     - BELOW `utilities`: inside the portal, a plain Tailwind utility class
+       (e.g. `text-2xl`, `bg-blue-600`) must still beat Bootstrap's bare
+       element defaults, or portal components render at Bootstrap's sizes.
+
+   Portal bare elements with NO utility class (Bootstrap now outranks
+   Preflight for them) are re-normalized in a `.gcio-portal`-scoped
+   `@layer components` block in portal-theme.css — above legacy-marketing,
+   below utilities. */
+@layer theme, base, legacy-marketing, components, utilities;
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Legacy marketing CSS (Bootstrap + the marketing theme) assigned to the
+   `legacy-marketing` layer via Tailwind v4's own @import bundler, which
+   supports `layer()` in both the Turbopack dev server and the webpack build
+   (sass-loader does NOT — a sass `@import ... layer()` is left as a literal
+   @import in an invalid position). Sitting above Preflight keeps the
+   marketing pages unchanged; sitting below components/utilities lets the
+   portal's Tailwind utilities win over Bootstrap's bare-element sizes. The
+   sass-only partial `main.scss` is layered separately inside index.scss. */
+@import "../assets/css/animate.min.css" layer(legacy-marketing);
+@import "../assets/css/bootstrap.min.css" layer(legacy-marketing);
+@import "../assets/css/default-icons.css" layer(legacy-marketing);
+@import "../assets/css/default.css" layer(legacy-marketing);
+@import "../assets/css/fontawesome-all.min.css" layer(legacy-marketing);
+@import "../assets/css/tg-flaticon.css" layer(legacy-marketing);
+
+@import "./portal-theme.css";
