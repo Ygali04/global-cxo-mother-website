@@ -296,7 +296,7 @@ const Login: React.FC = () => {
                       onChange={(e) => handleDigitChange(i, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(i, e)}
                       onPaste={i === 0 ? handlePaste : undefined}
-                      className={`w-10 h-12 text-center text-lg font-bold rounded-lg border-2 bg-white text-navy-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+                      className={`otp-digit-input w-10 h-12 text-center text-lg font-bold rounded-lg border-2 bg-white text-navy-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
                         codeError ? 'border-red-400' : digit ? 'border-navy-400' : 'border-navy-200'
                       }`}
                     />
