@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/portal/components/ui/button';
 import { Input } from '@/portal/components/ui/input';
@@ -28,6 +28,18 @@ const Login: React.FC = () => {
     return tier === 'admin' || tier === 'dev' ? '/admin' : '/dashboard';
   };
 
+  // Focus the first OTP box the moment the code screen mounts. This must run
+  // synchronously in an effect (not a setTimeout) — a delayed timeout races
+  // against the user: if they start typing before the delay elapses,
+  // handleDigitChange correctly advances focus to box 2, but the stale timeout
+  // then fires and yanks focus back to box 1, making the first digit look like
+  // it "doesn't auto-advance" (the user has to manually click box 2).
+  useEffect(() => {
+    if (screen === 'code') {
+      inputRefs.current[0]?.focus();
+    }
+  }, [screen]);
+
   // Step 1: Submit email → backend sends 8-digit code
   const handleEmailSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -50,8 +62,7 @@ const Login: React.FC = () => {
         setScreen('code');
         setCode(Array(8).fill(''));
         setCodeError('');
-        // Focus first input after render
-        setTimeout(() => inputRefs.current[0]?.focus(), 100);
+        // First-box focus happens in the effect below, once the code screen mounts.
       } else if (err instanceof Error && err.message === 'APPLICATION_PENDING') {
         setScreen('application-pending');
       } else if (err instanceof Error && err.message === 'PRE_EXISTING_PROFILE') {
@@ -262,7 +273,22 @@ const Login: React.FC = () => {
                   {code.map((digit, i) => (
                     <input
                       key={i}
-                      ref={(el) => { inputRefs.current[i] = el; }}
+                      ref={(el) => {
+                        inputRefs.current[i] = el;
+                        // The typed digits were rendering invisible (white-on-white) —
+                        // likely the browser's autofill/OTP-suggestion styling
+                        // overriding text color on these 1-char sequential inputs.
+                        // setProperty(..., 'important') is the only way to set an
+                        // inline !important style via JS — assigning
+                        // el.style.color = '... !important' is a silent no-op per
+                        // the CSSOM spec — so this guarantees the digit color wins
+                        // over any external override, including another !important.
+                        if (el) {
+                          el.style.setProperty('color', '#1f2f62', 'important');
+                          el.style.setProperty('-webkit-text-fill-color', '#1f2f62', 'important');
+                          el.style.setProperty('caret-color', '#1f2f62', 'important');
+                        }
+                      }}
                       type="text"
                       inputMode="numeric"
                       maxLength={1}
