@@ -27,10 +27,10 @@ import BackendConnectionAlert from "@/portal/components/BackendConnectionAlert";
 import { useAuth } from "@/portal/hooks/useAuth";
 import { cn } from "@/portal/lib/utils";
 
-type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; end: boolean };
-type NavSection = { section: string; items: NavItem[] };
+export type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; end: boolean };
+export type NavSection = { section: string; items: NavItem[] };
 
-const navSections: NavSection[] = [
+export const navSections: NavSection[] = [
   {
     section: "Overview",
     items: [

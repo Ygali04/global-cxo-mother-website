@@ -3,21 +3,24 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { UserTier } from '@/portal/data/mock/types';
 import { useAuth } from '@/portal/hooks/useAuth';
 import { SkeletonBlock } from '@/portal/components/ui/admin-skeletons';
+import {
+  AdminShellSkeleton,
+  UserDashboardSkeleton,
+  UserSettingsSkeleton,
+} from '@/portal/components/ui/route-skeletons';
 
 interface ProtectedRouteProps {
   children: ReactNode;
   requiredTier?: UserTier[];
 }
 
-// Generic route-loading shell shown while the session hydrates. ProtectedRoute
-// wraps destinations with very different layouts (admin console, dashboard,
-// settings), so this can't be shape-matched to one of them — a title bar +
-// a few card placeholders reads reasonably regardless of which page lands.
-// min-h-screen + pt-24 (the same top clearance the real dashboard/settings
-// pages reserve for HeaderFive's absolute/transparent header) keeps this
-// from collapsing to a short block that leaves the footer riding up right
-// underneath it before the real content arrives.
-function RouteLoadingSkeleton(): React.ReactElement {
+// Fallback for destinations without a shape-matched skeleton (program
+// dashboard, startup profile) — a title bar + a few card placeholders reads
+// reasonably even without an exact match. min-h-screen + pt-24 (the same top
+// clearance the real pages reserve for HeaderFive's absolute/transparent
+// header) keeps this from collapsing to a short block that leaves the footer
+// riding up right underneath it before the real content arrives.
+function GenericRouteSkeleton(): React.ReactElement {
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
@@ -43,6 +46,23 @@ function RouteLoadingSkeleton(): React.ReactElement {
   );
 }
 
+// Picks a skeleton shaped like the ACTUAL destination page, keyed off the
+// URL — ProtectedRoute wraps the whole /admin subtree (AdminLayout + every
+// child route) behind one auth check, so this is the only place that knows
+// which real page is about to render before it does.
+function RouteLoadingSkeleton({ pathname }: { pathname: string }): React.ReactElement {
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+    return <AdminShellSkeleton pathname={pathname} />;
+  }
+  if (pathname === '/dashboard') {
+    return <UserDashboardSkeleton />;
+  }
+  if (pathname === '/settings') {
+    return <UserSettingsSkeleton />;
+  }
+  return <GenericRouteSkeleton />;
+}
+
 function AccessDenied(): React.ReactElement {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
@@ -63,7 +83,7 @@ export function ProtectedRoute({
   const location = useLocation();
 
   if (!authHydrated) {
-    return <RouteLoadingSkeleton />;
+    return <RouteLoadingSkeleton pathname={location.pathname} />;
   }
 
   if (!isAuthenticated) {
