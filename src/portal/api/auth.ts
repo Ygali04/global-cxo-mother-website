@@ -149,7 +149,15 @@ export async function verifyCodeApi(email: string, code: string): Promise<MockUs
 
 export async function logoutApi(): Promise<void> {
   try {
-    await apiFetch<unknown>(LOGOUT_PATH, { method: 'POST' });
+    // Fire the server-side logout but don't wait for it — a slow/unreachable
+    // backend shouldn't delay the user actually being logged out on this
+    // device. apiFetch reads the current access token synchronously (before
+    // its first `await`) to build the Authorization header, so the request
+    // is still properly authenticated even though we clear that token on the
+    // very next line, before the network response comes back.
+    void apiFetch<unknown>(LOGOUT_PATH, { method: 'POST' }).catch(() => {
+      // Best-effort server-side revocation; local logout already happened.
+    });
   } finally {
     setStoredAccessToken(null);
     if (typeof sessionStorage !== 'undefined') {

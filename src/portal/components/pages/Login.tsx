@@ -241,10 +241,9 @@ const Login: React.FC = () => {
                     inputMode="numeric"
                     autoComplete="one-time-code"
                     maxLength={8}
-                    placeholder="12345678"
                     value={code}
                     onChange={(e) => handleCodeChange(e.target.value)}
-                    className={`h-12 rounded-xl border-navy-200 bg-white text-center text-lg font-bold tracking-[0.3em] text-navy-900 placeholder:tracking-normal placeholder:text-navy-300 focus-visible:ring-blue-500 focus-visible:border-blue-400 ${
+                    className={`h-12 rounded-xl border-navy-200 bg-white text-center text-lg font-bold tracking-[0.3em] text-navy-900 focus-visible:ring-blue-500 focus-visible:border-blue-400 ${
                       codeError ? 'border-red-400 focus-visible:ring-red-400' : ''
                     }`}
                   />
