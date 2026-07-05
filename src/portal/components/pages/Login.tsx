@@ -38,8 +38,12 @@ const Login: React.FC = () => {
     }
     setIsLoading(true);
     try {
-      await login(email, '');
-      // If no throw, somehow auto-logged in (demo mode)
+      const user = await login(email, '');
+      if (!user) {
+        setEmailError('No account exists with that email.');
+        return;
+      }
+      // Only reached on a real, immediate login (e.g. mock/demo mode).
       navigate(redirect ?? '/dashboard');
     } catch (err) {
       if (err instanceof Error && err.message === '2FA_REQUIRED') {
