@@ -21,6 +21,21 @@
   @import "../assets/scss/main.scss";
 }
 
+/* Marketing-page horizontal-overflow guard. The portal SPA already wraps
+   itself in overflow-x-hidden (PortalApp.tsx's AppContent), but the marketing
+   pages (home, /login is portal but pre-hydration marketing chrome, etc.)
+   have no equivalent. If ANY descendant is even slightly wider than the
+   viewport (e.g. an absolutely-positioned decorative element not fully
+   clipped by its own ancestor), mobile browsers expand the whole page's
+   layout viewport to fit it — which then makes EVERY max-width media query
+   on the page evaluate against that wider width, silently breaking mobile
+   styles (like the hero event card's mobile layout) even on a narrow phone.
+   Unlayered so it applies regardless of Bootstrap/legacy-marketing rules. */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 /* Login OTP digit boxes — typed digits were rendering invisible (white-on-
    white). Kept as unlayered global CSS (not a Tailwind/portal utility class)
    so it wins over ANY layered rule (Bootstrap's legacy-marketing layer or the

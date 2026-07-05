@@ -418,6 +418,18 @@ const Banner = () => {
                     .orbit-ring-three {
                         --orbit-size: 600px;
                     }
+                    /* .hero-event-card switches to mobile in-flow layout at
+                       1279px (see index.scss), but this title kept
+                       white-space: nowrap until 768px — leaving a gap where
+                       "Where Global CXOs"/"Converge" could force the line
+                       wider than the viewport and push the whole page's
+                       layout viewport out, breaking max-width media queries
+                       (incl. the event card's) even though the device itself
+                       is narrow. Relax it at the same 991px breakpoint. */
+                    .hero-title-line-one,
+                    .hero-title-line-two {
+                        white-space: normal;
+                    }
                 }
                 @media (max-width: 768px) {
                     .hero-section {
