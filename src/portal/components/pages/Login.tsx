@@ -214,7 +214,7 @@ const Login: React.FC = () => {
 
                 <p className="mt-6 text-center text-sm text-navy-500">
                   Don&apos;t have an account?{' '}
-                  <Link to="/signup" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                  <Link to="/waitlist" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                     Sign Up
                   </Link>
                 </p>

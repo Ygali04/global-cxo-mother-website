@@ -241,7 +241,7 @@ export default function Onboard() {
     token.includes('sandbox') || token === '';
 
   // Post-password multi-step flow
-  type PostStep = 'twofa' | 'calendar' | 'boomerang' | null;
+  type PostStep = 'twofa' | 'boomerang' | null;
   const [postStep, setPostStep] = useState<PostStep>(null);
   const [emailVerificationSent, setEmailVerificationSent] = useState(false);
   const [boomerangConsent, setBoomerangConsent] = useState<boolean | null>(null);
@@ -395,8 +395,11 @@ export default function Onboard() {
       await enroll2faApi();
       setEmailVerificationSent(true);
     } catch {
+      // 'calendar' was a dead post-step here — no JSX branch ever handled it,
+      // so a failed verification-email send stranded the user on a blank
+      // screen with no way to proceed. Move to the next real step instead.
       toast.error('Could not send verification email. You can set it up later in Settings.');
-      setPostStep('calendar');
+      setPostStep('boomerang');
     }
   };
 
