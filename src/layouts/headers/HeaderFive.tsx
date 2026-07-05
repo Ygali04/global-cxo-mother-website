@@ -13,6 +13,13 @@ import { getMockSessionUserId, setMockSessionUserId } from "@/portal/lib/mockSes
 import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 import type { MockUser } from "@/portal/data/mock/types"
 
+// Module-level cache — survives HeaderFive remounting on every client-side
+// navigation (it resets only on a genuine full page reload, e.g. logout's
+// window.location.href). Lets a signed-in user's name render immediately on
+// every navigation after the first, instead of flashing "Sign in" while the
+// async /users/me (or mock-session lookup) resolves again from scratch.
+let cachedAuthUser: MockUser | null = null;
+
 const HeaderFive = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
 
    const { sticky } = UseSticky();
@@ -21,9 +28,10 @@ const HeaderFive = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
    // Auth-aware header. The marketing site lives outside the portal's
    // AuthProvider, so we read the session directly the same way the portal
    // does: an access token in sessionStorage (`gcio_access_token`). If present
-   // we resolve the user via /users/me. Runs client-side only (post-hydration),
-   // so logged-in users briefly see "Sign in" before their name resolves.
-   const [authUser, setAuthUser] = useState<MockUser | null>(null);
+   // we resolve the user via /users/me. Seeded from the module cache so a
+   // returning-this-session user doesn't flash "Sign in" first; the effect
+   // below still revalidates in the background on every mount.
+   const [authUser, setAuthUser] = useState<MockUser | null>(() => cachedAuthUser);
    const [menuOpen, setMenuOpen] = useState<boolean>(false);
    const menuRef = useRef<HTMLDivElement>(null);
 
@@ -33,17 +41,20 @@ const HeaderFive = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
       // and the real API is CORS-blocked from localhost — resolve from the mock DB.
       if (!USE_API_AUTH) {
          const uid = getMockSessionUserId();
-         if (uid) {
-            const found = loadMockDatabaseSnapshot().users.find((u) => u.id === uid);
-            if (found) setAuthUser(found);
-         }
+         const found = uid ? loadMockDatabaseSnapshot().users.find((u) => u.id === uid) ?? null : null;
+         cachedAuthUser = found;
+         setAuthUser(found);
          return;
       }
       // Production: real session — access token in sessionStorage → /users/me.
-      if (!getStoredAccessToken()) return;
+      if (!getStoredAccessToken()) {
+         cachedAuthUser = null;
+         setAuthUser(null);
+         return;
+      }
       let cancelled = false;
       fetchCurrentUserApi()
-         .then((u) => { if (!cancelled) setAuthUser(u); })
+         .then((u) => { if (!cancelled) { cachedAuthUser = u; setAuthUser(u); } })
          .catch(() => { /* not signed in / unreachable — stay as Sign in */ });
       return () => { cancelled = true; };
    }, []);

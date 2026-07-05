@@ -13,25 +13,31 @@ interface ProtectedRouteProps {
 // wraps destinations with very different layouts (admin console, dashboard,
 // settings), so this can't be shape-matched to one of them — a title bar +
 // a few card placeholders reads reasonably regardless of which page lands.
+// min-h-screen + pt-24 (the same top clearance the real dashboard/settings
+// pages reserve for HeaderFive's absolute/transparent header) keeps this
+// from collapsing to a short block that leaves the footer riding up right
+// underneath it before the real content arrives.
 function RouteLoadingSkeleton(): React.ReactElement {
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
-      <div className="space-y-2">
-        <SkeletonBlock className="h-7 w-40" />
-        <SkeletonBlock className="h-3 w-64 max-w-full" />
-      </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
-            style={{ opacity: Math.max(0.5, 1 - i * 0.15) }}
-          >
-            <SkeletonBlock className="h-4 w-2/3" />
-            <SkeletonBlock className="h-3 w-full" />
-            <SkeletonBlock className="h-3 w-4/5" />
-          </div>
-        ))}
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
+        <div className="space-y-2">
+          <SkeletonBlock className="h-7 w-40" />
+          <SkeletonBlock className="h-3 w-64 max-w-full" />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+              style={{ opacity: Math.max(0.5, 1 - i * 0.15) }}
+            >
+              <SkeletonBlock className="h-4 w-2/3" />
+              <SkeletonBlock className="h-3 w-full" />
+              <SkeletonBlock className="h-3 w-4/5" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

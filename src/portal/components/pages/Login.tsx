@@ -13,10 +13,10 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [screen, setScreen] = useState<Screen>('email');
-  const [code, setCode] = useState<string[]>(Array(8).fill(''));
+  const [code, setCode] = useState('');
   const [codeError, setCodeError] = useState('');
   const [emailError, setEmailError] = useState('');
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const codeInputRef = useRef<HTMLInputElement | null>(null);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -28,15 +28,10 @@ const Login: React.FC = () => {
     return tier === 'admin' || tier === 'dev' ? '/admin' : '/dashboard';
   };
 
-  // Focus the first OTP box the moment the code screen mounts. This must run
-  // synchronously in an effect (not a setTimeout) — a delayed timeout races
-  // against the user: if they start typing before the delay elapses,
-  // handleDigitChange correctly advances focus to box 2, but the stale timeout
-  // then fires and yanks focus back to box 1, making the first digit look like
-  // it "doesn't auto-advance" (the user has to manually click box 2).
+  // Focus the code field the moment the code screen mounts.
   useEffect(() => {
     if (screen === 'code') {
-      inputRefs.current[0]?.focus();
+      codeInputRef.current?.focus();
     }
   }, [screen]);
 
@@ -60,9 +55,9 @@ const Login: React.FC = () => {
     } catch (err) {
       if (err instanceof Error && err.message === '2FA_REQUIRED') {
         setScreen('code');
-        setCode(Array(8).fill(''));
+        setCode('');
         setCodeError('');
-        // First-box focus happens in the effect below, once the code screen mounts.
+        // Focus happens in the effect above, once the code screen mounts.
       } else if (err instanceof Error && err.message === 'APPLICATION_PENDING') {
         setScreen('application-pending');
       } else if (err instanceof Error && err.message === 'PRE_EXISTING_PROFILE') {
@@ -75,49 +70,19 @@ const Login: React.FC = () => {
     }
   };
 
-  // Handle paste: fill all 8 boxes at once
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 8);
-    if (pasted.length === 0) return;
-    const newCode = Array(8).fill('');
-    for (let i = 0; i < pasted.length; i++) newCode[i] = pasted[i];
-    setCode(newCode);
+  // Single field: strip anything non-digit, cap at 8, auto-submit once full.
+  const handleCodeChange = (raw: string) => {
+    const digits = raw.replace(/\D/g, '').slice(0, 8);
+    setCode(digits);
     setCodeError('');
-    // Focus last filled or submit if all 8
-    const focusIdx = Math.min(pasted.length, 7);
-    inputRefs.current[focusIdx]?.focus();
-    if (pasted.length === 8) {
-      void handleCodeSubmit(newCode);
-    }
-  };
-
-  // Handle individual digit input
-  const handleDigitChange = (index: number, value: string) => {
-    if (!/^\d?$/.test(value)) return;
-    const newCode = [...code];
-    newCode[index] = value;
-    setCode(newCode);
-    setCodeError('');
-    if (value && index < 7) {
-      inputRefs.current[index + 1]?.focus();
-    }
-    // Auto-submit when all 8 digits filled
-    if (value && newCode.every((d) => d !== '')) {
-      void handleCodeSubmit(newCode);
-    }
-  };
-
-  // Handle backspace
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !code[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+    if (digits.length === 8) {
+      void handleCodeSubmit(digits);
     }
   };
 
   // Step 2: Submit code → verify → login
-  const handleCodeSubmit = async (codeArr?: string[]): Promise<void> => {
-    const digits = (codeArr ?? code).join('');
+  const handleCodeSubmit = async (value?: string): Promise<void> => {
+    const digits = value ?? code;
     if (digits.length !== 8) {
       setCodeError('Please enter all 8 digits.');
       return;
@@ -132,8 +97,8 @@ const Login: React.FC = () => {
       return;
     } catch {
       setCodeError('Invalid or expired code. Please try again.');
-      setCode(Array(8).fill(''));
-      inputRefs.current[0]?.focus();
+      setCode('');
+      codeInputRef.current?.focus();
     } finally {
       setIsLoading(false);
     }
@@ -147,9 +112,9 @@ const Login: React.FC = () => {
     } catch (err) {
       if (err instanceof Error && err.message === '2FA_REQUIRED') {
         toast.success('New code sent to your email.');
-        setCode(Array(8).fill(''));
+        setCode('');
         setCodeError('');
-        inputRefs.current[0]?.focus();
+        codeInputRef.current?.focus();
       }
     } finally {
       setIsLoading(false);
@@ -269,38 +234,20 @@ const Login: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex justify-center gap-2 mb-4">
-                  {code.map((digit, i) => (
-                    <input
-                      key={i}
-                      ref={(el) => {
-                        inputRefs.current[i] = el;
-                        // The typed digits were rendering invisible (white-on-white) —
-                        // likely the browser's autofill/OTP-suggestion styling
-                        // overriding text color on these 1-char sequential inputs.
-                        // setProperty(..., 'important') is the only way to set an
-                        // inline !important style via JS — assigning
-                        // el.style.color = '... !important' is a silent no-op per
-                        // the CSSOM spec — so this guarantees the digit color wins
-                        // over any external override, including another !important.
-                        if (el) {
-                          el.style.setProperty('color', '#1f2f62', 'important');
-                          el.style.setProperty('-webkit-text-fill-color', '#1f2f62', 'important');
-                          el.style.setProperty('caret-color', '#1f2f62', 'important');
-                        }
-                      }}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={(e) => handleDigitChange(i, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(i, e)}
-                      onPaste={i === 0 ? handlePaste : undefined}
-                      className={`otp-digit-input w-10 h-12 text-center text-lg font-bold rounded-lg border-2 bg-white text-navy-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
-                        codeError ? 'border-red-400' : digit ? 'border-navy-400' : 'border-navy-200'
-                      }`}
-                    />
-                  ))}
+                <div className="mb-4">
+                  <Input
+                    ref={codeInputRef}
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    maxLength={8}
+                    placeholder="12345678"
+                    value={code}
+                    onChange={(e) => handleCodeChange(e.target.value)}
+                    className={`h-12 rounded-xl border-navy-200 bg-white text-center text-lg font-bold tracking-[0.3em] text-navy-900 placeholder:tracking-normal placeholder:text-navy-300 focus-visible:ring-blue-500 focus-visible:border-blue-400 ${
+                      codeError ? 'border-red-400 focus-visible:ring-red-400' : ''
+                    }`}
+                  />
                 </div>
 
                 {codeError && (
@@ -309,7 +256,7 @@ const Login: React.FC = () => {
 
                 <Button
                   onClick={() => handleCodeSubmit()}
-                  disabled={isLoading || code.some((d) => !d)}
+                  disabled={isLoading || code.length !== 8}
                   className="w-full h-11 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition-all"
                   size="lg"
                 >
