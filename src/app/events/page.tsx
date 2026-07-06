@@ -94,7 +94,7 @@ function EventCard({ ev }: { ev: EventCardData }) {
         }}>
             <div style={{ position: "relative", width: "100%", height: "220px", overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ev.image} alt={ev.title} className="event-card-img"
+                <img src={ev.image} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }} />
             </div>
             <div style={{ padding: "26px 26px 22px", display: "flex", flexDirection: "column", flex: 1 }}>

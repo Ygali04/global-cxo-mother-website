@@ -88,6 +88,8 @@ function Avatar({ src, name, size }: { src: string; name: string; size: number }
             alt={name}
             width={size}
             height={size}
+            loading="lazy"
+            decoding="async"
             onError={() => setErrored(true)}
             style={{
                 width: size, height: size, borderRadius: "50%", objectFit: "cover", flexShrink: 0,

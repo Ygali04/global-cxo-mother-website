@@ -5,7 +5,9 @@ import FooterThree from "@/layouts/footers/FooterThree"
 import Image from "next/image"
 
 // ponytail: single hardcoded event page. Make /events a list + data file only when there's a 2nd event.
-const REGISTER_URL = "https://bit.ly/3RByJaB"
+// Direct registration URL (was a bit.ly short link, whose interstitial showed a
+// confusing "redirect in 8 seconds" page before landing here).
+const REGISTER_URL = "https://withjoy.com/GCxO-July182026/registration"
 
 const perks = [
     "Private Club level access",
