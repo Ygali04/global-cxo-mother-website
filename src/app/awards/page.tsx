@@ -40,6 +40,8 @@ function Avatar({ src, name, size, square = false }: { src: string; name: string
             alt={name}
             width={size}
             height={size}
+            loading="lazy"
+            decoding="async"
             onError={() => setErrored(true)}
             style={{
                 width: size, height: size, borderRadius: radius, objectFit: "cover", flexShrink: 0,
@@ -68,6 +70,8 @@ function PhotoCover({ src, name, height }: { src: string; name: string; height: 
         <img
             src={src}
             alt={name}
+            loading="lazy"
+            decoding="async"
             onError={() => setErrored(true)}
             style={{ width: "100%", height, objectFit: "cover", objectPosition: "center top", display: "block", transition: "transform 0.4s ease" }}
         />
@@ -483,7 +487,7 @@ const AwardsPage = () => {
                                     <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.8)", maxWidth: "560px", margin: "0 auto 28px" }}>
                                         Nominate exceptional technology leaders driving career-long excellence, breakthrough innovation, and lasting industry impact.
                                     </p>
-                                    <Link href="/contact" className="nominate-btn" style={{
+                                    <Link href="/nominate" className="nominate-btn" style={{
                                         display: "inline-flex", alignItems: "center", gap: "8px",
                                         background: "#fff", color: "var(--tg-theme-primary)", padding: "14px 34px",
                                         borderRadius: "8px", fontWeight: 700, fontSize: "15px", textDecoration: "none",
