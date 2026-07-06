@@ -10,13 +10,13 @@ export const sfConferenceImages = {
     hero: `${sfBasePath}/NEW Event Image wt Logo.webp`,
     heroMobile: `${sfBasePath}/Event Image no Logo.webp`,
     card: `${sfBasePath}/Event Image no Logo.webp`,
-    banner: `${sfBasePath}/NEW Partners Banner wt Image.png`,
+    banner: `${sfBasePath}/NEW Partners Banner wt Image.webp`,
     venue: `${sfBasePath}/Venue Image 1.jpg`,
     gallery: [
-        `${sfBasePath}/Speakers Panels for Reference/1.png`,
-        `${sfBasePath}/Speakers Panels for Reference/2.png`,
-        `${sfBasePath}/Speakers Panels for Reference/3.png`,
-        `${sfBasePath}/NEW Partners Banner.png`,
+        `${sfBasePath}/Speakers Panels for Reference/1.webp`,
+        `${sfBasePath}/Speakers Panels for Reference/2.webp`,
+        `${sfBasePath}/Speakers Panels for Reference/3.webp`,
+        `${sfBasePath}/NEW Partners Banner.webp`,
     ],
 };
 

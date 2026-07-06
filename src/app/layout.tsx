@@ -28,12 +28,13 @@ export default function RootLayout({
         <meta name="keywords" content="Global CXO Circle, executive ecosystem, CXO network, CIO circle, leadership, enterprise outcomes" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="icon" type="image/png" href="/public/favicon-96x96.png" sizes="96x96" />
-        <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
-        <link rel="shortcut icon" href="/public/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png" />
+        {/* Files in public/ are served from the site root — a /public/ prefix 404s.
+            Only link icons that actually exist in public/. */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/favicon-16.png" sizes="16x16" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="apple-mobile-web-app-title" content="Global CXO" />
-        <link rel="manifest" href="/public/site.webmanifest" />
       </head>
       <body className={poppins.className} suppressHydrationWarning={true}>
         <Providers>

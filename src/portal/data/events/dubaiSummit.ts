@@ -7,16 +7,18 @@ const dubaiSpeakerPath = `${dubaiBasePath}/Speakers Photos & Info`;
 const dubaiSponsorPath = `${dubaiBasePath}/Partner Logos for scroll`;
 
 export const dubaiSummitImages = {
-  hero: `${dubaiBasePath}/Event Image wt Logo.png`,
-  heroMobile: `${dubaiBasePath}/Event Image no Logo.png`,
-  card: `${dubaiBasePath}/Event Image no Logo.png`,
+  hero: `${dubaiBasePath}/Event Image wt Logo.webp`,
+  heroMobile: `${dubaiBasePath}/Event Image no Logo.webp`,
+  card: `${dubaiBasePath}/Event Image no Logo.webp`,
   banner: `${dubaiBasePath}/Partners Banner wt Image.png`,
   venue: `${dubaiBasePath}/Venue 1.jpg`,
+  // The old "Speaker Pages from Flyer_Reference" folder never shipped — these
+  // panel slides are the real assets on disk (webp versions, compressed).
   gallery: [
-    `${dubaiBasePath}/Speaker Pages from Flyer_Reference/4.png`,
-    `${dubaiBasePath}/Speaker Pages from Flyer_Reference/5.png`,
-    `${dubaiBasePath}/Speaker Pages from Flyer_Reference/6.png`,
-    `${dubaiBasePath}/Speaker Pages from Flyer_Reference/7.png`,
+    `${dubaiBasePath}/Panel Slides/1 CxO Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/2 Global CTO Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/3 Global CIO Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/4 UAE Business Panel.webp`,
   ],
 };
 
