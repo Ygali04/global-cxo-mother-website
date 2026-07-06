@@ -68,14 +68,14 @@ html, body {
         "top arrow"
         "title arrow"
         "meta arrow";
-    row-gap: 3px;
-    column-gap: 12px;
+    row-gap: 4px;
+    column-gap: 14px;
     align-items: center;
-    justify-items: start;
-    text-align: left;
-    width: min(calc(100% - 32px), 760px);
-    margin: 20px auto 4px;
-    padding: 14px 18px;
+    justify-items: end;
+    text-align: right;
+    width: min(calc(100% - 40px), 680px);
+    margin: 14px auto 18px;
+    padding: 16px 18px;
     border-radius: 16px;
     background: #ffffff;
     border: 1px solid rgba(10, 60, 194, 0.16);
@@ -157,6 +157,7 @@ html, body {
         left: clamp(20px, 3vw, 56px);
         display: flex;
         flex-direction: column;
+        align-items: flex-end;
         gap: 5px;
         width: 320px;
         margin: 0;
@@ -196,11 +197,11 @@ html, body {
 
 @media (max-width: 768px) {
     .hero-event-card {
-        width: min(calc(100% - 24px), 620px);
-        margin-top: 16px;
-        padding: 13px 16px;
-        row-gap: 3px;
-        column-gap: 10px;
+        width: min(calc(100% - 56px), 540px);
+        margin: 8px auto 22px;
+        padding: 18px 18px;
+        row-gap: 5px;
+        column-gap: 12px;
     }
     .hero-event-badge {
         font-size: 10px;
@@ -221,11 +222,11 @@ html, body {
 
 @media (max-width: 580px) {
     .hero-event-card {
-        width: min(calc(100% - 20px), 520px);
-        margin-top: 14px;
-        padding: 12px 14px;
-        row-gap: 2px;
-        column-gap: 9px;
+        width: min(calc(100% - 52px), 460px);
+        margin: 6px auto 20px;
+        padding: 17px 16px;
+        row-gap: 5px;
+        column-gap: 11px;
     }
     .hero-event-badge {
         font-size: 9.5px;
@@ -246,7 +247,8 @@ html, body {
 
 @media (max-width: 480px) {
     .hero-event-card {
-        width: min(calc(100% - 14px), 460px);
+        width: min(calc(100% - 48px), 420px);
+        padding: 16px 16px;
     }
     .hero-event-date {
         font-size: 13.5px;
@@ -258,9 +260,9 @@ html, body {
 
 @media (max-width: 420px) {
     .hero-event-card {
-        width: min(calc(100% - 16px), 430px);
-        margin-top: 12px;
-        padding: 11px 13px;
+        width: min(calc(100% - 44px), 380px);
+        margin: 6px auto 18px;
+        padding: 15px 15px;
     }
     .hero-event-top {
         gap: 6px;
