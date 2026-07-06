@@ -29,12 +29,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         {/* Files in public/ are served from the site root — a /public/ prefix 404s.
-            Only link icons that actually exist in public/. */}
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+            Favicons are generated from the brand mark (cxo-circle-logo.png) via
+            scripts; regenerate with the same source if the logo changes. */}
         <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="/favicon-16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/favicon-48.png" sizes="48x48" />
         <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-title" content="Global CXO" />
+        <meta name="theme-color" content="#0B1A4A" />
       </head>
       <body className={poppins.className} suppressHydrationWarning={true}>
         <Providers>
