@@ -21,15 +21,26 @@ const ContactPage = () => {
     const [phone, setPhone] = useState("")
     const [company, setCompany] = useState("")
     const [message, setMessage] = useState("")
-    const [fieldErrors, setFieldErrors] = useState<{ name?: boolean; email?: boolean; message?: boolean }>({})
+    const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; phone?: string; message?: string }>({})
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
     const [errorMsg, setErrorMsg] = useState("")
 
     const validate = () => {
         const errors: typeof fieldErrors = {}
-        if (!name.trim()) errors.name = true
-        if (!email.trim() || !email.includes("@")) errors.email = true
-        if (!message.trim()) errors.message = true
+        if (!name.trim()) errors.name = "Please enter your full name."
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())
+        if (!email.trim()) errors.email = "Please enter your email address."
+        else if (!emailOk) errors.email = "Please enter a valid email address (e.g. name@company.com)."
+        // Phone is optional — but if provided, it must be a real-looking number:
+        // an optional +, then 7-15 digits, with spaces/dashes/dots/parens allowed
+        // as separators. Anything else (letters, !, #, etc.) is rejected.
+        if (phone.trim()) {
+            const digits = phone.replace(/[\s().-]/g, "")
+            if (!/^\+?\d{7,15}$/.test(digits)) {
+                errors.phone = "Please enter a valid phone number (digits only, e.g. +1 555 123 4567)."
+            }
+        }
+        if (!message.trim()) errors.message = "Please tell us a little about your inquiry."
         setFieldErrors(errors)
         return Object.keys(errors).length === 0
     }
@@ -67,8 +78,9 @@ const ContactPage = () => {
     }
 
     const errorStyle: CSSProperties = { borderColor: "#DC2626", boxShadow: "0 0 0 3px rgba(220,38,38,0.1)" }
+    const fieldErrorText: CSSProperties = { marginTop: "6px", fontSize: "12.5px", color: "#DC2626" }
     const clearError = (key: keyof typeof fieldErrors) => {
-        if (fieldErrors[key]) setFieldErrors((prev) => ({ ...prev, [key]: false }))
+        if (fieldErrors[key]) setFieldErrors((prev) => ({ ...prev, [key]: undefined }))
     }
 
     return (
@@ -135,6 +147,7 @@ const ContactPage = () => {
                                                             onChange={(e) => { setName(e.target.value); clearError("name") }}
                                                             placeholder="Your full name" className="contact-input"
                                                             style={{ ...inputStyle, ...(fieldErrors.name ? errorStyle : {}) }} />
+                                                        {fieldErrors.name && <p style={fieldErrorText}>{fieldErrors.name}</p>}
                                                     </div>
                                                     <div className="col-12">
                                                         <label style={labelStyle}>Email Address<Required /></label>
@@ -142,11 +155,15 @@ const ContactPage = () => {
                                                             onChange={(e) => { setEmail(e.target.value); clearError("email") }}
                                                             placeholder="your.email@company.com" className="contact-input"
                                                             style={{ ...inputStyle, ...(fieldErrors.email ? errorStyle : {}) }} />
+                                                        {fieldErrors.email && <p style={fieldErrorText}>{fieldErrors.email}</p>}
                                                     </div>
                                                     <div className="col-12">
                                                         <label style={labelStyle}>Phone Number</label>
-                                                        <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                                                            placeholder="+1 (555) 123-4567" className="contact-input" style={inputStyle} />
+                                                        <input type="tel" value={phone}
+                                                            onChange={(e) => { setPhone(e.target.value); clearError("phone") }}
+                                                            placeholder="+1 (555) 123-4567" className="contact-input"
+                                                            style={{ ...inputStyle, ...(fieldErrors.phone ? errorStyle : {}) }} />
+                                                        {fieldErrors.phone && <p style={fieldErrorText}>{fieldErrors.phone}</p>}
                                                     </div>
                                                     <div className="col-12">
                                                         <label style={labelStyle}>Company</label>
@@ -159,6 +176,7 @@ const ContactPage = () => {
                                                             onChange={(e) => { setMessage(e.target.value); clearError("message") }}
                                                             placeholder="Tell us about your interest in joining Global CXO Circle..." className="contact-input"
                                                             style={{ ...inputStyle, resize: "vertical", ...(fieldErrors.message ? errorStyle : {}) }} />
+                                                        {fieldErrors.message && <p style={fieldErrorText}>{fieldErrors.message}</p>}
                                                     </div>
                                                     <div className="col-12">
                                                         <button type="submit" disabled={status === "sending"} className="contact-submit-btn" style={{
@@ -170,11 +188,6 @@ const ContactPage = () => {
                                                         }}>
                                                             {status === "sending" ? "Sending..." : "Send Message"} <i className="flaticon-paper-plane" style={{ fontSize: "15px" }}></i>
                                                         </button>
-                                                        {(fieldErrors.name || fieldErrors.email || fieldErrors.message) && (
-                                                            <p style={{ marginTop: "12px", textAlign: "center", fontSize: "13px", color: "#DC2626" }}>
-                                                                Please fill in all required fields marked with *.
-                                                            </p>
-                                                        )}
                                                         {status === "error" && (
                                                             <p style={{ marginTop: "12px", textAlign: "center", fontSize: "13px", color: "#DC2626" }}>{errorMsg}</p>
                                                         )}
@@ -225,7 +238,7 @@ const ContactPage = () => {
                                         </div>
                                         <h3 style={{ fontSize: "17px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "8px" }}>Book a Discovery Call</h3>
                                         <p style={{ fontSize: "14px", color: "var(--tg-body-color)", lineHeight: 1.6, marginBottom: "22px" }}>
-                                            Schedule a 15-minute call to discuss your interest in joining our community.
+                                            Schedule a 30-minute call to discuss your interest in joining our community.
                                         </p>
                                         <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="schedule-call-btn" style={{
                                             display: "inline-flex", alignItems: "center", gap: "8px", background: "var(--tg-color-gradient)", color: "#fff",

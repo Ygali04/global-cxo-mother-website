@@ -56,22 +56,30 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [fieldErrors, setFieldErrors] = useState<{ name?: boolean; email?: boolean; linkedin?: boolean; tier?: boolean }>({})
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; linkedin?: string; tier?: string }>({})
 
   const isHero = variant === "hero"
 
   const validate = () => {
     const errors: typeof fieldErrors = {}
-    if (!name.trim()) errors.name = true
-    if (!email.trim() || !email.includes("@")) errors.email = true
-    if (!linkedin.trim()) errors.linkedin = true
-    if (!tier) errors.tier = true
+    if (!name.trim()) errors.name = "Please enter your full name."
+    else if (name.trim().length < 2) errors.name = "Your name looks too short — please enter your full name."
+    if (!email.trim()) errors.email = "Please enter your work email."
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+      errors.email = "That doesn't look like a valid email — please use the format name@company.com."
+    }
+    if (!linkedin.trim()) errors.linkedin = "Please enter your LinkedIn profile URL."
+    else if (!/linkedin\.com\/.+/i.test(linkedin.trim())) {
+      errors.linkedin = "Please enter a LinkedIn profile URL (e.g. linkedin.com/in/yourname)."
+    }
+    if (!tier) errors.tier = "Please select the option that best describes you."
     setFieldErrors(errors)
     return Object.keys(errors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
     if (!validate()) return
     setSubmitting(true)
     try {
@@ -120,48 +128,43 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" })
     )
   }
 
-  if (error) {
-    return (
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-        style={{ borderRadius: "16px", border: "1px solid #fde68a", background: "#fffbeb", padding: "36px", textAlign: "center" }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "4px" }}>Something went wrong</h3>
-        <p style={{ fontSize: "14px", color: "var(--tg-body-color)", margin: 0 }}>{error}</p>
-      </motion.div>
-    )
-  }
-
   const errorStyle: CSSProperties = { borderColor: "#DC2626", boxShadow: "0 0 0 3px rgba(220,38,38,0.1)" }
+  const fieldErrorText: CSSProperties = { marginTop: "6px", fontSize: "12.5px", color: "#DC2626" }
 
   return (
     <form onSubmit={handleSubmit} noValidate className="grid gap-3 sm:grid-cols-2">
       <div>
         <label style={labelStyle}>Full Name<Required /></label>
         <input type="text" value={name}
-          onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: false })) }}
+          onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined })) }}
           placeholder="John Doe" style={{ ...inputStyle, ...(fieldErrors.name ? errorStyle : {}) }} className="wl-input" />
+        {fieldErrors.name && <p style={fieldErrorText}>{fieldErrors.name}</p>}
       </div>
       <div>
         <label style={labelStyle}>Work Email<Required /></label>
         <input type="email" value={email}
-          onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: false })) }}
+          onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined })) }}
           placeholder="john@company.com" style={{ ...inputStyle, ...(fieldErrors.email ? errorStyle : {}) }} className="wl-input" />
+        {fieldErrors.email && <p style={fieldErrorText}>{fieldErrors.email}</p>}
       </div>
       <div>
         <label style={labelStyle}>LinkedIn Profile URL<Required /></label>
         <input type="url" value={linkedin}
-          onChange={(e) => { setLinkedin(e.target.value); if (fieldErrors.linkedin) setFieldErrors((prev) => ({ ...prev, linkedin: false })) }}
+          onChange={(e) => { setLinkedin(e.target.value); if (fieldErrors.linkedin) setFieldErrors((prev) => ({ ...prev, linkedin: undefined })) }}
           placeholder="https://linkedin.com/in/yourname" style={{ ...inputStyle, ...(fieldErrors.linkedin ? errorStyle : {}) }} className="wl-input" />
+        {fieldErrors.linkedin && <p style={fieldErrorText}>{fieldErrors.linkedin}</p>}
       </div>
       <div>
         <label style={labelStyle}>I am a...<Required /></label>
         <select value={tier}
-          onChange={(e) => { setTier(e.target.value); if (fieldErrors.tier) setFieldErrors((prev) => ({ ...prev, tier: false })) }}
+          onChange={(e) => { setTier(e.target.value); if (fieldErrors.tier) setFieldErrors((prev) => ({ ...prev, tier: undefined })) }}
           style={{ ...inputStyle, ...(fieldErrors.tier ? errorStyle : {}), color: tier ? "var(--tg-heading-color)" : "#9aa0ad" }} className="wl-input">
           <option value="" disabled hidden>Select one</option>
           <option value="cxo">CxO Executive</option>
           <option value="startup">Startup Founder</option>
           <option value="vc">Venture Capital</option>
         </select>
+        {fieldErrors.tier && <p style={fieldErrorText}>{fieldErrors.tier}</p>}
       </div>
       <div className="sm:col-span-2">
         <motion.button type="submit" disabled={submitting} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
@@ -173,10 +176,13 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" })
           }}>
           {submitting ? "Submitting..." : isHero ? "Join the Waitlist" : "Request Early Access"}
         </motion.button>
-        {(fieldErrors.name || fieldErrors.email || fieldErrors.linkedin || fieldErrors.tier) && (
-          <p style={{ marginTop: "10px", textAlign: "center", fontSize: "13px", color: "#DC2626" }}>
-            Please fill in all required fields marked with *.
-          </p>
+        {/* Server-side failures show inline below the button — the form stays
+            visible and editable so the user can correct and retry (previously
+            this replaced the whole form with a dead-end message block). */}
+        {error && (
+          <div style={{ marginTop: "12px", borderRadius: "12px", border: "1px solid #fde68a", background: "#fffbeb", padding: "12px 16px", textAlign: "center" }}>
+            <p style={{ fontSize: "13.5px", color: "#92400e", margin: 0 }}>{error}</p>
+          </div>
         )}
       </div>
     </form>
