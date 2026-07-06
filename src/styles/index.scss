@@ -68,17 +68,18 @@ html, body {
         "top arrow"
         "title arrow"
         "meta arrow";
-    row-gap: 2px;
-    column-gap: 10px;
+    row-gap: 3px;
+    column-gap: 12px;
     align-items: center;
-    width: min(calc(100% - 24px), 760px);
-    margin: 22px auto 0;
-    padding: 10px 52px 10px 14px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(10, 60, 194, 0.14);
-    box-shadow: 0 10px 36px rgba(11, 26, 74, 0.14);
+    justify-items: start;
+    text-align: left;
+    width: min(calc(100% - 32px), 760px);
+    margin: 20px auto 4px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(10, 60, 194, 0.16);
+    box-shadow: 0 12px 32px rgba(11, 26, 74, 0.12);
     text-decoration: none;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
@@ -195,11 +196,11 @@ html, body {
 
 @media (max-width: 768px) {
     .hero-event-card {
-        width: min(calc(100% - 20px), 620px);
-        margin-top: 18px;
-        padding: 9px 44px 9px 12px;
-        row-gap: 2px;
-        column-gap: 8px;
+        width: min(calc(100% - 24px), 620px);
+        margin-top: 16px;
+        padding: 13px 16px;
+        row-gap: 3px;
+        column-gap: 10px;
     }
     .hero-event-badge {
         font-size: 10px;
@@ -220,11 +221,11 @@ html, body {
 
 @media (max-width: 580px) {
     .hero-event-card {
-        width: min(calc(100% - 16px), 520px);
-        margin-top: 16px;
-        padding: 8px 38px 8px 10px;
-        row-gap: 1px;
-        column-gap: 7px;
+        width: min(calc(100% - 20px), 520px);
+        margin-top: 14px;
+        padding: 12px 14px;
+        row-gap: 2px;
+        column-gap: 9px;
     }
     .hero-event-badge {
         font-size: 9.5px;
@@ -257,9 +258,9 @@ html, body {
 
 @media (max-width: 420px) {
     .hero-event-card {
-        width: min(calc(100% - 12px), 430px);
-        margin-top: 14px;
-        padding: 7px 34px 7px 9px;
+        width: min(calc(100% - 16px), 430px);
+        margin-top: 12px;
+        padding: 11px 13px;
     }
     .hero-event-top {
         gap: 6px;
