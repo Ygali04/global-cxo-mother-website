@@ -134,7 +134,7 @@ const About = () => {
             <div className="row gutter-y-30 justify-content-center">
                {mission_pillars.map((item, i) => (
                   <div key={item.title} className="col-lg-3">
-                     <AnimateOnScroll delay={0.1 * i}>
+                     <AnimateOnScroll delay={0.1 * i} className="h-100">
                         <div className="pillar-card" style={{
                            background: "#fff",
                            borderRadius: "16px",
@@ -158,7 +158,21 @@ const About = () => {
                            }}>
                               <i className={item.icon}></i>
                            </div>
-                           <h4 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "10px" }}>{item.title}</h4>
+                           <h4 style={{
+                              fontSize: "18px",
+                              fontWeight: 700,
+                              color: "var(--tg-heading-color)",
+                              marginBottom: "10px",
+                              lineHeight: 1.3,
+                              // Reserve two lines of height and vertically centre the
+                              // text, so a single-line title (e.g. "Startup Advisory")
+                              // sits centred in the same space a two-line title fills —
+                              // keeping every card's description aligned on the same row.
+                              minHeight: "2.6em",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                           }}>{item.title}</h4>
                            <p style={{ fontSize: "14.5px", color: "var(--tg-body-color)", margin: 0, lineHeight: 1.6 }}>{item.desc}</p>
                         </div>
                      </AnimateOnScroll>

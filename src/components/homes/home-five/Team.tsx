@@ -38,10 +38,12 @@ const Team = () => {
                             <div className="membership-card" style={{
                                 background: "#fff",
                                 borderRadius: "16px",
-                                padding: "32px",
+                                padding: "26px 28px",
                                 boxShadow: "0 1px 3px rgba(11,26,74,0.06)",
-                                height: "100%",
                                 border: "1px solid var(--tg-border-1)",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
                                 transition: "all 0.3s ease"
                             }}>
                                 <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "32px" }}>
@@ -56,7 +58,7 @@ const Team = () => {
                                         </li>
                                     ))}
                                 </ul>
-                                <div style={{ padding: "16px", background: "#f7f8fc", borderRadius: "8px", fontSize: "13px", color: "var(--tg-body-color)", lineHeight: 1.5 }}>
+                                <div style={{ padding: "16px", background: "#f7f8fc", borderRadius: "8px", fontSize: "13px", color: "var(--tg-body-color)", lineHeight: 1.5, marginTop: "auto" }}>
                                     <strong>Note:</strong> Membership is strictly curated to ensure relevance, seniority, and shared values.
                                 </div>
                             </div>
@@ -64,10 +66,10 @@ const Team = () => {
                     </div>
 
                     {/* Column 2 - What Members Get (Featured) */}
-                    <div className="col-lg-3 mb-4">
+                    <div className="col-lg-4 mb-4 membership-col-featured">
                         <AnimateOnScroll delay={0.2} className="h-100">
                             <div className="membership-card featured-card" style={{
-                                background: "var(--tg-color-gradient)", borderRadius: "16px", padding: "32px", boxShadow: "0 12px 40px rgba(11,26,74,0.12)",
+                                background: "var(--tg-color-gradient)", borderRadius: "16px", padding: "26px 28px", boxShadow: "0 12px 40px rgba(11,26,74,0.12)",
                                 height: "100%",
                                 color: "#fff",
                                 display: "flex",
@@ -83,7 +85,7 @@ const Team = () => {
                                         "Private roundtables & curated interactions",
                                         "Cross-functional collaboration"
                                     ].map((item, i) => (
-                                        <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "16px", fontSize: "15px" }}>
+                                        <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "13px", fontSize: "15px" }}>
                                             <div style={{ color: "#fff", marginTop: "2px" }}>✓</div>
                                             <span>{item}</span>
                                         </li>
@@ -115,18 +117,20 @@ const Team = () => {
                             <div className="membership-card" style={{
                                 background: "#fff",
                                 borderRadius: "16px",
-                                padding: "32px",
+                                padding: "26px 28px",
                                 boxShadow: "0 1px 3px rgba(11,26,74,0.06)",
-                                height: "100%",
                                 border: "1px solid var(--tg-border-1)",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
                                 transition: "all 0.3s ease"
                             }}>
                                 <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "32px" }}>
                                     <i className="flaticon-idea"></i>
                                 </div>
-                                <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "24px" }}>Application Process</h3>
-                                
-                                <div style={{ display: "flex", flexDirection: "column", gap: "20px", position: "relative" }}>
+                                <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "20px" }}>Application Process</h3>
+
+                                <div style={{ display: "flex", flexDirection: "column", gap: "16px", justifyContent: "space-between", flexGrow: 1, position: "relative" }}>
                                     <div style={{
                                         position: "absolute",
                                         left: "15px",
@@ -164,25 +168,6 @@ const Team = () => {
                                         </div>
                                     ))}
                                 </div>
-
-                                <Link href="/pricing" className="see-pricing-btn" style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "8px",
-                                    marginTop: "28px",
-                                    background: "transparent",
-                                    color: "var(--tg-theme-primary)",
-                                    border: "1.5px solid var(--tg-theme-primary)",
-                                    padding: "13px 24px",
-                                    borderRadius: "8px",
-                                    fontWeight: 700,
-                                    fontSize: "15px",
-                                    textDecoration: "none",
-                                    transition: "all 0.3s ease"
-                                }}>
-                                    See Pricing <span aria-hidden="true">→</span>
-                                </Link>
                             </div>
                         </AnimateOnScroll>
                     </div>
@@ -200,11 +185,13 @@ const Team = () => {
                 .featured-card:hover {
                     box-shadow: 0 16px 48px rgba(11,26,74,0.18) !important;
                 }
-                .see-pricing-btn:hover {
-                    background: var(--tg-color-gradient) !important;
-                    color: #fff !important;
-                    border-color: transparent !important;
-                    box-shadow: 0 8px 22px rgba(10,60,194,0.25);
+                /* Featured column: a touch wider than the 25% side columns so the
+                   benefit lines don't wrap, but not the full 33% of col-lg-4. */
+                @media (min-width: 992px) {
+                    .membership-col-featured {
+                        flex: 0 0 28%;
+                        max-width: 28%;
+                    }
                 }
             `}</style>
         </section>

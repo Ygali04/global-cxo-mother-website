@@ -30,6 +30,7 @@ const Service = () => {
                   </div>
                </div>
             </AnimateOnScroll>
+            <div style={{ maxWidth: "1220px", marginInline: "auto" }}>
             <div className="row gutter-y-30 justify-content-center">
                {circles.map((item, idx) => (
                   <div key={item.id} className="col-xl-3 col-lg-4 col-md-6">
@@ -37,7 +38,7 @@ const Service = () => {
                         {item.href ? (
                            <a href={item.href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}>
                               <div className="circle-card" style={{
-                                 background: "#fff", padding: "32px 24px", borderRadius: "20px", border: "1px solid var(--tg-border-1)",
+                                 background: "#fff", padding: "30px 20px", borderRadius: "20px", border: "1px solid var(--tg-border-1)",
                                  transition: "all 0.35s ease", height: "100%", position: "relative", overflow: "hidden",
                                  textAlign: "center", cursor: "pointer"
                               }}>
@@ -49,15 +50,17 @@ const Service = () => {
                                        <div className="circle-logo-fallback">{item.badge}</div>
                                     )}
                                  </div>
-                                 <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "var(--tg-heading-color)", lineHeight: 1.3 }}>{item.title}</h3>
-                                 <p style={{ fontSize: "13px", color: "var(--tg-body-color)", marginBottom: 0 }}>{item.desc}</p>
+                                 <div className="circle-text">
+                                    <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "var(--tg-heading-color)", lineHeight: 1.3 }}>{item.title}</h3>
+                                    <p style={{ fontSize: "12px", color: "var(--tg-body-color)", marginBottom: 0 }}>{item.desc}</p>
+                                 </div>
                               </div>
                            </a>
                         ) : (
                            <div
                               onClick={() => setModalCircle(item.title)}
                               className="circle-card" style={{
-                                 background: "#fff", padding: "32px 24px", borderRadius: "20px", border: "1px solid var(--tg-border-1)",
+                                 background: "#fff", padding: "30px 20px", borderRadius: "20px", border: "1px solid var(--tg-border-1)",
                                  transition: "all 0.35s ease", height: "100%", position: "relative", overflow: "hidden",
                                  textAlign: "center", cursor: "pointer"
                               }}>
@@ -69,29 +72,33 @@ const Service = () => {
                                     <div className="circle-logo-fallback">{item.badge}</div>
                                  )}
                               </div>
-                              <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "var(--tg-heading-color)", lineHeight: 1.3 }}>{item.title}</h3>
-                              <p style={{ fontSize: "13px", color: "var(--tg-body-color)", marginBottom: 0 }}>{item.desc}</p>
+                              <div className="circle-text">
+                                 <h3 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "var(--tg-heading-color)", lineHeight: 1.3 }}>{item.title}</h3>
+                                 <p style={{ fontSize: "12px", color: "var(--tg-body-color)", marginBottom: 0 }}>{item.desc}</p>
+                              </div>
                            </div>
                         )}
                      </AnimateOnScroll>
                   </div>
                ))}
 
-               {/* Featured CTA Card */}
-               <div className="col-xl-3 col-lg-4 col-md-6">
-                  <AnimateOnScroll delay={0.6}>
-                     <div className="circle-card cta-card" style={{
-                        background: "var(--tg-color-gradient)", padding: "32px 24px", borderRadius: "20px",
-                        transition: "all 0.35s ease", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-                        textAlign: "center"
-                     }}>
-                        <Link href="/circles" style={{ color: "#fff", fontSize: "18px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" }}>
-                           Explore All Circles <span>→</span>
-                        </Link>
-                     </div>
-                  </AnimateOnScroll>
-               </div>
             </div>
+            </div>
+
+            {/* Learn More — sits below the grid, centered and compact */}
+            <AnimateOnScroll delay={0.3}>
+               <div className="text-center" style={{ marginTop: "44px" }}>
+                  <Link href="/circles" className="cta-learn-more" style={{
+                     display: "inline-flex", alignItems: "center", gap: "8px",
+                     background: "var(--tg-color-gradient)", color: "#fff",
+                     padding: "13px 32px", borderRadius: "50px",
+                     fontSize: "15px", fontWeight: 700, textDecoration: "none",
+                     boxShadow: "0 8px 24px rgba(10,60,194,0.22)", transition: "all 0.3s ease",
+                  }}>
+                     Learn More <span>→</span>
+                  </Link>
+               </div>
+            </AnimateOnScroll>
 
             <AnimateOnScroll delay={0.3}>
                <div className="text-center mt-5">
@@ -176,8 +183,53 @@ const Service = () => {
                   color: #fff;
                   background: var(--tg-color-gradient);
                }
-               .cta-card:hover {
-                   filter: brightness(1.1);
+               :global(.cta-learn-more):hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 12px 30px rgba(10,60,194,0.32);
+               }
+
+               /* Mobile: turn the vertical circle cards into compact horizontal
+                  rows (icon left, text right) to save vertical space, and shrink
+                  the CTA into a small pill button. */
+               @media (max-width: 767px) {
+                  .circle-card:not(.cta-card) {
+                     display: flex;
+                     flex-direction: row;
+                     align-items: center;
+                     text-align: left !important;
+                     gap: 16px;
+                     padding: 16px 18px !important;
+                  }
+                  .circle-card:not(.cta-card) .circle-logo-wrap {
+                     margin-bottom: 0 !important;
+                     margin-inline: 0 !important;
+                     width: 76px !important;
+                     height: 76px !important;
+                     border-radius: 18px;
+                     flex-shrink: 0;
+                  }
+                  .circle-card:not(.cta-card) .circle-logo-img {
+                     width: 62px !important;
+                     height: 62px !important;
+                     object-fit: contain;
+                  }
+                  .circle-card:not(.cta-card) .circle-logo-fallback {
+                     width: 56px !important;
+                     height: 56px !important;
+                  }
+                  /* Stack title + full-form vertically to the right of the icon,
+                     taking the remaining width, left-aligned. */
+                  .circle-card:not(.cta-card) .circle-text {
+                     flex: 1;
+                     min-width: 0;
+                  }
+                  .circle-card:not(.cta-card) h3 {
+                     font-size: 17px !important;
+                     margin-bottom: 4px !important;
+                  }
+                  .circle-card:not(.cta-card) p {
+                     font-size: 13px !important;
+                  }
                }
             `}</style>
          </div>
