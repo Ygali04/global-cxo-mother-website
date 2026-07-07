@@ -70,7 +70,7 @@ const CirclesPage = () => {
             <HeaderFive />
             <main className="main-area fix" style={{ paddingTop: "120px", paddingBottom: "120px", backgroundColor: "#f8f9fa" }}>
                 <div className="container">
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "60px" }}>
                         <div className="col-lg-8">
                             <span style={{
                                 background: "var(--tg-color-gradient)",
@@ -117,7 +117,7 @@ const CirclesPage = () => {
                         ))}
                     </div>
 
-                    <div className="text-center mt-60">
+                    <div className="text-center" style={{ marginTop: "60px" }}>
                         <Link href="/waitlist" style={{
                             display: "inline-block",
                             background: "var(--tg-color-gradient)",
