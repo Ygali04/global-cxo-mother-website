@@ -336,7 +336,7 @@ export default function WaitlistPage() {
       <section style={{ backgroundColor: "#f8f9fa", padding: "100px 0" }}>
         <div className="container">
           <FadeUp>
-            <div className="row justify-content-center text-center mb-60">
+            <div className="row justify-content-center text-center" style={{ marginBottom: "60px" }}>
               <div className="col-lg-7">
                 <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "6px", display: "inline-block" }}>
                   How It Works
@@ -394,7 +394,7 @@ export default function WaitlistPage() {
       <section style={{ backgroundColor: "#fff", padding: "100px 0" }}>
         <div className="container">
           <FadeUp>
-            <div className="row justify-content-center text-center mb-60">
+            <div className="row justify-content-center text-center" style={{ marginBottom: "60px" }}>
               <div className="col-lg-7">
                 <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "6px", display: "inline-block" }}>
                   The Network
