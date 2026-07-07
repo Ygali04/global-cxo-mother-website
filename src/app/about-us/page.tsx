@@ -180,18 +180,26 @@ const AboutUsPage = () => {
                                             <h3 style={{ fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "6px" }}>
                                                 {m.name}
                                             </h3>
-                                            <span style={{
-                                                fontSize: "15px", fontWeight: 700, marginBottom: m.company ? "3px" : "14px",
-                                                lineHeight: 1.4, whiteSpace: "pre-line",
-                                                background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                                            {/* Fixed-height role+company block so every card's
+                                                bio starts at the same vertical position, even when
+                                                a role wraps to two lines (e.g. Padma) or a card has
+                                                no company. */}
+                                            <div style={{
+                                                minHeight: "58px", marginBottom: "14px",
+                                                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: "3px",
                                             }}>
-                                                {m.role}
-                                            </span>
-                                            {m.company && (
-                                                <span style={{ fontSize: "14px", color: "#8a90a0", fontWeight: 600, marginBottom: "14px" }}>
-                                                    {m.company}
+                                                <span style={{
+                                                    fontSize: "15px", fontWeight: 700, lineHeight: 1.4, whiteSpace: "pre-line",
+                                                    background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                                                }}>
+                                                    {m.role}
                                                 </span>
-                                            )}
+                                                {m.company && (
+                                                    <span style={{ fontSize: "14px", color: "#8a90a0", fontWeight: 600 }}>
+                                                        {m.company}
+                                                    </span>
+                                                )}
+                                            </div>
                                             <p style={{ fontSize: "14px", color: "var(--tg-body-color)", lineHeight: 1.65, margin: 0 }}>
                                                 {m.bio}
                                             </p>
