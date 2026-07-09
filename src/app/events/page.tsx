@@ -52,7 +52,7 @@ const cricketEvent: EventCardData = {
     attendeesSuffix: " attendees expected",
     description:
         "Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.",
-    image: "/events/mlc-oakland-1.jpg",
+    image: "/events/mlc_main_banner.webp",
     href: "/events/mlc-oakland",
 }
 
@@ -80,7 +80,7 @@ function truncate(text: string, max = 155) {
     return `${text.slice(0, max).trimEnd()}…`
 }
 
-function EventCard({ ev }: { ev: EventCardData }) {
+function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?: number }) {
     const meta = [
         { icon: <CalendarIcon />, text: ev.date },
         { icon: <PinIcon />, text: ev.location },
@@ -92,7 +92,7 @@ function EventCard({ ev }: { ev: EventCardData }) {
             border: "1px solid var(--tg-border-1)", boxShadow: "0 4px 20px rgba(11,26,74,0.05)",
             display: "flex", flexDirection: "column", transition: "all 0.3s ease",
         }}>
-            <div style={{ position: "relative", width: "100%", height: "220px", overflow: "hidden" }}>
+            <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ev.image} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }} />
@@ -220,7 +220,7 @@ const EventsPageContent = () => {
                                 {list.map((ev, i) => (
                                     <div key={ev.title} className="col-lg-4 col-md-6">
                                         <AnimateOnScroll delay={0.08 * (i % 3)} className="h-100">
-                                            <EventCard ev={ev} />
+                                            <EventCard ev={ev} imageHeight={tab === "upcoming" ? 270 : undefined} />
                                         </AnimateOnScroll>
                                     </div>
                                 ))}
