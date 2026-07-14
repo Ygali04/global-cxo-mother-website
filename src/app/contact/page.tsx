@@ -4,7 +4,7 @@ import HeaderFive from "@/layouts/headers/HeaderFive"
 import FooterThree from "@/layouts/footers/FooterThree"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
-const WEB3FORMS_ACCESS_KEY = "e2f3426f-24fd-472c-b564-50bac442e030"
+const WEB3FORMS_ACCESS_KEY = "c5188dd1-228e-41f6-8b5e-146d05eaff0d"
 const CALENDLY_URL = "https://calendly.com/leningali/30min"
 
 const labelStyle: CSSProperties = { display: "block", fontSize: "13px", fontWeight: 600, color: "var(--tg-heading-color)", marginBottom: "5px" }
