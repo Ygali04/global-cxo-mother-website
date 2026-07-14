@@ -212,8 +212,8 @@ const ContactPage = () => {
                                                 </div>
                                                 <div>
                                                     <h4 style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "3px" }}>Email</h4>
-                                                    <a href="mailto:hello@globalcxocircle.com" style={{ fontSize: "14.5px", color: "var(--tg-theme-primary)", fontWeight: 600, textDecoration: "none" }}>
-                                                        hello@globalcxocircle.com
+                                                    <a href="mailto:contactus@globalcxocircle.com" style={{ fontSize: "14.5px", color: "var(--tg-theme-primary)", fontWeight: 600, textDecoration: "none" }}>
+                                                        contactus@globalcxocircle.com
                                                     </a>
                                                 </div>
                                             </div>

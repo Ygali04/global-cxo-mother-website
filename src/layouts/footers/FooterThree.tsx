@@ -40,7 +40,7 @@ const columns: FooterColumn[] = [
    },
 ]
 
-const CONTACT_EMAIL = "hello@globalcxocircle.com"
+const CONTACT_EMAIL = "contactus@globalcxocircle.com"
 
 const FooterThree = () => {
    const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
