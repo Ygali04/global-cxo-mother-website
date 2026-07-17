@@ -42,3 +42,5 @@ Disallow: /verify-login/
 Disallow: /onboard/
 Disallow: /onboarding/
 Disallow: /password-set/
+
+Sitemap: https://globalcxocircle.com/sitemap.xml

@@ -1,0 +1,24 @@
+# Global CXO Circle
+
+Global CXO Circle (https://globalcxocircle.com) is an invite-only, executive-led network and ecosystem for enterprise technology leaders (CIOs, CISOs, CTOs, VCs, and advisors). It facilitates structured access, collaborative alignment, advisory engagements, and outcome-driven relationships.
+
+## Site Map & Routes
+
+- [Homepage](https://globalcxocircle.com/) - Main overview, value proposition, and core pillars of the CXO ecosystem.
+- [About Us](https://globalcxocircle.com/about-us/) - Our leadership team and advisors.
+- [Circles](https://globalcxocircle.com/circles/) - Focused executive sub-networks (e.g., Global CIO Circle).
+- [Events](https://globalcxocircle.com/events/) - Upcoming summits, roundtables, and conferences.
+- [Nominate](https://globalcxocircle.com/nominate/) - Member recommendation and peer nomination form.
+- [Resources](https://globalcxocircle.com/resources/) - Case studies, whitepapers, advisory content, and downloads.
+- [Waitlist](https://globalcxocircle.com/waitlist/) - Application process for joining the invite-only circle.
+- [Contact](https://globalcxocircle.com/contact/) - Support, inquiries, and connection requests.
+- [Gallery](https://globalcxocircle.com/gallery/) - Event photos and visual highlights.
+
+## Dynamic Event Details
+- [Global Innovation Summit 2025 - Sri Lanka](https://globalcxocircle.com/events/sri-lanka-2025/)
+- [SF Conference 2025](https://globalcxocircle.com/events/sf-conference-2025/)
+- [Dubai Summit 2026](https://globalcxocircle.com/events/dubai-summit-2026/)
+- [MLC Oakland Event](https://globalcxocircle.com/events/mlc-oakland/)
+
+## Dynamic Gallery Details
+- [Global Innovation Summit 2025 Gallery](https://globalcxocircle.com/gallery/sri-lanka-2025/)

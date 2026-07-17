@@ -10,8 +10,31 @@ const poppins = Poppins({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://globalcxocircle.com"),
   title: "Global CXO Circle | From Conversations To Outcomes",
   description: "Where CXOs Connect, Align, and Execute Together. A CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships.",
+  openGraph: {
+    title: "Global CXO Circle | From Conversations To Outcomes",
+    description: "Where CXOs Connect, Align, and Execute Together. A CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships.",
+    url: "https://globalcxocircle.com/",
+    siteName: "Global CXO Circle",
+    images: [
+      {
+        url: "/cxo-circle-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Global CXO Circle Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Global CXO Circle | From Conversations To Outcomes",
+    description: "Where CXOs Connect, Align, and Execute Together. A CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships.",
+    images: ["/cxo-circle-logo.png"],
+  },
 };
 
 export default function RootLayout({
