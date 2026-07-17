@@ -7,7 +7,7 @@ import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 import awardsData from "@/data/AwardsData"
 
 // Same Web3Forms inbox the contact form delivers to.
-const WEB3FORMS_ACCESS_KEY = "c5188dd1-228e-41f6-8b5e-146d05eaff0d"
+const WEB3FORMS_ACCESS_KEY = "b6e38651-6009-4ab0-a71d-c98ddda90dfa"
 
 const labelStyle: CSSProperties = { display: "block", fontSize: "13px", fontWeight: 600, color: "var(--tg-heading-color)", marginBottom: "5px" }
 const inputStyle: CSSProperties = {
