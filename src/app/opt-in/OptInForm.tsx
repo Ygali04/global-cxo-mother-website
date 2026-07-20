@@ -42,6 +42,7 @@ export default function OptInForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
+  const dupCache = React.useRef<Record<string, boolean>>({})
   
   const [fieldErrors, setFieldErrors] = useState<{
     firstName?: string
@@ -85,73 +86,137 @@ export default function OptInForm() {
     return Object.keys(errors).length === 0
   }
 
+  // Helper to run JSONP duplicate email check
+  const runJsonpCheck = async (checkEmail: string, timeoutMs = 3500): Promise<boolean> => {
+    const scriptUrl =
+      process.env.NEXT_PUBLIC_OPT_IN_SCRIPT_URL || process.env.OPT_IN_SCRIPT_URL
+    if (!scriptUrl || !checkEmail.includes("@")) return false
+
+    const cached = dupCache.current[checkEmail]
+    if (cached !== undefined) {
+      if (typeof cached === "boolean") return cached
+      return await cached
+    }
+
+    const checkPromise = new Promise<boolean>((resolve) => {
+      const callbackName = "checkDup_" + Math.random().toString(36).substring(2, 11)
+      let resolved = false
+
+      const script = document.createElement("script")
+      script.src = `${scriptUrl}?action=check&email=${encodeURIComponent(
+        checkEmail
+      )}&callback=${callbackName}`
+      script.async = true
+
+      const timer = setTimeout(() => {
+        if (!resolved) {
+          resolved = true
+          cleanup()
+          resolve(false)
+        }
+      }, timeoutMs)
+
+      const cleanup = () => {
+        clearTimeout(timer)
+        if (script.parentNode) script.parentNode.removeChild(script)
+        delete (window as any)[callbackName]
+      }
+
+      ;(window as any)[callbackName] = (data: any) => {
+        if (!resolved) {
+          resolved = true
+          cleanup()
+          const isDup = Boolean(
+            data &&
+              (data.duplicate ||
+                (typeof data.error === "string" &&
+                  data.error.toLowerCase().includes("already")))
+          )
+          dupCache.current[checkEmail] = isDup
+          resolve(isDup)
+        }
+      }
+
+      script.onerror = () => {
+        if (!resolved) {
+          resolved = true
+          cleanup()
+          resolve(false)
+        }
+      }
+
+      document.head.appendChild(script)
+    })
+
+    dupCache.current[checkEmail] = checkPromise
+    const finalRes = await checkPromise
+    dupCache.current[checkEmail] = finalRes
+    return finalRes
+  }
+
+  // Run background duplicate check on email blur while user finishes answering questions
+  const checkEmailBackground = async (val: string) => {
+    const cleanEmail = val.trim().toLowerCase()
+    if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) return
+    const isDup = await runJsonpCheck(cleanEmail, 3500)
+    if (isDup) {
+      setFieldErrors((prev) => ({ ...prev, email: "This email address is already registered." }))
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitError(null)
     if (!validate()) return
 
+    const cleanEmail = email.trim().toLowerCase()
+    const scriptUrl =
+      process.env.NEXT_PUBLIC_OPT_IN_SCRIPT_URL || process.env.OPT_IN_SCRIPT_URL
+
+    const payload = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: cleanEmail,
+      joinCircle: joinCircle === "yes",
+      learnMore: learnMore === "yes",
+    }
+
+    // If our background check or instant check confirms a duplicate, show warning immediately
+    if (dupCache.current[cleanEmail] === true) {
+      setFieldErrors((prev) => ({ ...prev, email: "This email address is already registered." }))
+      return
+    }
+
     setSubmitting(true)
     try {
-      const scriptUrl =
-        process.env.NEXT_PUBLIC_OPT_IN_SCRIPT_URL || process.env.OPT_IN_SCRIPT_URL
-
-      const payload = {
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim(),
-        joinCircle: joinCircle === "yes",
-        learnMore: learnMore === "yes",
-      }
-
-      let response: Response | undefined
-      let data: any = {}
-
       if (scriptUrl) {
         // Direct call to Google Apps Script Web App (required in static export / output: 'export' production)
-        // 1. First, perform a lightning-fast GET request to check for duplicate emails without triggering CORS redirect blocks.
-        try {
-          const checkRes = await fetch(
-            `${scriptUrl}?action=check&email=${encodeURIComponent(payload.email)}`,
-            { method: "GET", redirect: "follow" }
-          )
-          if (checkRes.ok) {
-            const checkText = await checkRes.text()
-            try {
-              const checkData = JSON.parse(checkText)
-              if (
-                checkData.duplicate ||
-                (typeof checkData.error === "string" &&
-                  checkData.error.toLowerCase().includes("already"))
-              ) {
-                setSubmitError("This email address is already registered.")
-                setSubmitting(false)
-                return
-              }
-            } catch {
-              // If GET response is opaque or non-JSON, continue directly to POST submission
-            }
+        // Check if email is already registered (uses background promise if already running)
+        if (dupCache.current[cleanEmail] !== false) {
+          const isDuplicate = await runJsonpCheck(cleanEmail, 3500)
+          if (isDuplicate) {
+            setFieldErrors((prev) => ({ ...prev, email: "This email address is already registered." }))
+            setSubmitting(false)
+            return
           }
-        } catch {
-          // If GET check fails or is unavailable, continue directly to POST submission
         }
 
-        // 2. Immediately send the POST request via mode: "no-cors" to bypass browser cross-domain redirect blocks
-        // and instantly transition the UI to success without waiting for Google Apps Script execution.
-        await fetch(scriptUrl, {
+        // Send POST request asynchronously without blocking the UI transition so user experience is instant
+        fetch(scriptUrl, {
           method: "POST",
           mode: "no-cors",
           headers: {
             "Content-Type": "text/plain;charset=utf-8",
           },
           body: JSON.stringify(payload),
-        })
+        }).catch((err) => console.error("Background submission error:", err))
 
         setSubmitted(true)
         setSubmitting(false)
         return
       } else {
         // Local Node dev server fallback (/api/opt-in)
-        response = await fetch("/api/opt-in", {
+        const response = await fetch("/api/opt-in", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -160,6 +225,7 @@ export default function OptInForm() {
         })
 
         const text = await response.text()
+        let data: any = {}
         try {
           data = JSON.parse(text)
         } catch {
@@ -168,24 +234,24 @@ export default function OptInForm() {
           }
           data = { success: true }
         }
-      }
 
-      if (response && (!response.ok || data.success === false)) {
-        if (
-          data.duplicate ||
-          (typeof data.error === "string" && data.error.toLowerCase().includes("already"))
-        ) {
-          setSubmitError("This email address is already registered.")
-        } else {
-          setSubmitError(
-            data.error || "Failed to submit response. Please verify NEXT_PUBLIC_OPT_IN_SCRIPT_URL."
-          )
+        if (!response.ok || data.success === false) {
+          if (
+            data.duplicate ||
+            (typeof data.error === "string" && data.error.toLowerCase().includes("already"))
+          ) {
+            setFieldErrors((prev) => ({ ...prev, email: "This email address is already registered." }))
+          } else {
+            setSubmitError(
+              data.error || "Failed to submit response. Please verify NEXT_PUBLIC_OPT_IN_SCRIPT_URL."
+            )
+          }
+          setSubmitting(false)
+          return
         }
-        setSubmitting(false)
-        return
-      }
 
-      setSubmitted(true)
+        setSubmitted(true)
+      }
     } catch (err) {
       console.error(err)
       setSubmitError("There was an error submitting your response. Please try again.")
@@ -541,7 +607,11 @@ export default function OptInForm() {
                                 onChange={(e) => {
                                   setEmail(e.target.value)
                                   clearError("email")
+                                  if (dupCache.current[e.target.value.trim().toLowerCase()]) {
+                                    delete dupCache.current[e.target.value.trim().toLowerCase()]
+                                  }
                                 }}
+                                onBlur={(e) => checkEmailBackground(e.target.value)}
                                 className={`opt-in-input ${fieldErrors.email ? "error" : ""}`}
                                 placeholder="john.doe@company.com"
                                 required
