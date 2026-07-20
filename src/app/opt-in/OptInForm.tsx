@@ -108,37 +108,47 @@ export default function OptInForm() {
 
       if (scriptUrl) {
         // Direct call to Google Apps Script Web App (required in static export / output: 'export' production)
+        // 1. First, perform a lightning-fast GET request to check for duplicate emails without triggering CORS redirect blocks.
         try {
-          response = await fetch(scriptUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8",
-            },
-            body: JSON.stringify(payload),
-            redirect: "follow",
-          })
-
-          const text = await response.text()
-          try {
-            data = JSON.parse(text)
-          } catch {
-            data = { success: response.ok, raw: text }
+          const checkRes = await fetch(
+            `${scriptUrl}?action=check&email=${encodeURIComponent(payload.email)}`,
+            { method: "GET", redirect: "follow" }
+          )
+          if (checkRes.ok) {
+            const checkText = await checkRes.text()
+            try {
+              const checkData = JSON.parse(checkText)
+              if (
+                checkData.duplicate ||
+                (typeof checkData.error === "string" &&
+                  checkData.error.toLowerCase().includes("already"))
+              ) {
+                setSubmitError("This email address is already registered.")
+                setSubmitting(false)
+                return
+              }
+            } catch {
+              // If GET response is opaque or non-JSON, continue directly to POST submission
+            }
           }
-        } catch (fetchErr) {
-          // If browser blocks reading cross-domain POST redirect response due to strict CORS,
-          // fall back to mode: "no-cors" to guarantee the form data reaches Google Sheets.
-          await fetch(scriptUrl, {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8",
-            },
-            body: JSON.stringify(payload),
-          })
-          setSubmitted(true)
-          setSubmitting(false)
-          return
+        } catch {
+          // If GET check fails or is unavailable, continue directly to POST submission
         }
+
+        // 2. Immediately send the POST request via mode: "no-cors" to bypass browser cross-domain redirect blocks
+        // and instantly transition the UI to success without waiting for Google Apps Script execution.
+        await fetch(scriptUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8",
+          },
+          body: JSON.stringify(payload),
+        })
+
+        setSubmitted(true)
+        setSubmitting(false)
+        return
       } else {
         // Local Node dev server fallback (/api/opt-in)
         response = await fetch("/api/opt-in", {
