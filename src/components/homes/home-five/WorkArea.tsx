@@ -15,9 +15,9 @@ const WorkArea = () => {
         <section className="section-py-130" style={{ backgroundColor: "#FFFFFF", position: "relative", overflow: "hidden" }}>
             <div className="container" style={{ position: "relative", zIndex: 3 }}>
                 <AnimateOnScroll>
-                    <div className="row justify-content-center mb-60">
+                    <div className="row justify-content-center" style={{ marginBottom: "36px" }}>
                         <div className="col-lg-8 text-center">
-                            <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "12px", display: "inline-block" }}>
+                            <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "12px", marginBottom: "6px", display: "inline-block" }}>
                                 THE PLATFORM MODEL
                             </span>
                             <h2 style={{ fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "16px" }}>

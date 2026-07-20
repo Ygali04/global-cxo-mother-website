@@ -5,16 +5,16 @@ import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
 const Team = () => {
     return (
-        <section id="membership" className="section-py-130" style={{ backgroundColor: "#f7f8fc", position: "relative", overflow: "hidden" }}>
+        <section id="membership" className="section-py-130" style={{ backgroundColor: "#f7f8fc", position: "relative", overflow: "hidden", paddingBottom: "90px" }}>
             <div className="container" style={{ position: "relative", zIndex: 2 }}>
                 <AnimateOnScroll>
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                         <div className="col-lg-8">
                             <span style={{
                                 background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase",
                                 letterSpacing: "2px",
                                 fontSize: "12px",
-                                marginBottom: "12px",
+                                marginBottom: "6px",
                                 display: "inline-block",
                             }}>
                                 MEMBERSHIP
@@ -23,6 +23,7 @@ const Team = () => {
                                 fontSize: "clamp(28px, 3.5vw, 40px)",
                                 fontWeight: 700,
                                 color: "var(--tg-heading-color)",
+                                marginBottom: "0",
                             }}>
                                 Curated. Invite-Only. Outcome-Focused.
                             </h2>
@@ -30,17 +31,19 @@ const Team = () => {
                     </div>
                 </AnimateOnScroll>
 
-                <div className="row">
+                <div className="row justify-content-center">
                     {/* Column 1 - Who Can Join */}
-                    <div className="col-lg-4 mb-4">
+                    <div className="col-lg-3 mb-4">
                         <AnimateOnScroll delay={0.1} direction="left" className="h-100">
                             <div className="membership-card" style={{
                                 background: "#fff",
                                 borderRadius: "16px",
-                                padding: "32px",
+                                padding: "26px 28px",
                                 boxShadow: "0 1px 3px rgba(11,26,74,0.06)",
-                                height: "100%",
                                 border: "1px solid var(--tg-border-1)",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
                                 transition: "all 0.3s ease"
                             }}>
                                 <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "32px" }}>
@@ -55,7 +58,7 @@ const Team = () => {
                                         </li>
                                     ))}
                                 </ul>
-                                <div style={{ padding: "16px", background: "#f7f8fc", borderRadius: "8px", fontSize: "13px", color: "var(--tg-body-color)", lineHeight: 1.5 }}>
+                                <div style={{ padding: "16px", background: "#f7f8fc", borderRadius: "8px", fontSize: "13px", color: "var(--tg-body-color)", lineHeight: 1.5, marginTop: "auto" }}>
                                     <strong>Note:</strong> Membership is strictly curated to ensure relevance, seniority, and shared values.
                                 </div>
                             </div>
@@ -63,10 +66,10 @@ const Team = () => {
                     </div>
 
                     {/* Column 2 - What Members Get (Featured) */}
-                    <div className="col-lg-4 mb-4">
+                    <div className="col-lg-4 mb-4 membership-col-featured">
                         <AnimateOnScroll delay={0.2} className="h-100">
                             <div className="membership-card featured-card" style={{
-                                background: "var(--tg-color-gradient)", borderRadius: "16px", padding: "32px", boxShadow: "0 12px 40px rgba(11,26,74,0.12)",
+                                background: "var(--tg-color-gradient)", borderRadius: "16px", padding: "26px 28px", boxShadow: "0 12px 40px rgba(11,26,74,0.12)",
                                 height: "100%",
                                 color: "#fff",
                                 display: "flex",
@@ -82,7 +85,7 @@ const Team = () => {
                                         "Private roundtables & curated interactions",
                                         "Cross-functional collaboration"
                                     ].map((item, i) => (
-                                        <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "16px", fontSize: "15px" }}>
+                                        <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "13px", fontSize: "15px" }}>
                                             <div style={{ color: "#fff", marginTop: "2px" }}>✓</div>
                                             <span>{item}</span>
                                         </li>
@@ -109,23 +112,25 @@ const Team = () => {
                     </div>
 
                     {/* Column 3 - Application Process */}
-                    <div className="col-lg-4 mb-4">
+                    <div className="col-lg-3 mb-4">
                         <AnimateOnScroll delay={0.3} direction="right" className="h-100">
                             <div className="membership-card" style={{
                                 background: "#fff",
                                 borderRadius: "16px",
-                                padding: "32px",
+                                padding: "26px 28px",
                                 boxShadow: "0 1px 3px rgba(11,26,74,0.06)",
-                                height: "100%",
                                 border: "1px solid var(--tg-border-1)",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
                                 transition: "all 0.3s ease"
                             }}>
                                 <div style={{ marginBottom: "20px", color: "var(--tg-theme-primary)", fontSize: "32px" }}>
                                     <i className="flaticon-idea"></i>
                                 </div>
-                                <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "24px" }}>Application Process</h3>
-                                
-                                <div style={{ display: "flex", flexDirection: "column", gap: "20px", position: "relative" }}>
+                                <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "20px" }}>Application Process</h3>
+
+                                <div style={{ display: "flex", flexDirection: "column", gap: "16px", justifyContent: "space-between", flexGrow: 1, position: "relative" }}>
                                     <div style={{
                                         position: "absolute",
                                         left: "15px",
@@ -179,6 +184,14 @@ const Team = () => {
                 }
                 .featured-card:hover {
                     box-shadow: 0 16px 48px rgba(11,26,74,0.18) !important;
+                }
+                /* Featured column: a touch wider than the 25% side columns so the
+                   benefit lines don't wrap, but not the full 33% of col-lg-4. */
+                @media (min-width: 992px) {
+                    .membership-col-featured {
+                        flex: 0 0 28%;
+                        max-width: 28%;
+                    }
                 }
             `}</style>
         </section>

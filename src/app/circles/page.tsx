@@ -36,7 +36,7 @@ function CardContent({ item }: { item: typeof circles_data[0] }) {
             <div className="circle-top-accent"></div>
             <div className="circle-logo-shell">
                 {item.logo ? (
-                    <Image src={item.logo} alt={item.title} width={90} height={90} className="circle-logo-img" />
+                    <Image src={item.logo} alt={item.title} width={90} height={90} className="circle-logo-img" style={{ width: "90px", height: "90px" }} />
                 ) : (
                     <div className="circle-logo-fallback">{item.badge}</div>
                 )}
@@ -70,7 +70,7 @@ const CirclesPage = () => {
             <HeaderFive />
             <main className="main-area fix" style={{ paddingTop: "120px", paddingBottom: "120px", backgroundColor: "#f8f9fa" }}>
                 <div className="container">
-                    <div className="row justify-content-center text-center mb-60">
+                    <div className="row justify-content-center text-center" style={{ marginBottom: "60px" }}>
                         <div className="col-lg-8">
                             <span style={{
                                 background: "var(--tg-color-gradient)",
@@ -117,7 +117,7 @@ const CirclesPage = () => {
                         ))}
                     </div>
 
-                    <div className="text-center mt-60">
+                    <div className="text-center" style={{ marginTop: "60px" }}>
                         <Link href="/waitlist" style={{
                             display: "inline-block",
                             background: "var(--tg-color-gradient)",

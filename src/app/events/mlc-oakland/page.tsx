@@ -5,7 +5,9 @@ import FooterThree from "@/layouts/footers/FooterThree"
 import Image from "next/image"
 
 // ponytail: single hardcoded event page. Make /events a list + data file only when there's a 2nd event.
-const REGISTER_URL = "https://bit.ly/3RByJaB"
+// Direct registration URL (was a bit.ly short link, whose interstitial showed a
+// confusing "redirect in 8 seconds" page before landing here).
+const REGISTER_URL = "https://withjoy.com/GCxO-July182026/registration"
 
 const perks = [
     "Private Club level access",
@@ -59,10 +61,11 @@ const page = () => {
                                 </div>
                                 <RegisterBtn />
                             </div>
-                            <div className="col-lg-6 text-center">
-                                <Image src="/events/mlc-oakland-1.jpg" alt="Major League Cricket Season 04 Final — VIP Experience flyer"
-                                    width={1275} height={1650}
-                                    style={{ width: "100%", maxWidth: "440px", height: "auto", borderRadius: "16px", boxShadow: "0 20px 60px rgba(11,26,74,0.18)" }} />
+                            <div className="col-lg-6">
+                                <Image src="/events/mlc_main_banner.webp"
+                                    alt="MLC T20 Cricket Finals — Platinum Sponsors Atomicwork, DevRev & Mactores. Saturday, 18 July 2026 at 4:30 PM, The Oakland Coliseum. 100+ Enterprise CXOs confirmed."
+                                    width={1366} height={768} priority
+                                    style={{ width: "100%", height: "auto", borderRadius: "16px", boxShadow: "0 20px 60px rgba(11,26,74,0.18)", display: "block" }} />
                             </div>
                         </div>
                     </div>
@@ -97,10 +100,11 @@ const page = () => {
                             </div>
                         </div>
 
-                        <div className="text-center" style={{ marginTop: "50px" }}>
-                            <Image src="/events/mlc-oakland-2.jpg" alt="Major League Cricket VIP Experience — agenda and confirmed CXOs & startup sponsors"
-                                width={1275} height={1650}
-                                style={{ width: "100%", maxWidth: "760px", height: "auto", borderRadius: "16px", boxShadow: "0 16px 50px rgba(11,26,74,0.14)" }} />
+                        <div className="text-center" style={{ marginTop: "64px" }}>
+                            <Image src="/events/sponsors.webp"
+                                alt="Startup sponsors (Atomicwork, DevRev, Mactores, Linen, Manifestit, NopalCyber, Trupeer, CurieTech AI, Hivel) and 40+ confirmed enterprise CXOs, plus the T20 Cricket VIP Experience agenda"
+                                width={1366} height={768}
+                                style={{ width: "100%", maxWidth: "1140px", height: "auto", borderRadius: "16px", boxShadow: "0 16px 50px rgba(11,26,74,0.14)", display: "inline-block" }} />
                         </div>
 
                         <div className="text-center" style={{ marginTop: "50px" }}>

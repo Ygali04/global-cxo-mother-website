@@ -1,46 +1,113 @@
 @import "tailwindcss";
+/* Poppins is already loaded via next/font/google in layout.tsx (self-hosted,
+   preloaded, no external request). This render-blocking @import duplicated
+   it from Google's CDN — removed. If a font-weight 900 need ever comes up
+   (next/font here only covers 300-800), add it to the next/font config
+   instead of reintroducing this import. */
 
 @import "react-toastify/dist/ReactToastify.css";
 @import "swiper/css/bundle";
 @import "react-responsive-modal/styles.css";
 @import "yet-another-react-lightbox/styles.css";
 
-@import "../assets/css/animate.min.css";
-@import "../assets/css/bootstrap.min.css";
-@import "../assets/css/default-icons.css";
-@import "../assets/css/default.css";
-@import "../assets/css/fontawesome-all.min.css";
-@import "../assets/css/tg-flaticon.css";
-@import "../assets/scss/main.scss";
 @import "./fouc-fixes";
 @import "./aurora.scss";
 
+/* Bootstrap + the marketing CSS files are imported (and assigned to the
+   `legacy-marketing` cascade layer) from tailwind.css. `main.scss` is a sass
+   partial, so sass owns it and it must be layered here — sass fully inlines
+   the partial's content inside this block, leaving no literal @import (which
+   is what keeps both the Turbopack dev server and the webpack build happy).
+   The layer keeps these marketing styles below the portal's Tailwind
+   utilities so `.gcio-portal` admin/dashboard components stop rendering at
+   Bootstrap's inflated bare-element sizes. */
+@layer legacy-marketing {
+  @import "../assets/scss/main.scss";
+}
+
+/* Marketing-page horizontal-overflow guard. The portal SPA already wraps
+   itself in overflow-x-hidden (PortalApp.tsx's AppContent), but the marketing
+   pages (home, /login is portal but pre-hydration marketing chrome, etc.)
+   have no equivalent. If ANY descendant is even slightly wider than the
+   viewport (e.g. an absolutely-positioned decorative element not fully
+   clipped by its own ancestor), mobile browsers expand the whole page's
+   layout viewport to fit it — which then makes EVERY max-width media query
+   on the page evaluate against that wider width, silently breaking mobile
+   styles (like the hero event card's mobile layout) even on a narrow phone.
+   Unlayered so it applies regardless of Bootstrap/legacy-marketing rules. */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 /* Hero "Upcoming Event" promo card — kept in global CSS (not styled-jsx) because
-   styled-jsx mangles @media blocks and doesn't scope next/link's <Link>. */
-.hero-event-card {
-    position: absolute;
-    bottom: clamp(28px, 5vh, 72px);
-    left: clamp(20px, 3vw, 56px);
-    z-index: 6;
-    display: flex;
+   styled-jsx mangles @media blocks and doesn't scope next/link's <Link>.
+
+   MOBILE-FIRST, and here's why that matters: _fouc-fixes.scss makes
+   .hero-section a flex container (display: flex, default row direction).
+   Whenever this card is in its in-flow mode, a row direction lays it out
+   BESIDE the aurora hero content — squeezed against the right edge and
+   clipped by the section's overflow:hidden. That was the recurring
+   "banner pushed to the side" bug on phones/tablets. Two safeguards:
+   1. .hero-section is forced to column direction UNCONDITIONALLY. On
+      desktop the card is absolute (out of flow) and the aurora wrapper is
+      the section's only other in-flow child at width:100%, so column vs
+      row renders identically there — but every in-flow case now stacks.
+   2. The in-flow layout is the DEFAULT below; the absolute desktop overlay
+      only applies at min-width:1280px. If any media query fails to match
+      on an odd device, the fallback is the safe stacked layout. */
+.hero-section {
     flex-direction: column;
-    gap: 8px;
-    width: 250px;
-    padding: 18px 20px;
+}
+.hero-event-card {
+    position: relative;
+    z-index: 6;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "top arrow"
+        "title arrow"
+        "meta arrow";
+    row-gap: 4px;
+    column-gap: 14px;
+    align-items: center;
+    justify-items: start;
+    text-align: left;
+    width: min(calc(100% - 40px), 680px);
+    margin: 14px auto 18px;
+    padding: 16px 18px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(10, 60, 194, 0.14);
-    box-shadow: 0 10px 36px rgba(11, 26, 74, 0.14);
+    background: #ffffff;
+    border: 1px solid rgba(10, 60, 194, 0.16);
+    box-shadow: 0 12px 32px rgba(11, 26, 74, 0.12);
     text-decoration: none;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.hero-event-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(11, 26, 74, 0.22);
+.hero-event-arrow {
+    grid-area: arrow;
+    align-self: center;
+    justify-self: end;
+    color: #0a3cc2;
+    opacity: 0.95;
+}
+.hero-event-top {
+    grid-area: top;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+}
+.hero-event-date {
+    font-size: 16px;
+    line-height: 1.05;
+    font-weight: 500;
+    color: #1d4ed8;
+    white-space: nowrap;
 }
 .hero-event-badge {
     align-self: flex-start;
+    flex-shrink: 0;
+    white-space: nowrap;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
@@ -51,15 +118,23 @@
     background: var(--tg-color-gradient);
 }
 .hero-event-title {
-    font-size: 15px;
+    grid-area: title;
+    font-size: clamp(16px, 1.45vw, 21px);
     font-weight: 800;
-    line-height: 1.3;
+    line-height: 1.15;
     color: var(--tg-heading-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .hero-event-meta {
-    font-size: 12px;
+    grid-area: meta;
+    font-size: clamp(12px, 1.05vw, 15px);
     color: var(--tg-body-color);
     line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .hero-event-cta {
     display: inline-flex;
@@ -73,26 +148,137 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-/* Below 1280px the centered hero leaves no side gutter, and the mobile hero is
-   too full for an absolute card to clear the text. Stack the hero <section> as a
-   column so the card flows in at the top (full width via align-self) and pushes
-   the hero content down — no overlap at any mobile height. */
-@media (max-width: 1279px) {
-    .hero-section {
-        flex-direction: column;
-    }
+/* Desktop (≥1280px): the card becomes an absolute bottom-left overlay so it
+   floats over the hero's side gutter instead of taking vertical space. */
+@media (min-width: 1280px) {
     .hero-event-card {
-        position: relative;
-        order: -1;
-        align-self: stretch;
-        top: auto;
-        bottom: auto;
-        left: auto;
-        right: auto;
-        width: auto;
-        margin: 88px 16px 0;
+        position: absolute;
+        bottom: clamp(28px, 5vh, 72px);
+        left: clamp(20px, 3vw, 56px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        width: 320px;
+        margin: 0;
+        padding: 12px 48px 12px 18px;
+        border-radius: 16px;
     }
     .hero-event-card:hover {
-        transform: none;
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(11, 26, 74, 0.22);
+    }
+    .hero-event-arrow {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        transform: translateY(-50%);
+    }
+    .hero-event-top {
+        gap: 10px;
+    }
+    .hero-event-date {
+        font-size: 14px;
+    }
+    .hero-event-title {
+        font-size: 15px;
+        line-height: 1.3;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+    .hero-event-meta {
+        font-size: 12px;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-event-card {
+        width: min(calc(100% - 56px), 540px);
+        margin: 8px auto 22px;
+        padding: 18px 18px;
+        row-gap: 5px;
+        column-gap: 12px;
+    }
+    .hero-event-badge {
+        font-size: 10px;
+        letter-spacing: 1.3px;
+        padding: 4px 10px;
+    }
+    .hero-event-date {
+        font-size: 15px;
+    }
+    .hero-event-title {
+        font-size: 14.5px;
+        line-height: 1.08;
+    }
+    .hero-event-meta {
+        font-size: 11.5px;
+    }
+}
+
+@media (max-width: 580px) {
+    .hero-event-card {
+        width: min(calc(100% - 52px), 460px);
+        margin: 6px auto 20px;
+        padding: 17px 16px;
+        row-gap: 5px;
+        column-gap: 11px;
+    }
+    .hero-event-badge {
+        font-size: 9.5px;
+        letter-spacing: 1.2px;
+        padding: 3px 9px;
+    }
+    .hero-event-date {
+        font-size: 14px;
+    }
+    .hero-event-title {
+        font-size: 13.5px;
+        line-height: 1.08;
+    }
+    .hero-event-meta {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-event-card {
+        width: min(calc(100% - 48px), 420px);
+        padding: 16px 16px;
+    }
+    .hero-event-date {
+        font-size: 13.5px;
+    }
+    .hero-event-title {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 420px) {
+    .hero-event-card {
+        width: min(calc(100% - 44px), 380px);
+        margin: 6px auto 18px;
+        padding: 15px 15px;
+    }
+    .hero-event-top {
+        gap: 6px;
+    }
+    .hero-event-badge {
+        font-size: 8.5px;
+        letter-spacing: 1.2px;
+        padding: 3px 8px;
+    }
+    .hero-event-date {
+        font-size: 12.5px;
+    }
+    .hero-event-title {
+        font-size: 12px;
+    }
+    .hero-event-meta {
+        font-size: 10px;
     }
 }

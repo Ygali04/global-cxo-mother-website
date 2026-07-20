@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link"
-import Arrow from "@/components/common/Arrow"
 import { AuroraBackground } from "@/components/ui/aurora-background"
 import { motion } from "framer-motion"
 
@@ -14,14 +13,6 @@ const Banner = () => {
                 <div className="mobile-blob mobile-blob--3"></div>
                 <div className="mobile-blob mobile-blob--4"></div>
             </div>
-
-            {/* Event promo card — one side of the hero, links to event details */}
-            <Link href="/events/mlc-oakland" className="hero-event-card" aria-label="Major League Cricket Season 04 Final VIP Experience — view event details">
-                <span className="hero-event-badge">Upcoming Event</span>
-                <span className="hero-event-title">Major League Cricket — Season 04 Final</span>
-                <span className="hero-event-meta">VIP Experience · 18 Jul 2026 · Oakland Coliseum</span>
-                <span className="hero-event-cta">View event details <Arrow /></span>
-            </Link>
 
             <div className="orbit-scene" aria-hidden="true">
                 <div className="orbit-core"></div>
@@ -57,7 +48,7 @@ const Banner = () => {
                                     textTransform: "uppercase",
                                     letterSpacing: "2.5px",
                                     fontSize: "12px",
-                                    marginBottom: "18px",
+                                    marginBottom: "26px",
                                     display: "inline-block",
                                     padding: "6px 16px",
                                     borderRadius: "20px",
@@ -65,44 +56,38 @@ const Banner = () => {
                                 }}>
                                     ONE GLOBAL ECOSYSTEM
                                 </span>
-                                <h1 className="hero-title" style={{ fontSize: "clamp(28px, 4vw, 48px)", lineHeight: "1.2", fontWeight: 800, color: "var(--tg-heading-color)", marginBottom: "20px", marginInline: "auto", maxWidth: "800px", textTransform: "none" }}>
-                                    <span className="hero-title-line-one">Where CXO Conversations Turn</span>
-                                    <span className="hero-title-line-two">Into <span className="hero-title-gradient">Enterprise Outcomes</span></span>
+                                <h1 className="hero-title" style={{ fontSize: "clamp(28px, 4vw, 48px)", lineHeight: "1.2", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "20px", marginInline: "auto", maxWidth: "800px", textTransform: "none" }}>
+                                    <span className="hero-title-line-one">Where Global CXOs</span>
+                                    <span className="hero-title-line-two"><span className="hero-title-gradient">Converge</span></span>
                                 </h1>
-                                <p className="hero-desc" style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "36px", marginInline: "auto", maxWidth: "600px" }}>
-                                    Global CXO Circle is a CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships across a global ecosystem.
+                                <p className="hero-desc" style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "36px", marginInline: "auto", maxWidth: "640px" }}>
+                                    Conferences, roundtables, and a year-round peer network for<br className="d-none d-md-block" /> visionary technology leaders.
                                 </p>
                                 
                                 <div className="hero-btn-group">
-                                    <Link href="/waitlist" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", color: "#fff", border: "none" }}>
-                                        Request Access <Arrow />
+                                    <Link href="/waitlist" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", color: "#fff", border: "none", display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                        Request Access
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+                                            <path d="M9 5l7 7-7 7" />
+                                        </svg>
                                     </Link>
                                     <Link href="/circles" className="tg-btn tg-btn-seven hero-btn-main" style={{ padding: "14px 30px", fontSize: "14px", color: "#fff", border: "none" }}>
                                         Explore Circles
                                     </Link>
                                 </div>
                                 
-                                <div className="mt-5" style={{ maxWidth: "680px", marginInline: "auto" }}>
-                                    <div className="stats-band">
-                                        <div className="stats-item">
-                                            <h3 style={{ fontSize: "24px", fontWeight: 800, marginBottom: "2px", background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>500+</h3>
-                                            <span style={{ fontSize: "11px", color: "var(--tg-body-color)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 500 }}>CXOs</span>
-                                        </div>
-                                        <div className="stats-divider d-none d-sm-block"></div>
-                                        <div className="stats-item">
-                                            <h3 style={{ fontSize: "24px", fontWeight: 800, marginBottom: "2px", background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>40+</h3>
-                                            <span style={{ fontSize: "11px", color: "var(--tg-body-color)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 500 }}>Countries</span>
-                                        </div>
-                                        <div className="stats-divider d-none d-md-block"></div>
-                                        <div className="stats-item">
-                                            <h3 style={{ fontSize: "13px", fontWeight: 700, marginBottom: "2px", background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: "1.4" }}>Invite-Only</h3>
-                                            <span style={{ fontSize: "11px", color: "var(--tg-body-color)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 500 }}>Network</span>
-                                        </div>
-                                        <div className="stats-divider d-none d-sm-block"></div>
-                                        <div className="stats-item">
-                                            <h3 style={{ fontSize: "13px", fontWeight: 700, marginBottom: "2px", background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: "1.4" }}>Enterprise-Grade</h3>
-                                            <span style={{ fontSize: "11px", color: "var(--tg-body-color)", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 500 }}>Engagements</span>
-                                        </div>
+                                <div className="mt-5 hero-stats">
+                                    <div className="hero-stat-card">
+                                        <h3>500+</h3>
+                                        <span>Enterprise CXOs</span>
+                                    </div>
+                                    <div className="hero-stat-card">
+                                        <h3>60+</h3>
+                                        <span>Startups</span>
+                                    </div>
+                                    <div className="hero-stat-card">
+                                        <h3>40+</h3>
+                                        <span>Countries</span>
                                     </div>
                                 </div>
                             </div>
@@ -111,8 +96,24 @@ const Banner = () => {
                 </motion.div>
             </AuroraBackground>
 
+            {/* Event promo card — desktop: absolute bottom-left; mobile: flows in at the bottom of the hero */}
+            <Link href="/events/mlc-oakland" className="hero-event-card" aria-label="Major League Cricket Season 04 Final VIP Experience — view event details">
+                <span className="hero-event-arrow" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M13 5l7 7-7 7" />
+                    </svg>
+                </span>
+                <div className="hero-event-top">
+                    <span className="hero-event-badge">Upcoming Event</span>
+                    <span className="hero-event-date">18 Jul 2026</span>
+                </div>
+                <span className="hero-event-title">Major League Cricket S4 Final</span>
+                <span className="hero-event-meta">Oakland Coliseum</span>
+            </Link>
+
             {/* Scroll indicator */}
             <div
+                className="hero-scroll-indicator"
                 onClick={() => {
                     const hero = document.querySelector('.hero-section');
                     if (hero && hero.nextElementSibling) {
@@ -270,29 +271,45 @@ const Banner = () => {
                     background: var(--tg-theme-primary) !important;
                     color: #fff !important;
                 }
-                .stats-band {
+                .hero-stats {
                     display: flex;
-                    flex-wrap: wrap;
                     justify-content: center;
-                    align-items: center;
-                    gap: 0;
+                    align-items: stretch;
+                    gap: clamp(14px, 1.8vw, 22px);
+                    flex-wrap: wrap;
+                    max-width: 660px;
+                    margin-inline: auto;
+                }
+                .hero-stat-card {
+                    flex: 1 1 0;
+                    min-width: 150px;
+                    text-align: center;
                     background: rgba(255,255,255,0.7);
                     backdrop-filter: blur(12px);
-                    border-radius: 16px;
-                    padding: clamp(16px, 2vw, 20px) clamp(16px, 3vw, 32px);
                     border: 1px solid rgba(0,0,0,0.06);
-                    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+                    border-radius: 14px;
+                    padding: clamp(18px, 2vw, 24px) clamp(14px, 1.8vw, 22px);
+                    box-shadow: 0 4px 18px rgba(11,26,74,0.05);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
                 }
-                .stats-item {
-                    flex: 1;
-                    text-align: center;
-                    padding: 4px clamp(8px, 1.5vw, 16px);
-                    min-width: 0;
+                .hero-stat-card:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 12px 30px rgba(11,26,74,0.1);
                 }
-                .stats-divider {
-                    width: 1px;
-                    height: clamp(28px, 3vw, 36px);
-                    background: rgba(0,0,0,0.08);
+                .hero-stat-card h3 {
+                    font-size: clamp(24px, 2.6vw, 30px);
+                    font-weight: 700;
+                    line-height: 1.05;
+                    margin-bottom: 5px;
+                    background: var(--tg-color-gradient);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .hero-stat-card span {
+                    font-size: clamp(12.5px, 0.95vw, 14px);
+                    color: var(--tg-body-color);
+                    font-weight: 400;
                 }
 
                 .hero-content-wrap {
@@ -308,9 +325,11 @@ const Banner = () => {
                 }
 
                 .hero-title {
-                    font-size: clamp(30px, 4.2vw, 54px) !important;
-                    max-width: min(100%, 860px) !important;
-                    margin-bottom: clamp(16px, 2vw, 22px) !important;
+                    font-size: clamp(38px, 5.6vw, 70px) !important;
+                    line-height: 1.08 !important;
+                    letter-spacing: -0.5px;
+                    max-width: min(100%, 900px) !important;
+                    margin-bottom: clamp(20px, 2.4vw, 28px) !important;
                 }
                 .hero-title-line-one,
                 .hero-title-line-two {
@@ -318,7 +337,7 @@ const Banner = () => {
                     white-space: nowrap;
                 }
                 .hero-title-line-two {
-                    margin-top: 2px;
+                    margin-top: 6px;
                 }
                 .hero-title-gradient {
                     background: var(--tg-color-gradient);
@@ -327,24 +346,69 @@ const Banner = () => {
                 }
 
                 .hero-desc {
-                    font-size: clamp(15px, 1.35vw, 17px) !important;
-                    max-width: min(100%, 640px) !important;
-                    margin-bottom: clamp(28px, 3vw, 40px) !important;
+                    font-size: clamp(17px, 1.65vw, 21px) !important;
+                    line-height: 1.65 !important;
+                    max-width: min(100%, 680px) !important;
+                    margin-bottom: clamp(28px, 3vw, 36px) !important;
                 }
 
                 .hero-btn-main {
-                    padding: clamp(11px, 1.2vw, 14px) clamp(20px, 2.4vw, 30px) !important;
-                    font-size: clamp(12px, 0.95vw, 14px) !important;
+                    padding: clamp(13px, 1.4vw, 16px) clamp(24px, 2.8vw, 34px) !important;
+                    font-size: clamp(13px, 1vw, 15px) !important;
                 }
 
                 .mt-5 {
-                    margin-top: clamp(1.25rem, 3vw, 3rem) !important;
+                    margin-top: clamp(0.9rem, 1.8vw, 1.6rem) !important;
                 }
-                
+
+                /* Short desktop/laptop viewports (e.g. a 13" MacBook, wide but only
+                   ~750-900px tall): scale the CONTENT down so the vertically-centered
+                   block stays compact and clears the absolute bottom-left promo card
+                   (which remains pinned/visible on wide screens). Deliberately touches
+                   only the inner elements — never .hero-section or .hero-aurora-wrap
+                   padding/min-height — so the aurora keeps filling the section and no
+                   white gap can appear. */
+                @media (min-width: 992px) and (max-height: 900px) {
+                    .hero-subtitle {
+                        margin-bottom: 16px !important;
+                    }
+                    .hero-title {
+                        font-size: clamp(30px, 4.2vw, 50px) !important;
+                        margin-bottom: 14px !important;
+                    }
+                    .hero-desc {
+                        font-size: 16px !important;
+                        margin-bottom: 20px !important;
+                    }
+                    .hero-btn-main {
+                        padding: 12px 26px !important;
+                        font-size: 13.5px !important;
+                    }
+                    .mt-5 {
+                        margin-top: 0.9rem !important;
+                    }
+                    .hero-stat-card {
+                        padding: 14px 16px !important;
+                    }
+                    .hero-stat-card h3 {
+                        font-size: 24px !important;
+                    }
+                    .hero-stat-card span {
+                        font-size: 12.5px !important;
+                    }
+                }
+
                 /* Mobile Responsive Styles */
                 @media (max-width: 991px) {
                     .hero-section {
                         margin-top: 0 !important;
+                    }
+                    /* The event card flows in-flow at the bottom of the hero on
+                       mobile/tablet; the absolute scroll indicator (bottom:32px)
+                       would sit on top of it. Hide it — it's decorative and
+                       redundant on touch devices. */
+                    .hero-scroll-indicator {
+                        display: none !important;
                     }
                     .orbit-scene {
                         opacity: 0.48;
@@ -362,6 +426,18 @@ const Banner = () => {
                     }
                     .orbit-ring-three {
                         --orbit-size: 600px;
+                    }
+                    /* .hero-event-card switches to mobile in-flow layout at
+                       1279px (see index.scss), but this title kept
+                       white-space: nowrap until 768px — leaving a gap where
+                       "Where Global CXOs"/"Converge" could force the line
+                       wider than the viewport and push the whole page's
+                       layout viewport out, breaking max-width media queries
+                       (incl. the event card's) even though the device itself
+                       is narrow. Relax it at the same 991px breakpoint. */
+                    .hero-title-line-one,
+                    .hero-title-line-two {
+                        white-space: normal;
                     }
                 }
                 @media (max-width: 768px) {
@@ -464,31 +540,23 @@ const Banner = () => {
                         border-radius: 10px !important;
                         box-shadow: 0 4px 15px rgba(10, 60, 194, 0.25) !important;
                     }
-                    .stats-band {
-                        padding: 16px 14px;
-                        gap: 0;
+                    .hero-stats {
+                        gap: 10px;
                         flex-wrap: nowrap !important;
+                    }
+                    .hero-stat-card {
+                        min-width: 0 !important;
+                        padding: 16px 10px !important;
+                        border-radius: 14px !important;
                         background: rgba(255,255,255,0.85) !important;
                         border: 1px solid rgba(10, 60, 194, 0.08) !important;
                         box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-                        border-radius: 14px !important;
                     }
-                    .stats-item {
-                        flex: 1 1 0 !important;
-                        padding: 4px 8px;
-                        min-width: 0;
+                    .hero-stat-card h3 {
+                        font-size: 22px !important;
                     }
-                    .stats-item h3 {
-                        font-size: 20px !important;
-                    }
-                    .stats-item span {
-                        font-size: 9px !important;
-                        letter-spacing: 0.5px !important;
-                    }
-                    .stats-divider {
-                        display: block !important;
-                        height: 28px;
-                        background: rgba(0,0,0,0.06) !important;
+                    .hero-stat-card span {
+                        font-size: 11px !important;
                     }
                 }
                 
@@ -510,20 +578,17 @@ const Banner = () => {
                         padding: 11px 18px !important;
                         font-size: 12px !important;
                     }
-                    .stats-band {
-                        flex-wrap: wrap !important;
-                        gap: 8px 0 !important;
-                        padding: 14px 12px !important;
+                    .hero-stats {
+                        gap: 8px !important;
                     }
-                    .stats-item {
-                        flex: 0 0 50% !important;
-                        padding: 6px 4px !important;
+                    .hero-stat-card {
+                        padding: 14px 6px !important;
                     }
-                    .stats-item h3 {
-                        font-size: 18px !important;
+                    .hero-stat-card h3 {
+                        font-size: 19px !important;
                     }
-                    .stats-divider {
-                        display: none !important;
+                    .hero-stat-card span {
+                        font-size: 10px !important;
                     }
                 }
                 

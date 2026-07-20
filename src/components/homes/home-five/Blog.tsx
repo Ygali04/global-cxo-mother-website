@@ -15,9 +15,9 @@ const Blog = () => {
       <section id="events" className="section-py-130" style={{ backgroundColor: "#fff" }}>
          <div className="container">
             <AnimateOnScroll>
-               <div className="row justify-content-center text-center mb-60">
+               <div className="row justify-content-center text-center" style={{ marginBottom: "36px" }}>
                   <div className="col-lg-8">
-                     <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "12px", display: "inline-block" }}>Events & Programs</span>
+                     <span style={{ background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, textTransform: "uppercase", letterSpacing: "2px", fontSize: "13px", marginBottom: "6px", display: "inline-block" }}>Events & Programs</span>
                      <h2 style={{ fontSize: "clamp(28px, 3.5vw, 42px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "16px" }}>Not Events. Curated Environments.</h2>
                      <p style={{ fontSize: "17px", color: "var(--tg-body-color)" }}>Not events. Curated environments for meaningful outcomes.</p>
                   </div>

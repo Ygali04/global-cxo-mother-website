@@ -1,15 +1,35 @@
 "use client"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
+const mission_pillars = [
+   { title: "Thought Leadership", desc: "Bringing together the brightest minds from enterprises and startups.", icon: "flaticon-idea" },
+   { title: "Advancing Innovation", desc: "Helping startups find the right enterprise partner for their product.", icon: "flaticon-start-up" },
+   { title: "Startup Advisory", desc: "Bridging enterprise wisdom with entrepreneurial innovation.", icon: "flaticon-handshake" },
+]
+
 const About = () => {
    return (
-      <section id="about" className="about__area-six section-py-130" style={{ backgroundColor: "#f7f8fc" }}>
+      <>
+      <section id="about" className="about__area-six section-py-130" style={{ backgroundColor: "#ffffff" }}>
          <div className="container">
-            {/* Top Row: Info (left) + Origin Story (right) */}
-            <div className="row align-items-stretch mb-4">
-               <div className="col-lg-6 mb-4 mb-lg-0">
+            {/* Top Row: Image (left) + Description & Origin Story (right) */}
+            <div className="row align-items-center">
+               <div className="col-lg-5 mb-4 mb-lg-0">
                   <AnimateOnScroll direction="left">
-                     <div style={{ height: "100%" }}>
+                     <div style={{ position: "relative", borderRadius: "20px", overflow: "hidden", boxShadow: "0 14px 40px rgba(11,26,74,0.12)" }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                           src="/assets/events/SriLanka/photos/GIS_2nd-193 - Copy.jpg"
+                           alt="Leaders convening at the Global Innovation Summit"
+                           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", aspectRatio: "4 / 3" }}
+                        />
+                     </div>
+                  </AnimateOnScroll>
+               </div>
+
+               <div className="col-lg-6">
+                  <AnimateOnScroll direction="right">
+                     <div>
                         <span style={{
                            background: "var(--tg-color-gradient)",
                            WebkitBackgroundClip: "text",
@@ -22,33 +42,16 @@ const About = () => {
                            display: "inline-block",
                         }}>About The Platform</span>
                         <h2 style={{
-                           fontSize: "clamp(28px, 3.5vw, 40px)",
+                           fontSize: "clamp(26px, 3.2vw, 38px)",
                            color: "var(--tg-heading-color)",
                            lineHeight: 1.15,
-                           marginBottom: "24px",
+                           marginBottom: "18px",
                            fontWeight: 700,
-                        }}>An Execution Platform. Not Just a Community.</h2>
-                        <p style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.75, margin: 0 }}>
-                           Global CXO Circle is a CXO-led platform designed to bridge the gap between conversations and real enterprise outcomes. It brings together enterprise leaders, founders, investors, and ecosystem partners into a structured environment where meaningful advisory, strategic introductions, and business outcomes can happen. Unlike traditional networks, Global CXO Circle is built as an execution platform — not just a community.
+                        }}>Built for Outcomes, Not Just Conversations.</h2>
+                        <p style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.75, marginBottom: "32px" }}>
+                           Global CXO Circle brings together enterprise leaders, founders, and investors to turn conversations into real results — through advisory, introductions, and partnerships that move business forward. It&apos;s not another networking group. It&apos;s a place built to get things done.
                         </p>
-                     </div>
-                  </AnimateOnScroll>
-               </div>
-               
-               <div className="col-lg-6">
-                  <AnimateOnScroll direction="right">
-                     <div style={{
-                        background: "#fff",
-                        boxShadow: "0 4px 16px rgba(11,26,74,0.08)",
-                        borderRadius: "16px",
-                        padding: "36px",
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center"
-                     }}>
-                        <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "28px" }}>The Origin Story</h3>
-                        
+
                         <div className="timeline-wrap" style={{ position: "relative", paddingLeft: "30px" }}>
                            <div style={{
                               position: "absolute",
@@ -59,7 +62,7 @@ const About = () => {
                               background: "var(--tg-color-gradient)",
                               opacity: 0.3
                            }}></div>
-                           
+
                            <div className="timeline-item mb-4" style={{ position: "relative" }}>
                               <div style={{
                                  position: "absolute",
@@ -73,10 +76,10 @@ const About = () => {
                               }}></div>
                               <h4 style={{ fontSize: "18px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "8px" }}>Global CIO Circle</h4>
                               <p style={{ fontSize: "15px", color: "var(--tg-body-color)", margin: 0 }}>
-                                 Global CXO Circle evolved from the success of Global CIO Circle, where technology leaders engaged in high-value interactions.
+                                 We started as a community for CIOs, built on trust and honest conversation.
                               </p>
                            </div>
-                           
+
                            <div className="timeline-item" style={{ position: "relative" }}>
                               <div style={{
                                  position: "absolute",
@@ -98,82 +101,93 @@ const About = () => {
                   </AnimateOnScroll>
                </div>
             </div>
+         </div>
+      </section>
 
-            {/* Bottom Row: Mission (left) + Vision (right) — full width */}
-            <div className="row">
-               <div className="col-lg-6 mb-4 mb-lg-0">
-                  <AnimateOnScroll delay={0.15} direction="left">
-                     <div className="about-card" style={{
-                        background: "#fff",
-                        borderRadius: "16px",
-                        padding: "32px",
-                        borderImage: "var(--tg-color-gradient) 1", borderLeft: "4px solid",
-                        boxShadow: "0 2px 8px rgba(11,26,74,0.06)",
-                        height: "100%",
-                        transition: "transform 0.3s ease, box-shadow 0.3s ease"
-                     }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                           <div style={{
-                              width: "40px",
-                              height: "40px",
-                              background: "var(--tg-color-gradient)",
-                              color: "#fff",
-                              borderRadius: "50%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: "18px",
-                              flexShrink: 0
-                           }}>
-                              <i className="flaticon-target"></i>
-                           </div>
-                           <h4 style={{ fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", margin: 0 }}>Mission</h4>
-                        </div>
-                        <p style={{ fontSize: "15px", color: "var(--tg-body-color)", margin: 0, lineHeight: 1.6 }}>To create a trusted global ecosystem where CXO leaders connect, collaborate, and drive meaningful outcomes together.</p>
-                     </div>
-                  </AnimateOnScroll>
-               </div>
-               <div className="col-lg-6">
-                  <AnimateOnScroll delay={0.25} direction="right">
-                     <div className="about-card" style={{
-                        background: "#fff",
-                        borderRadius: "16px",
-                        padding: "32px",
-                        borderImage: "var(--tg-color-gradient) 1", borderLeft: "4px solid",
-                        boxShadow: "0 2px 8px rgba(11,26,74,0.06)",
-                        height: "100%",
-                        transition: "transform 0.3s ease, box-shadow 0.3s ease"
-                     }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                           <div style={{
-                              width: "40px",
-                              height: "40px",
-                              background: "var(--tg-color-gradient)",
-                              color: "#fff",
-                              borderRadius: "50%",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              fontSize: "18px",
-                              flexShrink: 0
-                           }}>
-                              <i className="flaticon-start-up"></i>
-                           </div>
-                           <h4 style={{ fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", margin: 0 }}>Vision</h4>
-                        </div>
-                        <p style={{ fontSize: "15px", color: "var(--tg-body-color)", margin: 0, lineHeight: 1.6 }}>To become the world's most trusted platform for cross-functional executive collaboration and enterprise innovation.</p>
-                     </div>
+      {/* Our Mission — its own section with a tinted background so the white cards stand out */}
+      <section className="section-py-130" style={{ backgroundColor: "#eef2fb" }}>
+         <div className="container">
+            <div className="row justify-content-center text-center" style={{ marginBottom: "50px" }}>
+               <div className="col-lg-5">
+                  <AnimateOnScroll>
+                     <span style={{
+                        background: "var(--tg-color-gradient)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "2px",
+                        fontSize: "13px",
+                        marginBottom: "6px",
+                        display: "inline-block",
+                     }}>Our Mission</span>
+                     <h3 style={{ fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "16px", lineHeight: 1.25 }}>
+                        A Brighter Future for Enterprises and Startups — Together.
+                     </h3>
+                     <p style={{ fontSize: "16px", color: "var(--tg-body-color)", lineHeight: 1.75, margin: 0 }}>
+                        We&apos;re building a trusted global ecosystem where CXO leaders connect, collaborate, and turn ideas into outcomes.
+                     </p>
                   </AnimateOnScroll>
                </div>
             </div>
+
+            <div className="row gutter-y-30 justify-content-center">
+               {mission_pillars.map((item, i) => (
+                  <div key={item.title} className="col-lg-3">
+                     <AnimateOnScroll delay={0.1 * i} className="h-100">
+                        <div className="pillar-card" style={{
+                           background: "#fff",
+                           borderRadius: "16px",
+                           padding: "32px",
+                           height: "100%",
+                           boxShadow: "0 2px 8px rgba(11,26,74,0.06)",
+                           transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                           textAlign: "center",
+                        }}>
+                           <div style={{
+                              width: "56px",
+                              height: "56px",
+                              background: "var(--tg-color-gradient)",
+                              color: "#fff",
+                              borderRadius: "50%",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "24px",
+                              margin: "0 auto 20px",
+                           }}>
+                              <i className={item.icon}></i>
+                           </div>
+                           <h4 style={{
+                              fontSize: "18px",
+                              fontWeight: 700,
+                              color: "var(--tg-heading-color)",
+                              marginBottom: "10px",
+                              lineHeight: 1.3,
+                              // Reserve two lines of height and vertically centre the
+                              // text, so a single-line title (e.g. "Startup Advisory")
+                              // sits centred in the same space a two-line title fills —
+                              // keeping every card's description aligned on the same row.
+                              minHeight: "2.6em",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                           }}>{item.title}</h4>
+                           <p style={{ fontSize: "14.5px", color: "var(--tg-body-color)", margin: 0, lineHeight: 1.6 }}>{item.desc}</p>
+                        </div>
+                     </AnimateOnScroll>
+                  </div>
+               ))}
+            </div>
          </div>
          <style jsx>{`
-            .about-card:hover {
+            .about-card:hover, .pillar-card:hover {
                transform: translateY(-3px);
                box-shadow: 0 8px 24px rgba(11,26,74,0.1) !important;
             }
          `}</style>
       </section>
+      </>
    )
 }
 

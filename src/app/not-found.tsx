@@ -1,15 +1,10 @@
-import NotFound from "@/components/pages/error";
-import Wrapper from "@/layouts/Wrapper";
+import NotFoundClient from "@/components/pages/error/NotFoundClient";
 
 export const metadata = {
    title: "404 - Page Not Found | Global CXO Circle",
 };
 const NotFoundPage = () => {
-   return (
-      <Wrapper>
-         <NotFound />
-      </Wrapper>
-   )
+   return <NotFoundClient />
 }
 
 export default NotFoundPage

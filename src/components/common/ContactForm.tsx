@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react"
 
-const WEB3FORMS_ACCESS_KEY = "e2f3426f-24fd-472c-b564-50bac442e030"
+const WEB3FORMS_ACCESS_KEY = "b6e38651-6009-4ab0-a71d-c98ddda90dfa"
 
 const ContactForm = () => {
    const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
