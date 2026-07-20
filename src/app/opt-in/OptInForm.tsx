@@ -42,7 +42,7 @@ export default function OptInForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
-  const dupCache = React.useRef<Record<string, boolean>>({})
+  const dupCache = React.useRef<Record<string, boolean | Promise<boolean>>>({})
   
   const [fieldErrors, setFieldErrors] = useState<{
     firstName?: string
