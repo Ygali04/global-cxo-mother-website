@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import HeaderFive from "@/layouts/headers/HeaderFive"
 import FooterThree from "@/layouts/footers/FooterThree"
 import { Check, Mail, User, ShieldAlert, CheckCircle2, ChevronRight } from "lucide-react"
-import { toast } from "react-toastify"
 
 // =========================================================================
 // GOOGLE SHEETS CONFIGURATION
@@ -36,12 +35,13 @@ export default function OptInForm() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
-  const [joinCircle, setJoinCircle] = useState<"yes" | "no" | null>("yes")
-  const [learnMore, setLearnMore] = useState<"yes" | "no" | null>("yes")
+  const [joinCircle, setJoinCircle] = useState<"yes" | "no" | null>(null)
+  const [learnMore, setLearnMore] = useState<"yes" | "no" | null>(null)
 
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
   
   const [fieldErrors, setFieldErrors] = useState<{
     firstName?: string
@@ -52,12 +52,12 @@ export default function OptInForm() {
   }>({})
 
   useEffect(() => {
+    setMounted(true)
     // Check if there was an error during a previous submit that triggered a reload
     const storedError = sessionStorage.getItem("opt_in_error")
     if (storedError) {
       setSubmitError(storedError)
       sessionStorage.removeItem("opt_in_error")
-      toast.error(storedError)
     }
   }, [])
 
@@ -92,25 +92,10 @@ export default function OptInForm() {
 
     setSubmitting(true)
     try {
-      const scriptUrl = process.env.NEXT_PUBLIC_OPT_IN_SCRIPT_URL || process.env.OPT_IN_SCRIPT_URL
-
-      if (!scriptUrl) {
-        console.warn(
-          "⚠️ NEXT_PUBLIC_OPT_IN_SCRIPT_URL is not set. Submitting mock development success."
-        )
-        // Simulate a brief delay then mark as successful for testing UI
-        await new Promise((resolve) => setTimeout(resolve, 800))
-        setSubmitted(true)
-        toast.success("Response recorded")
-        setSubmitting(false)
-        return
-      }
-
-      await fetch(scriptUrl, {
+      const response = await fetch("/api/opt-in", {
         method: "POST",
-        mode: "no-cors",
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           firstName: firstName.trim(),
@@ -121,15 +106,25 @@ export default function OptInForm() {
         }),
       })
 
-      // Because mode: "no-cors" returns an opaque response (status 0),
-      // we treat successful completion of the fetch as confirmation of delivery.
+      const data = await response.json()
+
+      if (!response.ok || data.success === false) {
+        if (
+          data.duplicate ||
+          (typeof data.error === "string" && data.error.toLowerCase().includes("already"))
+        ) {
+          setSubmitError("This email address is already registered.")
+        } else {
+          setSubmitError(data.error || "There was an error. Please try again.")
+        }
+        setSubmitting(false)
+        return
+      }
+
       setSubmitted(true)
-      toast.success("Response recorded")
     } catch (err) {
       console.error(err)
-      // Reload the form when there is an error while submitting and say there was an error please try again
-      sessionStorage.setItem("opt_in_error", "There was an error. Please try again.")
-      window.location.reload()
+      setSubmitError("There was an error submitting your response. Please try again.")
     } finally {
       setSubmitting(false)
     }
@@ -142,14 +137,18 @@ export default function OptInForm() {
     setSubmitError(null)
   }
 
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f8f9fa]" suppressHydrationWarning={true} />
+  }
+
   return (
-    <div className="overflow-x-hidden" style={{ background: "#f8f9fa" }}>
+    <div className="overflow-x-hidden" style={{ background: "#f8f9fa" }} suppressHydrationWarning={true}>
       {/* Scoped Responsive CSS */}
       <style>{`
         .opt-in-card {
           background: #ffffff;
           border-radius: 14px;
-          padding: 20px 15px;
+          padding: 16px 14px;
           box-shadow: 0 10px 30px rgba(11,26,74,0.04), 0 1px 3px rgba(0,0,0,0.02);
           border-width: 1px;
           border-style: solid;
@@ -157,7 +156,7 @@ export default function OptInForm() {
         }
         .opt-in-input-container {
           width: 100%;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
         .opt-in-input-wrapper {
           position: relative;
@@ -257,10 +256,10 @@ export default function OptInForm() {
         @media (min-width: 576px) {
           .opt-in-card {
             border-radius: 20px;
-            padding: 32px 26px;
+            padding: 28px 24px;
           }
           .opt-in-input-container {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
           }
           .opt-in-icon {
             left: 15px;
@@ -284,10 +283,10 @@ export default function OptInForm() {
             line-height: 1.5;
           }
           .opt-in-submit-btn {
-            padding: 12.5px 16px;
+            padding: 12px 16px;
             border-radius: 10px;
             font-size: 15px;
-            margin-top: 22px;
+            margin-top: 18px;
           }
         }
         .brochure-card {
@@ -324,7 +323,7 @@ export default function OptInForm() {
       <HeaderFive hideSignIn />
 
       {/* Hero Banner Section */}
-      <section className="pt-[110px] pb-12 sm:pt-[150px] sm:pb-16 relative overflow-hidden">
+      <section className="pt-[90px] pb-6 sm:pt-[135px] sm:pb-12 relative overflow-hidden">
         <div
           className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full blur-3xl opacity-50"
           style={{
@@ -386,7 +385,7 @@ export default function OptInForm() {
           </div>
 
           {/* Form Container */}
-          <div className="row justify-content-center" style={{ marginTop: "24px" }}>
+          <div className="row justify-content-center" style={{ marginTop: "16px" }}>
             <div className="col-lg-6 col-md-8 col-sm-10">
               <FadeUp delay={0.3}>
                 <div className="opt-in-card">
@@ -400,61 +399,64 @@ export default function OptInForm() {
                         noValidate
                         autoComplete="on"
                       >
-                        {/* First Name Field */}
-                        <div style={{ textAlign: "left" }}>
-                          <label htmlFor="firstName" className="opt-in-label">
-                            First Name<Required />
-                          </label>
-                          <div className="opt-in-input-container">
-                            <div className="opt-in-input-wrapper">
-                              <User className="opt-in-icon" />
-                              <input
-                                type="text"
-                                id="firstName"
-                                name="firstName"
-                                autoComplete="given-name"
-                                value={firstName}
-                                onChange={(e) => {
-                                  setFirstName(e.target.value)
-                                  clearError("firstName")
-                                }}
-                                className={`opt-in-input ${fieldErrors.firstName ? "error" : ""}`}
-                                placeholder="John"
-                                required
-                              />
+                        {/* First & Last Name Row */}
+                        <div className="row g-2 sm:g-3">
+                          {/* First Name Field */}
+                          <div className="col-6" style={{ textAlign: "left" }}>
+                            <label htmlFor="firstName" className="opt-in-label">
+                              First Name<Required />
+                            </label>
+                            <div className="opt-in-input-container">
+                              <div className="opt-in-input-wrapper">
+                                <User className="opt-in-icon" />
+                                <input
+                                  type="text"
+                                  id="firstName"
+                                  name="firstName"
+                                  autoComplete="given-name"
+                                  value={firstName}
+                                  onChange={(e) => {
+                                    setFirstName(e.target.value)
+                                    clearError("firstName")
+                                  }}
+                                  className={`opt-in-input ${fieldErrors.firstName ? "error" : ""}`}
+                                  placeholder="John"
+                                  required
+                                />
+                              </div>
+                              {fieldErrors.firstName && (
+                                <p className="opt-in-error-text">{fieldErrors.firstName}</p>
+                              )}
                             </div>
-                            {fieldErrors.firstName && (
-                              <p className="opt-in-error-text">{fieldErrors.firstName}</p>
-                            )}
                           </div>
-                        </div>
 
-                        {/* Last Name Field */}
-                        <div style={{ textAlign: "left" }}>
-                          <label htmlFor="lastName" className="opt-in-label">
-                            Last Name<Required />
-                          </label>
-                          <div className="opt-in-input-container">
-                            <div className="opt-in-input-wrapper">
-                              <User className="opt-in-icon" />
-                              <input
-                                type="text"
-                                id="lastName"
-                                name="lastName"
-                                autoComplete="family-name"
-                                value={lastName}
-                                onChange={(e) => {
-                                  setLastName(e.target.value)
-                                  clearError("lastName")
-                                }}
-                                className={`opt-in-input ${fieldErrors.lastName ? "error" : ""}`}
-                                placeholder="Doe"
-                                required
-                              />
+                          {/* Last Name Field */}
+                          <div className="col-6" style={{ textAlign: "left" }}>
+                            <label htmlFor="lastName" className="opt-in-label">
+                              Last Name<Required />
+                            </label>
+                            <div className="opt-in-input-container">
+                              <div className="opt-in-input-wrapper">
+                                <User className="opt-in-icon" />
+                                <input
+                                  type="text"
+                                  id="lastName"
+                                  name="lastName"
+                                  autoComplete="family-name"
+                                  value={lastName}
+                                  onChange={(e) => {
+                                    setLastName(e.target.value)
+                                    clearError("lastName")
+                                  }}
+                                  className={`opt-in-input ${fieldErrors.lastName ? "error" : ""}`}
+                                  placeholder="Doe"
+                                  required
+                                />
+                              </div>
+                              {fieldErrors.lastName && (
+                                <p className="opt-in-error-text">{fieldErrors.lastName}</p>
+                              )}
                             </div>
-                            {fieldErrors.lastName && (
-                              <p className="opt-in-error-text">{fieldErrors.lastName}</p>
-                            )}
                           </div>
                         </div>
 
@@ -488,21 +490,21 @@ export default function OptInForm() {
                         </div>
 
                         {/* Join Circle Question with YES / NO Checkboxes */}
-                        <div style={{ margin: "18px 0 16px", textAlign: "left" }}>
+                        <div style={{ margin: "12px 0 10px", textAlign: "left" }} className="sm:!my-[16px]">
                           <p
                             style={{
                               fontSize: "12.5px",
                               color: "var(--tg-heading-color)",
                               fontWeight: 600,
-                              lineHeight: 1.5,
-                              marginBottom: "10px",
+                              lineHeight: 1.45,
+                              marginBottom: "8px",
                             }}
-                            className="sm:!text-[13.5px]"
+                            className="sm:!text-[13.5px] sm:!mb-[10px]"
                           >
-                            I would like to join the circle to meet the founders, invest, and advise them, network with fellow CxOs and founders, and attend future CxO events. If you are selected, you will receive a confirmation to join the Circle<Required />
+                            I'd like to be added to the mailing list to be invited to such premium CxO networking events.<Required />
                           </p>
 
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", alignItems: "center" }}>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "18px", alignItems: "center" }} className="sm:!gap-[24px]">
                             {/* YES Checkbox */}
                             <label className="opt-in-checkbox-label" style={{ alignItems: "center" }}>
                               <input
@@ -594,21 +596,21 @@ export default function OptInForm() {
                         </div>
 
                         {/* Learn More Question with YES / NO Checkboxes */}
-                        <div style={{ margin: "18px 0 16px", textAlign: "left" }}>
+                        <div style={{ margin: "12px 0 10px", textAlign: "left" }} className="sm:!my-[16px]">
                           <p
                             style={{
                               fontSize: "12.5px",
                               color: "var(--tg-heading-color)",
                               fontWeight: 600,
-                              lineHeight: 1.5,
-                              marginBottom: "10px",
+                              lineHeight: 1.45,
+                              marginBottom: "8px",
                             }}
-                            className="sm:!text-[13.5px]"
+                            className="sm:!text-[13.5px] sm:!mb-[10px]"
                           >
-                            I would like to learn more<Required />
+                            I'd like to learn more about joining the Circle - meeting founders, investing, advising, and networking with fellow CxOs.<Required />
                           </p>
 
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", alignItems: "center" }}>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "18px", alignItems: "center" }} className="sm:!gap-[24px]">
                             {/* YES Checkbox */}
                             <label className="opt-in-checkbox-label" style={{ alignItems: "center" }}>
                               <input
@@ -707,19 +709,22 @@ export default function OptInForm() {
                               borderWidth: "1px",
                               borderStyle: "solid",
                               borderColor: "#FCA5A5",
-                              borderRadius: "8px",
-                              padding: "10px 14px",
+                              borderLeftWidth: "4px",
+                              borderLeftColor: "#EF4444",
+                              borderRadius: "7px",
+                              padding: "9px 12px",
                               color: "#B91C1C",
-                              fontSize: "13px",
-                              marginTop: "14px",
+                              fontSize: "12.5px",
+                              marginTop: "12px",
                               display: "flex",
-                              alignItems: "center",
+                              alignItems: "flex-start",
                               gap: "8px",
-                              textAlign: "left"
+                              textAlign: "left",
+                              lineHeight: "1.4"
                             }}
                           >
-                            <ShieldAlert style={{ width: "16px", height: "16px", flexShrink: 0 }} />
-                            <span>{submitError}</span>
+                            <ShieldAlert style={{ width: "16px", height: "16px", flexShrink: 0, marginTop: "1px" }} />
+                            <span style={{ fontWeight: 500 }}>{submitError}</span>
                           </div>
                         )}
 
@@ -772,50 +777,26 @@ export default function OptInForm() {
                         </div>
                         <h3
                           style={{
-                            fontSize: "20px",
+                            fontSize: "22px",
                             fontWeight: 700,
                             color: "var(--tg-heading-color)",
-                            marginBottom: "10px",
+                            marginBottom: "12px",
                           }}
                         >
-                          Response recorded
+                          Thank you
                         </h3>
                         <p
                           style={{
-                            fontSize: "14px",
+                            fontSize: "14.5px",
                             color: "var(--tg-body-color)",
-                            lineHeight: "1.55",
-                            marginBottom: "20px",
+                            lineHeight: "1.6",
+                            marginBottom: "10px",
+                            maxWidth: "440px",
+                            margin: "0 auto",
                           }}
                         >
-                          Thank you for choosing to stay connected. Your response has been recorded.
+                          Your response has been received. If you expressed interest in joining the Circle, someone from our team will be in touch.
                         </p>
-                        <button
-                          onClick={() => {
-                            setFirstName("")
-                            setLastName("")
-                            setEmail("")
-                            setJoinCircle("yes")
-                            setLearnMore("yes")
-                            setSubmitted(false)
-                            setSubmitError(null)
-                          }}
-                          style={{
-                            background: "transparent",
-                            borderWidth: "1px",
-                            borderStyle: "solid",
-                            borderColor: "var(--tg-border-1)",
-                            padding: "8px 18px",
-                            borderRadius: "7px",
-                            fontSize: "13.5px",
-                            color: "var(--tg-body-color)",
-                            cursor: "pointer",
-                            transition: "all 0.2s",
-                          }}
-                          className="btn-outline-hover"
-                        >
-                          Submit another response
-                        </button>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -827,7 +808,7 @@ export default function OptInForm() {
       </section>
 
       {/* Brochure Showcase Section - More Information on the Organization */}
-      <section className="py-12 sm:py-16 relative" style={{ zIndex: 2 }}>
+      <section className="pt-4 pb-12 sm:pt-6 sm:pb-16 relative" style={{ zIndex: 2 }}>
         <div className="container">
           <div className="row justify-content-center text-center mb-10">
             <div className="col-lg-8">
