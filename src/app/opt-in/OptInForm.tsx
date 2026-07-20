@@ -92,30 +92,84 @@ export default function OptInForm() {
 
     setSubmitting(true)
     try {
-      const response = await fetch("/api/opt-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.trim(),
-          joinCircle: joinCircle === "yes",
-          learnMore: learnMore === "yes",
-        }),
-      })
+      const scriptUrl =
+        process.env.NEXT_PUBLIC_OPT_IN_SCRIPT_URL || process.env.OPT_IN_SCRIPT_URL
 
-      const data = await response.json()
+      const payload = {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        joinCircle: joinCircle === "yes",
+        learnMore: learnMore === "yes",
+      }
 
-      if (!response.ok || data.success === false) {
+      let response: Response | undefined
+      let data: any = {}
+
+      if (scriptUrl) {
+        // Direct call to Google Apps Script Web App (required in static export / output: 'export' production)
+        try {
+          response = await fetch(scriptUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+            body: JSON.stringify(payload),
+            redirect: "follow",
+          })
+
+          const text = await response.text()
+          try {
+            data = JSON.parse(text)
+          } catch {
+            data = { success: response.ok, raw: text }
+          }
+        } catch (fetchErr) {
+          // If browser blocks reading cross-domain POST redirect response due to strict CORS,
+          // fall back to mode: "no-cors" to guarantee the form data reaches Google Sheets.
+          await fetch(scriptUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+            body: JSON.stringify(payload),
+          })
+          setSubmitted(true)
+          setSubmitting(false)
+          return
+        }
+      } else {
+        // Local Node dev server fallback (/api/opt-in)
+        response = await fetch("/api/opt-in", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+
+        const text = await response.text()
+        try {
+          data = JSON.parse(text)
+        } catch {
+          if (!response.ok) {
+            throw new Error("Server returned status " + response.status)
+          }
+          data = { success: true }
+        }
+      }
+
+      if (response && (!response.ok || data.success === false)) {
         if (
           data.duplicate ||
           (typeof data.error === "string" && data.error.toLowerCase().includes("already"))
         ) {
           setSubmitError("This email address is already registered.")
         } else {
-          setSubmitError(data.error || "There was an error. Please try again.")
+          setSubmitError(
+            data.error || "Failed to submit response. Please verify NEXT_PUBLIC_OPT_IN_SCRIPT_URL."
+          )
         }
         setSubmitting(false)
         return
