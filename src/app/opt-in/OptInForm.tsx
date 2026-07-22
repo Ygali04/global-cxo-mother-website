@@ -6,7 +6,7 @@ import HeaderFive from "@/layouts/headers/HeaderFive"
 import FooterThree from "@/layouts/footers/FooterThree"
 import { Check, Mail, User, ShieldAlert, CheckCircle2, ChevronRight } from "lucide-react"
 
-const WEB3FORMS_ACCESS_KEY = "b6e38651-6009-4ab0-a71d-c98ddda90dfa"
+const LAZYFORMS_ENDPOINT = "https://api.lazyforms.com/f/ad9a16cd-2208-4c0c-bca7-6ac8244cdc9a"
 
 /* ------------------------------------------------------------------ */
 /* Motion helpers                                                      */
@@ -84,30 +84,40 @@ export default function OptInForm() {
     setSubmitError(null)
     if (!validate()) return
 
-    const payload = {
-      access_key: WEB3FORMS_ACCESS_KEY,
-      subject: `New opt-in from ${firstName.trim()} ${lastName.trim()}`,
-      name: `${firstName.trim()} ${lastName.trim()}`,
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email: email.trim().toLowerCase(),
-      joinCircle: joinCircle === "yes" ? "Yes" : "No",
-      learnMore: learnMore === "yes" ? "Yes" : "No",
+    // Check for duplicate submission (client-side)
+    const normalizedEmail = email.trim().toLowerCase()
+    const submittedEmails: string[] = JSON.parse(localStorage.getItem("opt_in_submitted") || "[]")
+    if (submittedEmails.includes(normalizedEmail)) {
+      setSubmitError("This email address has already been submitted.")
+      return
     }
+
+    const formData = new FormData()
+    formData.append("_honey", "") // Honeypot field for spam protection
+    formData.append("timestamp", new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }))
+    formData.append("firstName", firstName.trim())
+    formData.append("lastName", lastName.trim())
+    formData.append("email", normalizedEmail)
+    formData.append("name", `${firstName.trim()} ${lastName.trim()}`)
+    formData.append("mailingList", joinCircle === "yes" ? "Yes" : "No")
+    formData.append("joinCircle", learnMore === "yes" ? "Yes" : "No")
 
     setSubmitting(true)
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch(LAZYFORMS_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       })
-      const data = (await response.json()) as { success?: boolean; message?: string }
 
-      if (!response.ok || !data.success) {
-        setSubmitError(data.message || "Failed to submit response. Please try again.")
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        setSubmitError((data as any).message || "Failed to submit response. Please try again.")
         return
       }
+
+      // Store email to prevent duplicate submissions
+      submittedEmails.push(normalizedEmail)
+      localStorage.setItem("opt_in_submitted", JSON.stringify(submittedEmails))
 
       setSubmitted(true)
     } catch (err) {
