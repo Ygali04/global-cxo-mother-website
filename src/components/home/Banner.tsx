@@ -60,7 +60,11 @@ const Banner = () => {
                     events.unshift(cricket);
                 }
                 const found = events.find(
-                    (e: any) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived'
+                    (e: any) =>
+                        e.registrationOpen !== false &&
+                        e.lifecycleStatus !== 'past' &&
+                        e.lifecycleStatus !== 'archived' &&
+                        e.showHeroPromo !== false
                 );
                 if (found && isMounted) {
                     setUpcoming({
@@ -69,6 +73,9 @@ const Banner = () => {
                         date: found.date,
                         location: found.location,
                     });
+                    setShowToast(true);
+                } else if (isMounted) {
+                    setShowToast(false);
                 }
             } catch {}
         };

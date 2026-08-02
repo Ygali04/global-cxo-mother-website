@@ -71,6 +71,7 @@ type EventMutationInput = {
   objectives?: string[];
   lifecycleStatus?: EventLifecycleStatus;
   registrationOpen?: boolean;
+  showHeroPromo?: boolean;
   venueName?: string;
   venueAddress?: string;
   venueDescription?: string;
@@ -1304,6 +1305,12 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       const nextRegistrationOpen = updates.registrationOpen ?? existing.registrationOpen ?? false;
       const nextLifecycleStatus =
         updates.lifecycleStatus ?? existing.lifecycleStatus ?? (nextRegistrationOpen ? 'current' : 'past');
+
+      let nextShowHeroPromo = updates.showHeroPromo ?? existing.showHeroPromo ?? false;
+      if (nextLifecycleStatus === 'past' || nextLifecycleStatus === 'archived' || !nextRegistrationOpen) {
+        nextShowHeroPromo = false;
+      }
+
       const nextTitle = updates.title?.trim() || existing.title;
       const nextDescription = updates.description?.trim() || existing.description;
       const nextObjectives =
@@ -1337,6 +1344,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         livestreamUrl: updates.livestreamUrl !== undefined ? updates.livestreamUrl.trim() : existing.livestreamUrl,
         lifecycleStatus: nextLifecycleStatus,
         registrationOpen: nextRegistrationOpen,
+        showHeroPromo: nextShowHeroPromo,
         cta: (updates.ctaPrimaryLabel && updates.ctaPrimaryUrl) ? {
           primaryLabel: updates.ctaPrimaryLabel.trim(),
           primaryUrl: updates.ctaPrimaryUrl.trim(),
@@ -1360,14 +1368,22 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         },
       };
 
-      setEvents((prev) => prev.map((event) => (event.slug === slug ? updated : event)));
+      setEvents((prev) =>
+        prev.map((event) => {
+          if (event.slug === slug) return updated;
+          if (nextShowHeroPromo) return { ...event, showHeroPromo: false };
+          return event;
+        })
+      );
 
       try {
         const snap = loadMockDatabaseSnapshot();
-        const idx = snap.events.findIndex((e) => e.slug === slug);
-        if (idx !== -1) {
-          snap.events[idx] = updated;
-        } else {
+        snap.events = snap.events.map((e) => {
+          if (e.slug === slug) return updated;
+          if (nextShowHeroPromo) return { ...e, showHeroPromo: false };
+          return e;
+        });
+        if (!snap.events.some((e) => e.slug === slug)) {
           snap.events.unshift(updated);
         }
         void persistMockDatabaseSnapshot(snap);

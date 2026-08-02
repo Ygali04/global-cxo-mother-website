@@ -88,6 +88,7 @@ export interface EventDetail {
   pastHighlights?: string;
   lifecycleStatus?: EventLifecycleStatus;
   registrationOpen?: boolean;
+  showHeroPromo?: boolean;
   price?: string;
   isTeaser?: boolean;
   cta?: CTAConfig;

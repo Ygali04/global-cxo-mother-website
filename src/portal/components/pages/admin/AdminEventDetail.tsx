@@ -155,6 +155,7 @@ interface EditorState {
   livestreamUrl: string;
   lifecycleStatus: EventLifecycleStatus;
   registrationOpen: boolean;
+  showHeroPromo: boolean;
   price: string;
   metaTitle: string;
   metaDescription: string;
@@ -190,6 +191,7 @@ function buildEditorState(event: EventDetailType): EditorState {
     livestreamUrl: event.livestreamUrl ?? '',
     lifecycleStatus: event.lifecycleStatus ?? (event.registrationOpen ? 'current' : 'past'),
     registrationOpen: event.registrationOpen ?? false,
+    showHeroPromo: event.showHeroPromo ?? (event.lifecycleStatus === 'current' && event.registrationOpen !== false),
     price: event.price ?? '',
     metaTitle: event.metadata.title,
     metaDescription: event.metadata.description,
@@ -1375,16 +1377,35 @@ function SettingsTab({
         </CardContent>
       </Card>
 
-      {/* Registration */}
+      {/* Registration & Feature Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Registration</CardTitle>
-          <CardDescription>Control whether new registrations are accepted.</CardDescription>
+          <CardTitle className="text-base">Registration &amp; Hero Visibility</CardTitle>
+          <CardDescription>Control whether new registrations are accepted and homepage hero promo card visibility.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-3">
-            <Switch checked={form.registrationOpen} onCheckedChange={(v) => setForm((prev) => ({ ...prev, registrationOpen: v }))} />
-            <span className="text-sm">Registration is <strong>{form.registrationOpen ? 'open' : 'closed'}</strong></span>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="font-semibold text-slate-900">Registration Open</Label>
+              <p className="text-xs text-slate-500">Allow users to register for this event.</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Switch checked={form.registrationOpen} onCheckedChange={(v) => setForm((prev) => ({ ...prev, registrationOpen: v }))} />
+              <span className="text-sm"><strong>{form.registrationOpen ? 'Open' : 'Closed'}</strong></span>
+            </div>
+          </div>
+
+          <div className="border-t pt-4 flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="font-semibold text-slate-900">Hero Section Promo Card</Label>
+              <p className="text-xs text-slate-500">
+                Display this event as the floating promo toast card in the homepage hero section.
+              </p>
+            </div>
+            <Switch
+              checked={form.showHeroPromo}
+              onCheckedChange={(v) => setForm((prev) => ({ ...prev, showHeroPromo: v }))}
+            />
           </div>
         </CardContent>
       </Card>
@@ -1961,14 +1982,15 @@ export default function AdminEventDetail(): JSX.Element {
           ctaSecondaryLabel: form.ctaSecondaryLabel,
           ctaSecondaryUrl: form.ctaSecondaryUrl,
           lumaUrl: form.lumaUrl,
+          lifecycleStatus: form.lifecycleStatus,
+          registrationOpen: form.registrationOpen,
+          showHeroPromo: form.showHeroPromo,
           highlights: form.highlights.split('\n').map((h) => h.trim()).filter(Boolean),
           highlightCards,
           speakers,
           sponsors,
           itinerary,
           livestreamUrl: form.livestreamUrl,
-          lifecycleStatus: form.lifecycleStatus,
-          registrationOpen: form.registrationOpen,
         });
 
         // Save current state as the new baseline
