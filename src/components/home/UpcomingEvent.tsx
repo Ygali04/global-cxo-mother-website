@@ -20,6 +20,11 @@ const UsersIcon = () => (
     </svg>
 )
 
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+import eventsData from "@/data/EventsData"
+
 const UpcomingEvent = () => {
     const [event, setEvent] = useState<{
         slug: string;
@@ -42,24 +47,42 @@ const UpcomingEvent = () => {
     });
 
     useEffect(() => {
-        try {
-            const events = loadMockDatabaseSnapshot().events;
-            const found = events.find(
-                (e: any) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived'
-            );
-            if (found) {
-                setEvent({
-                    slug: found.slug,
-                    title: found.title,
-                    tagline: found.tagline || "VIP Experience · CXO Networking",
-                    date: found.date,
-                    location: found.location,
-                    attendees: `${found.attendees} attendees expected`,
-                    description: found.description,
-                    bannerImage: found.bannerImage || found.heroImage || "/events/mlc_main_banner.webp",
-                });
-            }
-        } catch {}
+        let isMounted = true;
+        const fetchEvents = async () => {
+            try {
+                let events: any[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(50);
+                        events = raw.map((e) => mapApiEventToEventDetail(e, 0));
+                    } catch {}
+                }
+                if (!events.length) {
+                    events = loadMockDatabaseSnapshot().events;
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !events.some((e) => e.slug === cricket.slug)) {
+                    events.unshift(cricket);
+                }
+                const found = events.find(
+                    (e: any) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived'
+                );
+                if (found && isMounted) {
+                    setEvent({
+                        slug: found.slug,
+                        title: found.title,
+                        tagline: found.tagline || "VIP Experience · CXO Networking",
+                        date: found.date,
+                        location: found.location,
+                        attendees: `${found.attendees} attendees expected`,
+                        description: found.description,
+                        bannerImage: found.bannerImage || found.heroImage || "/events/mlc_main_banner.webp",
+                    });
+                }
+            } catch {}
+        };
+        void fetchEvents();
+        return () => { isMounted = false; };
     }, []);
 
     return (

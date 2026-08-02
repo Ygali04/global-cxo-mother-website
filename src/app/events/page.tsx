@@ -107,18 +107,40 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
     )
 }
 
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
     const [allEvents, setAllEvents] = useState<EventDetail[]>(eventsData)
 
     useEffect(() => {
-        try {
-            const loaded = loadMockDatabaseSnapshot().events;
-            if (loaded && loaded.length > 0) {
-                setAllEvents(loaded as EventDetail[]);
-            }
-        } catch {}
+        let isMounted = true;
+        const loadEvents = async () => {
+            try {
+                let list: EventDetail[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(200);
+                        list = raw.map((e) => mapApiEventToEventDetail(e, 0));
+                    } catch {}
+                }
+                if (!list.length) {
+                    list = loadMockDatabaseSnapshot().events;
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !list.some((e) => e.slug === cricket.slug)) {
+                    list.unshift(cricket);
+                }
+                if (isMounted && list.length > 0) {
+                    setAllEvents(list);
+                }
+            } catch {}
+        };
+        void loadEvents();
+        return () => { isMounted = false; };
     }, []);
 
     useEffect(() => {

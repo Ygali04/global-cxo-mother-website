@@ -468,6 +468,12 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       const detailList = rawEvents
         .filter((e) => !deletedEventSlugsRef.current.has(e.slug))
         .map((e) => mapApiEventToEventDetail(e, countBySlug.get(e.slug) ?? 0));
+      const existingSlugs = new Set(detailList.map((e) => e.slug));
+      eventsData.forEach((defaultEv) => {
+        if (!existingSlugs.has(defaultEv.slug) && !deletedEventSlugsRef.current.has(defaultEv.slug)) {
+          detailList.push(defaultEv);
+        }
+      });
       setEvents(detailList);
     } catch {
       failedResources.push('events');
@@ -558,6 +564,12 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         rawEvents.forEach((e) => { vis[e.slug] = mapVisibilityFromApi(e.visibility_setting); });
         setEventVisibility(vis);
         const detailList = rawEvents.map((e) => mapApiEventToEventDetail(e, 0));
+        const existingSlugs = new Set(detailList.map((e) => e.slug));
+        eventsData.forEach((defaultEv) => {
+          if (!existingSlugs.has(defaultEv.slug)) {
+            detailList.push(defaultEv);
+          }
+        });
         setEvents(detailList);
       } catch {
         // Static fallback already loaded via emptyCatalogSnapshot

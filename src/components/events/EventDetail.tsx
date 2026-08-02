@@ -108,16 +108,38 @@ const ItineraryRow = ({ item }: { item: ItineraryItem }) => {
     )
 }
 
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+
 const EventDetail = ({ slug }: { slug: string }) => {
     const [allEvents, setAllEvents] = useState<EventDetailType[]>(eventsData)
 
     useEffect(() => {
-        try {
-            const loaded = loadMockDatabaseSnapshot().events;
-            if (loaded && loaded.length > 0) {
-                setAllEvents(loaded as EventDetailType[]);
-            }
-        } catch {}
+        let isMounted = true;
+        const loadEvents = async () => {
+            try {
+                let list: EventDetailType[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(200);
+                        list = raw.map((e) => mapApiEventToEventDetail(e, 0)) as EventDetailType[];
+                    } catch {}
+                }
+                if (!list.length) {
+                    list = loadMockDatabaseSnapshot().events as EventDetailType[];
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !list.some((e) => e.slug === cricket.slug)) {
+                    list.unshift(cricket as EventDetailType);
+                }
+                if (isMounted && list.length > 0) {
+                    setAllEvents(list);
+                }
+            } catch {}
+        };
+        void loadEvents();
+        return () => { isMounted = false; };
     }, []);
 
     const event = useMemo(() => {

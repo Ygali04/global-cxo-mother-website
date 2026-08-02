@@ -5,6 +5,11 @@ import { AuroraBackground } from "@/components/ui/aurora-background"
 import { motion } from "framer-motion"
 import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+import eventsData from "@/data/EventsData"
+
 const Banner = () => {
     const [upcoming, setUpcoming] = useState({
         slug: "mlc-oakland",
@@ -14,20 +19,38 @@ const Banner = () => {
     });
 
     useEffect(() => {
-        try {
-            const events = loadMockDatabaseSnapshot().events;
-            const found = events.find(
-                (e: any) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived'
-            );
-            if (found) {
-                setUpcoming({
-                    slug: found.slug,
-                    title: found.title,
-                    date: found.date,
-                    location: found.location,
-                });
-            }
-        } catch {}
+        let isMounted = true;
+        const fetchEvents = async () => {
+            try {
+                let events: any[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(50);
+                        events = raw.map((e) => mapApiEventToEventDetail(e, 0));
+                    } catch {}
+                }
+                if (!events.length) {
+                    events = loadMockDatabaseSnapshot().events;
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !events.some((e) => e.slug === cricket.slug)) {
+                    events.unshift(cricket);
+                }
+                const found = events.find(
+                    (e: any) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived'
+                );
+                if (found && isMounted) {
+                    setUpcoming({
+                        slug: found.slug,
+                        title: found.title,
+                        date: found.date,
+                        location: found.location,
+                    });
+                }
+            } catch {}
+        };
+        void fetchEvents();
+        return () => { isMounted = false; };
     }, []);
 
     return (
