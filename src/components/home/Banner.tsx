@@ -10,6 +10,36 @@ import { listEventsApi } from "@/portal/api/events"
 import { mapApiEventToEventDetail } from "@/portal/api/mappers"
 import eventsData from "@/data/EventsData"
 
+function mergeWithStaticEvents(loaded: any[]): any[] {
+    const staticMap = new Map(eventsData.map((e) => [e.slug, e]))
+    const merged = new Map<string, any>()
+
+    for (const ev of eventsData) {
+        merged.set(ev.slug, ev)
+    }
+    for (const ev of loaded) {
+        const staticEv = staticMap.get(ev.slug)
+        if (staticEv) {
+            merged.set(ev.slug, {
+                ...staticEv,
+                ...ev,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+                cardImage: staticEv.cardImage || ev.cardImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+            })
+        } else {
+            merged.set(ev.slug, ev)
+        }
+    }
+    return Array.from(merged.values())
+}
+
 function formatCardDate(rawDate: string): string {
     if (!rawDate) return '';
     return rawDate.split('·')[0].split(' - ')[0].trim();
@@ -59,7 +89,7 @@ const Banner = () => {
                 if (cricket && !events.some((e) => e.slug === cricket.slug)) {
                     events.unshift(cricket);
                 }
-                const found = events.find(
+                const found = mergeWithStaticEvents(events).find(
                     (e: any) =>
                         e.registrationOpen !== false &&
                         e.lifecycleStatus !== 'past' &&
@@ -105,7 +135,7 @@ const Banner = () => {
                     <span className="planet planet-three"></span>
                 </div>
             </div>
-            <AuroraBackground className="hero-aurora-wrap" style={{ minHeight: "clamp(760px, 100vh, 1040px)", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <AuroraBackground className="hero-aurora-wrap" style={{ minHeight: "100vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <motion.div
                     initial={{ opacity: 0.0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -232,7 +262,17 @@ const Banner = () => {
             <style jsx>{`
                 .hero-section {
                     margin-top: 0;
-                    min-height: clamp(760px, 100vh, 1040px);
+                    min-height: 100vh;
+                }
+                @media (min-width: 992px) {
+                    .hero-section {
+                        height: 100vh;
+                        min-height: auto;
+                    }
+                    .hero-aurora-wrap {
+                        min-height: 100vh !important;
+                        height: 100vh !important;
+                    }
                 }
                 .orbit-scene {
                     position: absolute;
@@ -442,14 +482,13 @@ const Banner = () => {
                     margin-top: clamp(0.9rem, 1.8vw, 1.6rem) !important;
                 }
 
-                /* Short desktop/laptop viewports (e.g. a 13" MacBook, wide but only
-                   ~750-900px tall): scale the CONTENT down so the vertically-centered
+                /* Desktop: scale the CONTENT down so the vertically-centered
                    block stays compact and clears the absolute bottom-left promo card
                    (which remains pinned/visible on wide screens). Deliberately touches
                    only the inner elements — never .hero-section or .hero-aurora-wrap
                    padding/min-height — so the aurora keeps filling the section and no
                    white gap can appear. */
-                @media (min-width: 992px) and (max-height: 900px) {
+                @media (min-width: 992px) {
                     .hero-subtitle {
                         margin-bottom: 16px !important;
                     }
