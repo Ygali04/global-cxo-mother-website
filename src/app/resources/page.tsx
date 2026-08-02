@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useMemo, useState, type CSSProperties } from "react"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 import resourcesLibrary, { ResourceItem } from "@/data/ResourcesData"
 
@@ -248,7 +248,7 @@ const ResourcesPage = () => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
@@ -330,7 +330,7 @@ const ResourcesPage = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             {active && (
                 <ResourceModal

@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
-import eventsData from "@/data/EventsData"
+import eventsData, { type EventDetail } from "@/data/EventsData"
+import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
 type EventCardData = {
     title: string
@@ -41,39 +42,6 @@ const ExternalIcon = () => (
         <path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
     </svg>
 )
-
-/* ---- Cricket event (lives on its own page) ---- */
-const cricketEvent: EventCardData = {
-    title: "Major League Cricket — Season 04 Final",
-    tagline: "VIP Experience · CXO Networking",
-    date: "Saturday, 18 July 2026 · 4:30 PM",
-    location: "The Oakland Coliseum",
-    attendees: "200+",
-    attendeesSuffix: " attendees expected",
-    description:
-        "Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.",
-    image: "/events/mlc_main_banner.webp",
-    href: "/events/mlc-oakland",
-}
-
-/* ---- Past events, pulled from the shared events data ---- */
-const pastOrder = ["dubai-summit-2026", "sf-conference-2025", "sri-lanka-2025"]
-const pastEvents: EventCardData[] = pastOrder
-    .map((slug) => eventsData.find((e) => e.slug === slug))
-    .filter((e): e is NonNullable<typeof e> => Boolean(e))
-    .map((e) => ({
-        title: e.title,
-        tagline: e.tagline,
-        date: e.date,
-        location: e.location,
-        attendees: e.attendees,
-        attendeesSuffix: " attendees",
-        description: e.description,
-        image: e.cardImage || e.heroImage,
-        href: `/events/${e.slug}`,
-    }))
-
-const upcomingEvents: EventCardData[] = [cricketEvent]
 
 function truncate(text: string, max = 155) {
     if (text.length <= max) return text
@@ -142,6 +110,50 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
+    const [allEvents, setAllEvents] = useState<EventDetail[]>(eventsData)
+
+    useEffect(() => {
+        try {
+            const loaded = loadMockDatabaseSnapshot().events;
+            if (loaded && loaded.length > 0) {
+                setAllEvents(loaded as EventDetail[]);
+            }
+        } catch {}
+    }, []);
+
+    useEffect(() => {
+        if (searchParams.get("tab") === "past") setTab("past")
+    }, [searchParams])
+
+    const upcomingEvents: EventCardData[] = allEvents
+        .filter((e) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived')
+        .map((e) => ({
+            title: e.title,
+            tagline: e.tagline,
+            date: e.date,
+            location: e.location,
+            attendees: e.attendees,
+            attendeesSuffix: " attendees expected",
+            description: e.description,
+            image: e.cardImage || e.bannerImage || e.heroImage,
+            href: e.cta?.isExternal && e.cta.primaryUrl ? e.cta.primaryUrl : `/events/${e.slug}`,
+            external: e.cta?.isExternal,
+        }))
+
+    const pastEvents: EventCardData[] = allEvents
+        .filter((e) => e.registrationOpen === false || e.lifecycleStatus === 'past')
+        .map((e) => ({
+            title: e.title,
+            tagline: e.tagline,
+            date: e.date,
+            location: e.location,
+            attendees: e.attendees,
+            attendeesSuffix: " attendees",
+            description: e.description,
+            image: e.cardImage || e.bannerImage || e.heroImage,
+            href: `/events/${e.slug}`,
+        }))
+
     const list = tab === "upcoming" ? upcomingEvents : pastEvents
 
     useEffect(() => {
@@ -150,7 +162,7 @@ const EventsPageContent = () => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
@@ -229,7 +241,7 @@ const EventsPageContent = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx>{`
                 .event-card-link:hover .event-card {

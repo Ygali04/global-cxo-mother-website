@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, type CSSProperties } from "react"
 import Link from "next/link"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 import awardsData from "@/data/AwardsData"
 
@@ -98,7 +98,7 @@ const NominatePage = () => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#f8f9fa" }}>
@@ -258,7 +258,7 @@ const NominatePage = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx global>{`
                 .contact-input::placeholder { color: #9aa0ad; opacity: 1; }

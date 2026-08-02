@@ -1,15 +1,15 @@
-import HeaderFive from "@/layouts/headers/HeaderFive"
+import Header from "@/layouts/headers/Header"
 import ErrorArea from "./ErrorArea"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Footer from "@/layouts/footers/Footer"
 
 const NotFound = () => {
    return (
       <>
-         <HeaderFive />
+         <Header />
          <main className="main-area fix">
             <ErrorArea />
          </main>
-         <FooterThree />
+         <Footer />
       </>
    )
 }

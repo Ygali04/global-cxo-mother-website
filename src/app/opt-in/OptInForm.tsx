@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import { Check, Mail, User, ShieldAlert, CheckCircle2, ChevronRight } from "lucide-react"
 
 const LAZYFORMS_ENDPOINT = "https://api.lazyforms.com/f/ad9a16cd-2208-4c0c-bca7-6ac8244cdc9a"
@@ -318,7 +318,7 @@ export default function OptInForm() {
         }
       `}</style>
 
-      <HeaderFive hideSignIn />
+      <Header hideSignIn />
 
       {/* Hero Banner Section */}
       <section className="pt-[90px] pb-6 sm:pt-[135px] sm:pb-12 relative overflow-hidden">
@@ -913,7 +913,7 @@ export default function OptInForm() {
         </div>
       </section>
 
-      <FooterThree />
+      <Footer />
     </div>
   )
 }

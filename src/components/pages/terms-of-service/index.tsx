@@ -1,15 +1,15 @@
-import HeaderFive from "@/layouts/headers/HeaderFive"
+import Header from "@/layouts/headers/Header"
 import TermsOfServiceArea from "./TermsOfServiceArea"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Footer from "@/layouts/footers/Footer"
 
 const TermsOfService = () => {
    return (
       <>
-         <HeaderFive />
+         <Header />
          <main className="main-area fix">
             <TermsOfServiceArea />
          </main>
-         <FooterThree />
+         <Footer />
       </>
    )
 }

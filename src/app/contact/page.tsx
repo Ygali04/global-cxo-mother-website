@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, type CSSProperties } from "react"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
 const WEB3FORMS_ACCESS_KEY = "b6e38651-6009-4ab0-a71d-c98ddda90dfa"
@@ -85,7 +85,7 @@ const ContactPage = () => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "70px", backgroundColor: "#f8f9fa" }}>
@@ -269,7 +269,7 @@ const ContactPage = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx global>{`
                 .contact-input::placeholder { color: #9aa0ad; opacity: 1; }

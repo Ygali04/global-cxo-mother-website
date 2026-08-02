@@ -2,8 +2,8 @@
 import React, { useMemo, useState } from "react"
 import Link from "next/link"
 import Marquee from "react-fast-marquee"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import eventsData from "@/data/EventsData"
 import type { ItineraryItem } from "@/data/itinerary"
 
@@ -130,14 +130,14 @@ const EventDetail = ({ slug }: { slug: string }) => {
     if (!event) {
         return (
             <>
-                <HeaderFive />
+                <Header />
                 <main className="main-area fix" style={{ paddingTop: "160px", paddingBottom: "160px", textAlign: "center" }}>
                     <div className="container">
                         <h1 style={{ color: "var(--tg-heading-color)", marginBottom: "16px" }}>Event not found</h1>
                         <Link href="/events" style={{ color: "var(--tg-theme-primary)", fontWeight: 700 }}>← Back to Events</Link>
                     </div>
                 </main>
-                <FooterThree />
+                <Footer />
             </>
         )
     }
@@ -148,7 +148,7 @@ const EventDetail = ({ slug }: { slug: string }) => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section className="event-hero" style={{ position: "relative", overflow: "hidden" }}>
@@ -183,18 +183,20 @@ const EventDetail = ({ slug }: { slug: string }) => {
 
                 <div className="container" style={{ paddingTop: "80px", paddingBottom: "40px" }}>
                     {/* Overview */}
-                    <div style={{ marginBottom: "80px" }}>
-                        <SectionTitle>Overview</SectionTitle>
-                        <p style={{ fontSize: "17px", color: "var(--tg-body-color)", lineHeight: 1.8, maxWidth: "980px" }}>{overviewText}</p>
-                        {event.overview.length > 320 && (
-                            <button onClick={() => setOverviewExpanded(!overviewExpanded)} style={{ marginTop: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--tg-theme-primary)", fontWeight: 700, fontSize: "15px", padding: 0 }}>
-                                {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
-                            </button>
-                        )}
-                    </div>
+                    {event.overview && event.overview.trim().length > 0 && (
+                        <div style={{ marginBottom: "80px" }}>
+                            <SectionTitle>Overview</SectionTitle>
+                            <p style={{ fontSize: "17px", color: "var(--tg-body-color)", lineHeight: 1.8, maxWidth: "980px" }}>{overviewText}</p>
+                            {event.overview.length > 320 && (
+                                <button onClick={() => setOverviewExpanded(!overviewExpanded)} style={{ marginTop: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--tg-theme-primary)", fontWeight: 700, fontSize: "15px", padding: 0 }}>
+                                    {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
+                                </button>
+                            )}
+                        </div>
+                    )}
 
                     {/* Sponsors */}
-                    {event.sponsors && event.sponsors.length > 0 && (
+                    {event.sponsors && event.sponsors.length > 0 && event.sponsors.some(s => s.logo || s.name) && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Partners</SectionTitle>
                             <Marquee gradient={false} speed={40} pauseOnHover>
@@ -230,7 +232,7 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     )}
 
                     {/* Livestream */}
-                    {event.livestreamUrl && (
+                    {event.livestreamUrl && event.livestreamUrl.trim().length > 0 && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Live Stream</SectionTitle>
                             <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "16px", overflow: "hidden", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }}>
@@ -348,15 +350,15 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     )}
 
                     {/* Banner */}
-                    {event.bannerImage && (
+                    {(event.bannerImage || event.heroImage) && (
                         <div style={{ marginBottom: "80px", maxWidth: "1000px", margin: "0 auto 80px" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={event.bannerImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
+                            <img src={event.bannerImage || event.heroImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
                         </div>
                     )}
 
                     {/* Venue */}
-                    {event.venue && (
+                    {event.venue && (event.venue.name?.trim() || event.venue.address?.trim() || event.venue.image?.trim() || event.venue.description?.trim()) && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Venue</SectionTitle>
                             <div style={{ background: "#fff", borderRadius: "20px", overflow: "hidden", boxShadow: "0 10px 40px rgba(11,26,74,0.08)", border: "1px solid var(--tg-border-1)", maxWidth: "1000px", margin: "0 auto" }}>
@@ -405,7 +407,7 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx>{`
                 /* Hero fills a defined tall area and crops as a cover image at every size, so the

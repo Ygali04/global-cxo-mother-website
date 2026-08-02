@@ -1,8 +1,8 @@
 "use client"
 import React, { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 import type { EventGallery } from "@/data/GalleryData"
 
@@ -111,7 +111,7 @@ const GalleryDetail = ({ gallery }: { gallery: EventGallery }) => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Header */}
                 <section style={{ paddingTop: "120px", paddingBottom: "40px", backgroundColor: "#ffffff" }}>
@@ -182,7 +182,7 @@ const GalleryDetail = ({ gallery }: { gallery: EventGallery }) => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             {lightboxIndex !== null && (
                 <Lightbox photos={gallery.photos} index={lightboxIndex} onClose={close} onPrev={prev} onNext={next} />

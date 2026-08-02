@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react"
 import Link from "next/link"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 import awardsData, { Awardee } from "@/data/AwardsData"
 
@@ -267,7 +267,7 @@ const AwardsPage = () => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
@@ -501,7 +501,7 @@ const AwardsPage = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             {selected && (
                 <AwardeeModal

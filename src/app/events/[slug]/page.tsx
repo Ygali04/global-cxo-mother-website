@@ -2,11 +2,10 @@ import type { Metadata } from "next"
 import EventDetail from "@/components/events/EventDetail"
 import eventsData from "@/data/EventsData"
 
-// Slugs with full detail pages. (mlc-oakland has its own dedicated route.)
-const DETAIL_SLUGS = ["sri-lanka-2025", "sf-conference-2025", "dubai-summit-2026"]
+const DETAIL_SLUGS = eventsData.map((e) => e.slug);
 
 export function generateStaticParams() {
-    return DETAIL_SLUGS.map((slug) => ({ slug }))
+    return DETAIL_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
