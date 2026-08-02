@@ -195,7 +195,7 @@ const EventsPageContent = () => {
         }));
 
     const pastEvents: EventCardData[] = allEvents
-        .filter((e) => e.registrationOpen === false || e.lifecycleStatus === 'past' || e.lifecycleStatus === 'archived')
+        .filter((e) => e.lifecycleStatus === 'past' || (e.registrationOpen === false && e.lifecycleStatus !== 'archived'))
         .map((e) => ({
             slug: e.slug,
             title: e.title,
