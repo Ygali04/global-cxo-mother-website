@@ -96,7 +96,7 @@ import {
   visibilityPresets,
   type MockUser,
 } from '@/portal/data/mock';
-import type { EventLifecycleStatus, EventDetail } from '@/portal/data/EventsData';
+import type { EventLifecycleStatus, EventDetail as EventDetailType } from '@/portal/data/EventsData';
 import type { Speaker } from '@/portal/data/speakers';
 import type { Sponsor } from '@/portal/data/sponsors';
 import type { ItineraryItem } from '@/portal/data/itinerary';
@@ -110,7 +110,7 @@ import {
   type AttendeeSheetRowInput,
 } from '@/portal/lib/attendeeSheets';
 import { mapVisibilityToApi } from '@/portal/api/mappers';
-import EventDetails from '@/portal/components/pages/EventDetails';
+import EventDetail from '@/components/events/EventDetail';
 import { ImageUpload } from '@/portal/components/ui/image-upload';
 import { cn } from '@/portal/lib/utils';
 
@@ -161,7 +161,7 @@ interface EditorState {
   metaImage: string;
 }
 
-function buildEditorState(event: EventDetail): EditorState {
+function buildEditorState(event: EventDetailType): EditorState {
   return {
     title: event.title,
     tagline: event.tagline ?? '',
@@ -1602,7 +1602,7 @@ function PreviewDeployTab({
     return result;
   }, [form, savedForm, speakers, savedSpeakers, sponsors, savedSponsors, itinerary, savedItinerary, highlightCards, savedHighlightCards]);
 
-  const buildPreviewEvent = useCallback((): EventDetail => {
+  const buildPreviewEvent = useCallback((): EventDetailType => {
     return {
       id: 0,
       slug,
@@ -1729,7 +1729,7 @@ function PreviewDeployTab({
             Exit Preview
           </Button>
           <div>
-            <EventDetails previewEvent={buildPreviewEvent()} />
+            <EventDetail previewEvent={buildPreviewEvent()} />
           </div>
         </div>
       )}
@@ -1746,7 +1746,7 @@ export default function AdminEventDetail(): JSX.Element {
 
   // Editor form state
   const [form, setForm] = useState<EditorState>(() =>
-    event ? buildEditorState(event) : buildEditorState({} as EventDetail),
+    event ? buildEditorState(event) : buildEditorState({} as EventDetailType),
   );
   const [speakers, setSpeakers] = useState<Speaker[]>(() => event?.speakers ?? []);
   const [sponsors, setSponsors] = useState<Sponsor[]>(() => event?.sponsors ?? []);
@@ -1755,7 +1755,7 @@ export default function AdminEventDetail(): JSX.Element {
 
   // Saved state (for diff and discard)
   const [savedForm, setSavedForm] = useState<EditorState>(() =>
-    event ? buildEditorState(event) : buildEditorState({} as EventDetail),
+    event ? buildEditorState(event) : buildEditorState({} as EventDetailType),
   );
   const [savedSpeakers, setSavedSpeakers] = useState<Speaker[]>(() => event?.speakers ?? []);
   const [savedSponsors, setSavedSponsors] = useState<Sponsor[]>(() => event?.sponsors ?? []);
@@ -1763,6 +1763,59 @@ export default function AdminEventDetail(): JSX.Element {
   const [savedHighlightCards, setSavedHighlightCards] = useState<Array<{ icon: string; title: string; text: string }>>(() => event?.highlightCards ?? []);
 
   const [deploying, setDeploying] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  const buildPreviewEvent = useCallback((): EventDetailType => {
+    return {
+      id: 0,
+      slug: slug || 'preview-event',
+      title: form.title,
+      tagline: form.tagline,
+      date: form.dateStart
+        ? new Date(form.dateStart).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })
+        : (event?.date || 'TBD'),
+      location: form.location,
+      description: form.description,
+      attendees: form.attendees,
+      heroImage: form.heroImage,
+      heroImageMobile: form.heroImageMobile || form.heroImage,
+      cardImage: form.cardImage || form.heroImage,
+      bannerImage: form.bannerImage,
+      gallery: [],
+      overview: form.overview,
+      objectives: [],
+      speakers,
+      sponsors,
+      itinerary,
+      highlights: form.highlights ? form.highlights.split('\n').map((h) => h.trim()).filter(Boolean) : [],
+      highlightCards,
+      lifecycleStatus: form.lifecycleStatus,
+      registrationOpen: form.registrationOpen,
+      price: form.price || undefined,
+      cta: form.ctaPrimaryLabel
+        ? {
+            primaryLabel: form.ctaPrimaryLabel,
+            primaryUrl: form.ctaPrimaryUrl,
+            isExternal: form.ctaIsExternal,
+            secondaryLabel: form.ctaSecondaryLabel || undefined,
+            secondaryUrl: form.ctaSecondaryUrl || undefined,
+          }
+        : undefined,
+      metadata: {
+        title: `Global CXO Circle | ${form.title}`,
+        description: form.description,
+        image: form.bannerImage || form.heroImage,
+      },
+      venue: {
+        name: form.venueName,
+        address: form.venueAddress,
+        description: form.venueDescription,
+        image: form.venueImage || form.heroImage,
+        mapEmbedUrl: form.venueMapEmbedUrl,
+      },
+      livestreamUrl: form.livestreamUrl || undefined,
+    };
+  }, [form, speakers, sponsors, itinerary, highlightCards, slug, event?.date]);
 
   // Try to fetch real date_start/date_end from backend
   const fetchedDates = useRef(false);
@@ -1966,23 +2019,31 @@ export default function AdminEventDetail(): JSX.Element {
   return (
     <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
-        <div className="mb-3 flex items-center gap-3">
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/admin">
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Link>
-          </Button>
-          <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100">
-            Event Editor Studio
-          </Badge>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="mb-3 flex items-center gap-3">
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/admin">
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Link>
+            </Button>
+            <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100">
+              Event Editor Studio
+            </Badge>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{event.title}</h1>
+          <p className="text-sm text-slate-500">
+            {event.date} &middot; {event.location} &middot;{' '}
+            {registrations.filter((r) => r.eventId === event.slug).length} registrations
+          </p>
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{event.title}</h1>
-        <p className="text-sm text-slate-500">
-          {event.date} &middot; {event.location} &middot;{' '}
-          {registrations.filter((r) => r.eventId === event.slug).length} registrations
-        </p>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => setPreviewOpen(true)}>
+            <Eye className="h-4 w-4" />
+            Preview Event Page
+          </Button>
+        </div>
       </div>
 
       {/* Unsaved changes banner */}
@@ -2052,6 +2113,24 @@ export default function AdminEventDetail(): JSX.Element {
           />
         </TabsContent>
       </Tabs>
+
+      {/* Full-screen Preview Overlay */}
+      {previewOpen && (
+        <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            className="fixed top-4 right-4 z-[60] gap-1 bg-white shadow-lg border-slate-300"
+            onClick={() => setPreviewOpen(false)}
+          >
+            <X className="h-4 w-4" />
+            Exit Preview
+          </Button>
+          <div>
+            <EventDetail previewEvent={buildPreviewEvent()} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

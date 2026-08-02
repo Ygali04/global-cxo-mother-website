@@ -112,10 +112,11 @@ import { USE_API_AUTH } from "@/portal/api/config"
 import { listEventsApi } from "@/portal/api/events"
 import { mapApiEventToEventDetail } from "@/portal/api/mappers"
 
-const EventDetail = ({ slug }: { slug: string }) => {
+const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: EventDetailType }) => {
     const [allEvents, setAllEvents] = useState<EventDetailType[]>(eventsData)
 
     useEffect(() => {
+        if (previewEvent) return;
         let isMounted = true;
         const loadEvents = async () => {
             try {
@@ -140,11 +141,12 @@ const EventDetail = ({ slug }: { slug: string }) => {
         };
         void loadEvents();
         return () => { isMounted = false; };
-    }, []);
+    }, [previewEvent]);
 
     const event = useMemo(() => {
+        if (previewEvent) return previewEvent;
         return allEvents.find((e) => e.slug === slug) || eventsData.find((e) => e.slug === slug);
-    }, [allEvents, slug]);
+    }, [previewEvent, allEvents, slug]);
 
     const [overviewExpanded, setOverviewExpanded] = useState(false)
     const [activeDay, setActiveDay] = useState(0)
