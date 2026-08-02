@@ -1,4 +1,4 @@
-import type { EventDetail, CTAConfig } from '@/portal/data/EventsData';
+import { eventsData, type EventDetail, type CTAConfig } from '@/portal/data/EventsData';
 import type { ItineraryItem } from '@/portal/data/itinerary';
 import type { Speaker } from '@/portal/data/speakers';
 import type { Sponsor } from '@/portal/data/sponsors';
@@ -244,6 +244,11 @@ export function mapApiEventToEventDetail(raw: ApiEventJson, registrationCount: n
     : [];
 
   const dateLabel = formatEventDateRange(raw.date_start, raw.date_end);
+  const template = eventsData.find((e) => e.slug === raw.slug);
+  const heroImage = raw.hero_image?.trim() || template?.heroImage || '/events/mlc_main_banner.webp';
+  const bannerImage = raw.banner_image?.trim() || template?.bannerImage || heroImage;
+  const heroImageMobile = (typeof meta.heroImageMobile === 'string' && meta.heroImageMobile.trim()) || template?.heroImageMobile || heroImage;
+  const cardImage = (typeof meta.cardImage === 'string' && meta.cardImage.trim()) || template?.cardImage || heroImage;
 
   return {
     id: stableNumericIdFromUuid(String(raw.id)),
@@ -255,10 +260,10 @@ export function mapApiEventToEventDetail(raw: ApiEventJson, registrationCount: n
     description: raw.description,
     attendees:
       registrationCount > 0 ? `${registrationCount} registration(s)` : 'Registrations from API',
-    heroImage: raw.hero_image,
-    heroImageMobile: (typeof meta.heroImageMobile === 'string' && meta.heroImageMobile) || raw.hero_image,
-    cardImage: (typeof meta.cardImage === 'string' && meta.cardImage) || raw.hero_image,
-    bannerImage: raw.banner_image,
+    heroImage,
+    heroImageMobile,
+    cardImage,
+    bannerImage,
     gallery: Array.isArray(meta.gallery) ? (meta.gallery as string[]) : [],
     overview: raw.overview,
     objectives,

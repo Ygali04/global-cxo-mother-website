@@ -18,10 +18,10 @@ function formatCardDate(rawDate: string): string {
 const Banner = () => {
     const [showToast, setShowToast] = useState<boolean>(true);
     const [upcoming, setUpcoming] = useState({
-        slug: "mlc-oakland",
-        title: "Major League Cricket S4 Final",
-        date: "18 Jul 2026",
-        location: "Oakland Coliseum",
+        slug: "cio-100",
+        title: "CIO 100 Awards & Conference 2026",
+        date: "August 14, 2026",
+        location: "San Jose Convention Center, CA",
     });
 
     useEffect(() => {

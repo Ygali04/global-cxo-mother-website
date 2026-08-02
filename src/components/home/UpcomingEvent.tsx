@@ -36,14 +36,14 @@ const UpcomingEvent = () => {
         description: string;
         bannerImage: string;
     }>({
-        slug: "mlc-oakland",
-        title: "Major League Cricket — Season 04 Final",
-        tagline: "VIP Experience · CXO Networking",
-        date: "Saturday, 18 July 2026",
-        location: "The Oakland Coliseum",
-        attendees: "200+ attendees expected",
-        description: "Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.",
-        bannerImage: "/events/mlc_main_banner.webp",
+        slug: "cio-100",
+        title: "CIO 100 Awards & Conference 2026",
+        tagline: "Recognizing Exceptional IT Leadership & Innovation",
+        date: "August 14, 2026",
+        location: "San Jose Convention Center, CA",
+        attendees: "250+ attendees expected",
+        description: "The premier annual gathering of top 100 CIOs, CTOs, and tech leaders recognizing game-changing technology implementations and executive leadership.",
+        bannerImage: "/assets/events/SF/banner.png",
     });
 
     useEffect(() => {

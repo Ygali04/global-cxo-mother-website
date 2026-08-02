@@ -198,8 +198,6 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                         <img src={event.heroImage} alt={event.title} className="event-hero-img" />
                     </picture>
                     <div className="event-hero-overlay" />
-                    {/* light top scrim: fades the image into the page bg so the dark navbar stays legible */}
-                    <div className="event-hero-scrim" />
                     <div className="event-hero-content">
                       <div className="container">
                         <div style={{ maxWidth: "820px", color: "#fff" }}>
@@ -457,10 +455,6 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                 .event-hero-overlay {
                     position: absolute; inset: 0; pointer-events: none;
                     background: linear-gradient(to top, rgba(6,12,34,0.92) 0%, rgba(6,12,34,0.55) 42%, rgba(6,12,34,0) 78%);
-                }
-                .event-hero-scrim {
-                    position: absolute; top: 0; left: 0; right: 0; height: 150px; pointer-events: none;
-                    background: linear-gradient(to bottom, #f8f9fa 0%, rgba(248,249,250,0.6) 42%, rgba(248,249,250,0) 100%);
                 }
                 .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
                 /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */
