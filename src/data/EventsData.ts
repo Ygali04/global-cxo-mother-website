@@ -208,7 +208,8 @@ export const eventsData: EventDetail[] = [
       'Safe environment for end-to-end workflow walkthroughs.',
     ],
     highlightCards: [],
-    registrationOpen: true,
+    registrationOpen: false,
+    lifecycleStatus: 'archived',
     cta: {
       primaryLabel: 'Open Demo Dashboard',
       primaryUrl: '/dashboard',
@@ -424,8 +425,8 @@ export const eventsData: EventDetail[] = [
         text: 'Trophy photo and exclusive meet & greet post-match.',
       },
     ],
-    registrationOpen: true,
-    lifecycleStatus: 'current',
+    registrationOpen: false,
+    lifecycleStatus: 'past',
     price: 'VIP Invite',
     cta: {
       primaryLabel: 'Register Now',

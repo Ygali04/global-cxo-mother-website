@@ -465,13 +465,29 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       flatRegs.forEach((r) => {
         countBySlug.set(r.eventId, (countBySlug.get(r.eventId) ?? 0) + 1);
       });
+      const localSnap = loadMockDatabaseSnapshot().events;
+      const localMap = new Map(localSnap.map((e) => [e.slug, e]));
+
       const detailList = rawEvents
         .filter((e) => !deletedEventSlugsRef.current.has(e.slug))
-        .map((e) => mapApiEventToEventDetail(e, countBySlug.get(e.slug) ?? 0));
+        .map((e) => {
+          const mapped = mapApiEventToEventDetail(e, countBySlug.get(e.slug) ?? 0);
+          const localOverride = localMap.get(e.slug);
+          if (localOverride) {
+            return {
+              ...mapped,
+              lifecycleStatus: localOverride.lifecycleStatus ?? mapped.lifecycleStatus,
+              registrationOpen: localOverride.registrationOpen ?? mapped.registrationOpen,
+            };
+          }
+          return mapped;
+        });
+
       const existingSlugs = new Set(detailList.map((e) => e.slug));
       eventsData.forEach((defaultEv) => {
         if (!existingSlugs.has(defaultEv.slug) && !deletedEventSlugsRef.current.has(defaultEv.slug)) {
-          detailList.push(defaultEv);
+          const localOverride = localMap.get(defaultEv.slug);
+          detailList.push(localOverride || defaultEv);
         }
       });
       setEvents(detailList);
@@ -1346,6 +1362,17 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
 
       setEvents((prev) => prev.map((event) => (event.slug === slug ? updated : event)));
 
+      try {
+        const snap = loadMockDatabaseSnapshot();
+        const idx = snap.events.findIndex((e) => e.slug === slug);
+        if (idx !== -1) {
+          snap.events[idx] = updated;
+        } else {
+          snap.events.unshift(updated);
+        }
+        void persistMockDatabaseSnapshot(snap);
+      } catch {}
+
       if (USE_API_AUTH) {
         const bid = backendEventIdBySlug[slug];
         if (bid) {
@@ -1390,6 +1417,47 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
                 void refreshCatalog();
               });
           }
+        } else {
+          const body: Record<string, unknown> = {
+            title: updated.title,
+            tagline: updated.tagline ?? null,
+            slug: updated.slug,
+            location: updated.location,
+            description: updated.description,
+            overview: updated.overview,
+            registration_open: updated.registrationOpen ?? false,
+            lifecycle_status: updated.lifecycleStatus ?? 'current',
+            luma_event_url: updated.cta?.isExternal ? updated.cta.primaryUrl : null,
+            visibility_setting: 'all',
+            event_metadata: {
+              objectives: updated.objectives ?? [],
+              highlights: updated.highlights ?? [],
+              highlightCards: updated.highlightCards ?? [],
+              title: updated.metadata.title,
+              description: updated.metadata.description,
+              image: updated.bannerImage || updated.heroImage,
+            },
+            venue: {
+              name: updated.venue.name,
+              address: updated.venue.address,
+              description: updated.venue.description,
+              image: updated.venue.image,
+              mapEmbedUrl: updated.venue.mapEmbedUrl || '',
+            },
+            cta_config: updated.cta ? {
+              primaryLabel: updated.cta.primaryLabel,
+              primaryUrl: updated.cta.primaryUrl,
+              isExternal: updated.cta.isExternal ?? false,
+            } : null,
+            speakers_json: updated.speakers ?? [],
+            sponsors_json: updated.sponsors ?? [],
+            itinerary_json: updated.itinerary ?? [],
+          };
+          void createEventApi(body)
+            .then(({ raw }) => {
+              setBackendEventIdBySlug((prev) => ({ ...prev, [raw.slug]: String(raw.id) }));
+            })
+            .catch(() => {});
         }
       }
 
