@@ -1,11 +1,12 @@
 "use client"
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import Link from "next/link"
 import Marquee from "react-fast-marquee"
 import Header from "@/layouts/headers/Header"
 import Footer from "@/layouts/footers/Footer"
-import eventsData from "@/data/EventsData"
+import eventsData, { type EventDetail as EventDetailType } from "@/data/EventsData"
 import type { ItineraryItem } from "@/data/itinerary"
+import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
 /* ---- Icons ---- */
 const CalendarIcon = ({ s = 22 }: { s?: number }) => (
@@ -108,7 +109,20 @@ const ItineraryRow = ({ item }: { item: ItineraryItem }) => {
 }
 
 const EventDetail = ({ slug }: { slug: string }) => {
-    const event = eventsData.find((e) => e.slug === slug)
+    const [allEvents, setAllEvents] = useState<EventDetailType[]>(eventsData)
+
+    useEffect(() => {
+        try {
+            const loaded = loadMockDatabaseSnapshot().events;
+            if (loaded && loaded.length > 0) {
+                setAllEvents(loaded as EventDetailType[]);
+            }
+        } catch {}
+    }, []);
+
+    const event = useMemo(() => {
+        return allEvents.find((e) => e.slug === slug) || eventsData.find((e) => e.slug === slug);
+    }, [allEvents, slug]);
 
     const [overviewExpanded, setOverviewExpanded] = useState(false)
     const [activeDay, setActiveDay] = useState(0)

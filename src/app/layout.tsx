@@ -9,14 +9,16 @@ const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700', '800',],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://global-cxo-mother-website.vercel.app");
+
 export const metadata = {
-  metadataBase: new URL("https://globalcxocircle.com"),
+  metadataBase: new URL(siteUrl),
   title: "Global CXO Circle | From Conversations To Outcomes",
   description: "Where CXOs Connect, Align, and Execute Together. A CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships.",
   openGraph: {
     title: "Global CXO Circle | From Conversations To Outcomes",
     description: "Where CXOs Connect, Align, and Execute Together. A CXO-led platform that enables structured access to enterprise leaders, advisory engagement, and outcome-driven relationships.",
-    url: "https://globalcxocircle.com/",
+    url: siteUrl,
     siteName: "Global CXO Circle",
     images: [
       {
