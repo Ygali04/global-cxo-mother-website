@@ -337,6 +337,116 @@ export const eventsData: EventDetail[] = [
     },
     livestreamUrl: 'https://www.youtube.com/embed/woI3-ARzql0?si=ySOHc-NRXa-wol_c',
   },
+  {
+    id: 4,
+    slug: 'mlc-oakland',
+    title: 'Major League Cricket — Season 04 Final',
+    tagline: 'VIP Experience · CXO Networking',
+    date: 'Saturday, 18 July 2026 · 4:30 PM',
+    location: 'The Oakland Coliseum',
+    description:
+      'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.',
+    attendees: '200+',
+    heroImage: '/events/mlc_main_banner.webp',
+    heroImageMobile: '/events/mlc_main_banner.webp',
+    cardImage: '/events/mlc_main_banner.webp',
+    bannerImage: '/events/mlc_main_banner.webp',
+    gallery: ['/events/mlc_main_banner.webp', '/events/sponsors.webp'],
+    overview:
+      'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience at the Oakland Coliseum. Experience restaurant-style hospitality, private balcony seating, and curated 1-on-1 networking with top enterprise leaders at the season finale.',
+    objectives: [
+      'Connect 200+ enterprise CXOs and 100+ startups for premier networking',
+      'Experience restaurant-style hospitality at the Private Club Level',
+      'Enjoy private balcony seating with field views',
+      'Meet cricket legends and take photos with the championship trophy',
+    ],
+    speakers: [],
+    sponsors: [],
+    itinerary: [
+      {
+        date: 'Day 1',
+        time: '2:45 PM',
+        title: 'Arrival, Parking & Check-In',
+        description: 'Gates open. Collect VIP credentials & wristbands.',
+        type: 'arrival',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'Day 1',
+        time: '3:00 PM',
+        title: 'Pre-Event VIP Reception',
+        description: 'Food, beer & wine. Restaurant-style hospitality, Private Club Level. Startup introductions & curated 1:1s with CXOs.',
+        type: 'networking',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'Day 1',
+        time: '4:30 PM',
+        title: 'T20 Final — Private Balcony Seating',
+        description: 'TVs + glass windows overlooking the field. Premium seating.',
+        type: 'cultural',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'Day 1',
+        time: 'Post-Match',
+        title: 'Legends Meet & Greet + Trophy Photo',
+        description: 'Connect with legends, photos, celebrate the finale.',
+        type: 'cocktails',
+        timeOfDay: 'evening',
+      },
+    ],
+    highlights: [
+      'Private Club level access with restaurant-style hospitality',
+      'Food, beer & wine included throughout the match',
+      'Premium balcony seating with glass windows overlooking the field',
+      'Legends meet & greet + trophy photo session post-match',
+    ],
+    highlightCards: [
+      {
+        icon: '/assets/icons/global.png',
+        title: 'Private Club Access',
+        text: 'Restaurant-style hospitality with food, beer & wine included.',
+      },
+      {
+        icon: '/assets/icons/founders.png',
+        title: 'Balcony Seating',
+        text: 'Glass windows overlooking the field with premium seating.',
+      },
+      {
+        icon: '/assets/icons/meetings.png',
+        title: 'Curated 1-on-1s',
+        text: 'Startup introductions and networking with 200+ CXOs.',
+      },
+      {
+        icon: '/assets/icons/vacation.png',
+        title: 'Legends Meet & Greet',
+        text: 'Trophy photo and exclusive meet & greet post-match.',
+      },
+    ],
+    registrationOpen: true,
+    lifecycleStatus: 'current',
+    price: 'VIP Invite',
+    cta: {
+      primaryLabel: 'Register Now',
+      primaryUrl: 'https://withjoy.com/GCxO-July182026/registration',
+      isExternal: true,
+    },
+    metadata: {
+      title: 'Major League Cricket Season 04 Final VIP Experience | Global CXO Circle',
+      description:
+        'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience at the Oakland Coliseum.',
+      image: '/events/mlc_main_banner.webp',
+    },
+    venue: {
+      name: 'The Oakland Coliseum',
+      address: '7000 Coliseum Way, Oakland, CA 94621',
+      description:
+        'Experience the T20 Cricket VIP Experience from the Private Club Level with private balcony seating, restaurant-style hospitality, and curated executive networking.',
+      image: '/events/mlc_main_banner.webp',
+      mapEmbedUrl: 'https://maps.google.com/maps?q=Oakland+Coliseum&t=&z=15&ie=UTF8&iwloc=&output=embed',
+    },
+  },
 ];
 
 export default eventsData;

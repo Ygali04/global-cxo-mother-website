@@ -41,6 +41,7 @@ export default function AdminDashboard(): JSX.Element {
   const [emailQueueLoading, setEmailQueueLoading] = useState(false);
   const [emailQueueError, setEmailQueueError] = useState<string | null>(null);
   const [flushing, setFlushing] = useState(false);
+  const [showAllEmailQueue, setShowAllEmailQueue] = useState(false);
 
   const fetchEmailQueue = useCallback(async () => {
     if (!USE_API_AUTH) return;
@@ -262,7 +263,7 @@ export default function AdminDashboard(): JSX.Element {
                     </tr>
                   </thead>
                   <tbody>
-                    {emailQueue.map((entry) => (
+                    {(showAllEmailQueue ? emailQueue : emailQueue.slice(0, 10)).map((entry) => (
                       <tr key={entry.id} className="border-b last:border-0">
                         <td className="py-2 pr-4 text-slate-900">
                           {entry.user_name ?? '-'}
@@ -300,6 +301,20 @@ export default function AdminDashboard(): JSX.Element {
                   </tbody>
                 </table>
               </FadedScroll>
+              {emailQueue.length > 10 && (
+                <div className="mt-3 flex justify-center border-t border-slate-100 pt-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs font-semibold text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                    onClick={() => setShowAllEmailQueue(!showAllEmailQueue)}
+                  >
+                    {showAllEmailQueue
+                      ? 'Show Less'
+                      : `View All (${emailQueue.length} emails)`}
+                  </Button>
+                </div>
+              )}
             </CardContent>
           )}
         </Card>

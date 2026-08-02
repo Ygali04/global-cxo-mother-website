@@ -146,13 +146,13 @@ const AdminLayout = () => {
                 <span className="text-base font-semibold text-gray-900">
                   Admin Console
                 </span>
-                <Link
-                  to="/"
+                <a
+                  href="/"
                   className="text-xs font-medium text-sky-500 hover:text-sky-600 hover:underline transition-colors"
                   title="Exit to website"
                 >
                   back home &rarr;
-                </Link>
+                </a>
               </div>
               <button
                 onClick={() => {

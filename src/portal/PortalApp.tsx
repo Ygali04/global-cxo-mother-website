@@ -18,8 +18,8 @@ import { Toaster } from '@/portal/components/ui/toaster';
 import { Toaster as Sonner } from '@/portal/components/ui/sonner';
 import { TooltipProvider } from '@/portal/components/ui/tooltip';
 import { AuthProvider } from '@/portal/contexts/AuthContext';
-import HeaderFive from '@/layouts/headers/HeaderFive';
-import FooterThree from '@/layouts/footers/FooterThree';
+import Header from '@/layouts/headers/Header';
+import Footer from '@/layouts/footers/Footer';
 import ImpersonationBanner from '@/portal/components/ImpersonationBanner';
 import Login from '@/portal/components/pages/Login';
 import Dashboard from '@/portal/components/pages/Dashboard';
@@ -104,7 +104,7 @@ const ExitToStaticSite = () => {
       : location.pathname + location.search;
     window.location.replace(target);
   }, [location]);
-  return <div className="flex min-h-screen items-center justify-center">Loading…</div>;
+  return null;
 };
 
 const AppContent = () => {
@@ -145,7 +145,7 @@ const AppContent = () => {
           site so navigating between them is visually seamless. Admin console
           keeps its own sidebar layout; standalone pages (login/onboard/cal)
           stay chrome-free. */}
-      {!isAdmin && !isStandalone && <HeaderFive />}
+      {!isAdmin && !isStandalone && <Header />}
       <ImpersonationBanner />
 
       <div>
@@ -231,7 +231,7 @@ const AppContent = () => {
           {/* Anything else is a marketing-site page — leave the SPA. */}
           <Route path="*" element={<ExitToStaticSite />} />
         </Routes>
-        {!isAdmin && !isStandalone && <FooterThree />}
+        {!isAdmin && !isStandalone && <Footer />}
       </div>
       <FeedbackWidget />
       <DevToolbar />

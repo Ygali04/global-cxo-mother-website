@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-import { Rocket, TrendingUp, UserCheck, X, CheckCircle, Calendar, Users, FlaskConical, Send } from "lucide-react";
+import { Rocket, TrendingUp, UserCheck, X, CheckCircle, Calendar, Users, FlaskConical, Send, ArrowLeft } from "lucide-react";
 import { walkOnboardingApi } from "@/portal/api/sandbox";
 import { toast } from "sonner";
 import OnboardCxO from "@/portal/components/pages/onboarding/OnboardCxO";
@@ -336,14 +336,24 @@ export default function AdminOnboarding() {
       </div>
 
       {activeFlow && createPortal(
-        <div className="fixed inset-0 z-[9999] bg-slate-900">
-          <button
-            onClick={handleClose}
-            className="fixed top-4 right-4 z-[10000] flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur hover:bg-white/20 transition-colors"
-          >
-            <X className="h-4 w-4" />
-            Exit Simulator
-          </button>
+        <div className="fixed inset-0 z-[9999] bg-slate-900 overflow-y-auto">
+          {/* Top Navigation Bar Controls */}
+          <div className="fixed top-4 left-4 right-4 z-[10000] flex items-center justify-between pointer-events-none">
+            <button
+              onClick={handleClose}
+              className="pointer-events-auto flex items-center gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-xl hover:bg-white hover:text-blue-600 transition-all hover:scale-105"
+            >
+              <ArrowLeft className="h-4 w-4 text-blue-600" />
+              <span>Back to Admin Console</span>
+            </button>
+            <button
+              onClick={handleClose}
+              className="pointer-events-auto flex items-center gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all hover:scale-105"
+            >
+              <X className="h-4 w-4" />
+              <span>Exit Simulator</span>
+            </button>
+          </div>
 
           {simulatorStep === "email" && (
             <div

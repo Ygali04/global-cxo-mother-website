@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { X, Rocket, TrendingUp, UserCheck, CalendarClock, ChevronLeft, ChevronRight, Clock, Users, ExternalLink } from "lucide-react";
+import { X, Rocket, TrendingUp, UserCheck, CalendarClock, ChevronLeft, ChevronRight, Clock, Users, ExternalLink, ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/portal/components/ui/card";
 import { Button } from "@/portal/components/ui/button";
 import { Badge } from "@/portal/components/ui/badge";
@@ -459,10 +459,23 @@ function SimulatorTab() {
       </div>
 
       {activeTier && createPortal(
-        <div className="fixed inset-0 z-[9999] bg-slate-900">
-          <button onClick={() => setActiveTier(null)} className="fixed top-4 right-4 z-[10000] flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur hover:bg-white/20 transition-colors">
-            <X className="h-4 w-4" /> Exit Simulator
-          </button>
+        <div className="fixed inset-0 z-[9999] bg-slate-900 overflow-y-auto">
+          <div className="fixed top-4 left-4 right-4 z-[10000] flex items-center justify-between pointer-events-none">
+            <button
+              onClick={() => setActiveTier(null)}
+              className="pointer-events-auto flex items-center gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-xl hover:bg-white hover:text-blue-600 transition-all hover:scale-105"
+            >
+              <ArrowLeft className="h-4 w-4 text-blue-600" />
+              <span>Back to Admin Console</span>
+            </button>
+            <button
+              onClick={() => setActiveTier(null)}
+              className="pointer-events-auto flex items-center gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all hover:scale-105"
+            >
+              <X className="h-4 w-4" />
+              <span>Exit Simulator</span>
+            </button>
+          </div>
           {simulatorStep === "email" && (
             <div style={{ minHeight: "100vh", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px" }}>
               <div style={{ width: "100%", maxWidth: "560px" }}>
@@ -500,9 +513,22 @@ function SimulatorTab() {
 
       {sessionSimOpen && createPortal(
         <div className="fixed inset-0 z-[9999] overflow-y-auto">
-          <button onClick={() => setSessionSimOpen(false)} className="fixed top-4 right-4 z-[10000] flex items-center gap-2 rounded-lg bg-white/90 border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 shadow hover:bg-white transition-colors">
-            <X className="h-4 w-4" /> Exit Simulator
-          </button>
+          <div className="fixed top-4 left-4 right-4 z-[10000] flex items-center justify-between pointer-events-none">
+            <button
+              onClick={() => setSessionSimOpen(false)}
+              className="pointer-events-auto flex items-center gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-xl hover:bg-white hover:text-blue-600 transition-all hover:scale-105"
+            >
+              <ArrowLeft className="h-4 w-4 text-blue-600" />
+              <span>Back to Admin Console</span>
+            </button>
+            <button
+              onClick={() => setSessionSimOpen(false)}
+              className="pointer-events-auto flex items-center gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-xl hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all hover:scale-105"
+            >
+              <X className="h-4 w-4" />
+              <span>Exit Simulator</span>
+            </button>
+          </div>
           <AdminSessionSimulator />
         </div>,
         document.body,

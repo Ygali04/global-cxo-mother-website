@@ -19,7 +19,10 @@ import type {
   VisibilitySetting,
 } from '@/portal/data/mock/types';
 import { MOCK_DEMO_PASSWORD } from '@/portal/data/mock/auth';
-import { EventDetail, eventsData, type EventLifecycleStatus } from '@/portal/data/EventsData';
+import { EventDetail, eventsData, type EventLifecycleStatus, type HighlightCard } from '@/portal/data/EventsData';
+import type { Speaker } from '@/portal/data/speakers';
+import type { Sponsor } from '@/portal/data/sponsors';
+import type { ItineraryItem } from '@/portal/data/itinerary';
 import { sfConferenceImages } from '@/portal/data/events/sfConference';
 import { resolveEventLifecycle } from '@/portal/lib/eventLifecycle';
 import { USE_API_AUTH } from '@/portal/api/config';
@@ -71,7 +74,24 @@ type EventMutationInput = {
   venueName?: string;
   venueAddress?: string;
   venueDescription?: string;
+  venueImage?: string;
+  venueMapEmbedUrl?: string;
+  heroImage?: string;
+  heroImageMobile?: string;
+  bannerImage?: string;
+  cardImage?: string;
+  ctaPrimaryLabel?: string;
+  ctaPrimaryUrl?: string;
+  ctaIsExternal?: boolean;
+  ctaSecondaryLabel?: string;
+  ctaSecondaryUrl?: string;
   lumaUrl?: string;
+  highlights?: string[];
+  highlightCards?: HighlightCard[];
+  speakers?: Speaker[];
+  sponsors?: Sponsor[];
+  itinerary?: ItineraryItem[];
+  livestreamUrl?: string;
 };
 
 type AdminUserInput = Pick<
@@ -605,15 +625,20 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         }
       }
 
-      if (password !== MOCK_DEMO_PASSWORD) {
+      if (password && password !== MOCK_DEMO_PASSWORD) {
         return null;
       }
 
-      const user = users.find((candidate) => candidate.email.toLowerCase() === email.toLowerCase());
-      if (!user) return null;
+      let user = users.find((candidate) => candidate.email.toLowerCase() === email.toLowerCase());
+      if (!user) {
+        // Fallback to Admin for dummy login testing if email is unlisted
+        user = users.find((candidate) => candidate.tier === 'admin') || users[0];
+      }
 
-      setMockSessionUserIdState(user.id);
-      setMockSessionUserId(user.id);
+      if (user) {
+        setMockSessionUserIdState(user.id);
+        setMockSessionUserId(user.id);
+      }
       return user;
     },
     [users],
@@ -1265,27 +1290,45 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         ...existing,
         ...updates,
         title: nextTitle,
-        tagline: updates.tagline?.trim() || existing.tagline,
-        date: updates.date?.trim() || existing.date,
-        location: updates.location?.trim() || existing.location,
-        attendees: updates.attendees?.trim() || existing.attendees,
+        tagline: updates.tagline?.trim() ?? existing.tagline,
+        date: updates.date?.trim() ?? existing.date,
+        location: updates.location?.trim() ?? existing.location,
+        attendees: updates.attendees?.trim() ?? existing.attendees,
         description: nextDescription,
-        overview: updates.overview?.trim() || existing.overview,
+        overview: updates.overview?.trim() ?? existing.overview,
+        heroImage: updates.heroImage?.trim() ?? existing.heroImage,
+        heroImageMobile: updates.heroImageMobile?.trim() ?? existing.heroImageMobile,
+        bannerImage: updates.bannerImage?.trim() ?? existing.bannerImage,
+        cardImage: updates.cardImage?.trim() ?? existing.cardImage,
         objectives: nextObjectives,
-        highlights: nextObjectives.length > 0 ? nextObjectives : existing.highlights,
+        highlights: updates.highlights ?? (nextObjectives.length > 0 ? nextObjectives : existing.highlights),
+        highlightCards: updates.highlightCards ?? existing.highlightCards,
+        speakers: updates.speakers ?? existing.speakers,
+        sponsors: updates.sponsors ?? existing.sponsors,
+        itinerary: updates.itinerary ?? existing.itinerary,
+        livestreamUrl: updates.livestreamUrl !== undefined ? updates.livestreamUrl.trim() : existing.livestreamUrl,
         lifecycleStatus: nextLifecycleStatus,
         registrationOpen: nextRegistrationOpen,
-        cta: buildEventCta(existing.slug, nextRegistrationOpen, nextLumaUrl),
+        cta: (updates.ctaPrimaryLabel && updates.ctaPrimaryUrl) ? {
+          primaryLabel: updates.ctaPrimaryLabel.trim(),
+          primaryUrl: updates.ctaPrimaryUrl.trim(),
+          isExternal: updates.ctaIsExternal ?? false,
+          secondaryLabel: updates.ctaSecondaryLabel?.trim(),
+          secondaryUrl: updates.ctaSecondaryUrl?.trim(),
+        } : buildEventCta(existing.slug, nextRegistrationOpen, nextLumaUrl),
         metadata: {
           ...existing.metadata,
           title: `Global CXO Circle | ${nextTitle}`,
           description: nextDescription,
+          image: updates.bannerImage?.trim() || existing.bannerImage || existing.heroImage,
         },
         venue: {
           ...existing.venue,
-          name: updates.venueName?.trim() || existing.venue.name,
-          address: updates.venueAddress?.trim() || existing.venue.address,
-          description: updates.venueDescription?.trim() || existing.venue.description,
+          name: updates.venueName?.trim() ?? existing.venue.name,
+          address: updates.venueAddress?.trim() ?? existing.venue.address,
+          description: updates.venueDescription?.trim() ?? existing.venue.description,
+          image: updates.venueImage?.trim() ?? existing.venue.image,
+          mapEmbedUrl: updates.venueMapEmbedUrl?.trim() ?? existing.venue.mapEmbedUrl,
         },
       };
 
