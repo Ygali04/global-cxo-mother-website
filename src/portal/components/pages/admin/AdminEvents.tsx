@@ -9,9 +9,9 @@ import { resolveEventLifecycle } from '@/portal/lib/eventLifecycle';
 import { EventCardListSkeleton } from '@/portal/components/ui/admin-skeletons';
 
 const STATUS_COLORS: Record<string, string> = {
-  current: 'bg-emerald-100 text-emerald-700',
-  past: 'bg-slate-100 text-slate-600',
-  archived: 'bg-red-100 text-red-600',
+  current: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100',
+  past: 'bg-slate-100 text-slate-600 hover:bg-slate-100',
+  archived: 'bg-red-100 text-red-600 hover:bg-red-100',
 };
 
 export default function AdminEvents(): JSX.Element {
@@ -55,7 +55,7 @@ export default function AdminEvents(): JSX.Element {
                       {status}
                     </Badge>
                     {event.registrationOpen && (
-                      <Badge className="bg-blue-100 text-blue-700 shrink-0">Registration Open</Badge>
+                      <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 shrink-0">Registration Open</Badge>
                     )}
                   </div>
                   {event.tagline && (

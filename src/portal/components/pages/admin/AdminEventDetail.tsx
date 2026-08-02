@@ -215,22 +215,22 @@ function redactEmail(email: string): string {
 
 function tierBadgeClass(tier: string): string {
   const m: Record<string, string> = {
-    startup: 'bg-cyan-100 text-cyan-700',
-    cxo: 'bg-amber-100 text-amber-700',
-    vc: 'bg-emerald-100 text-emerald-700',
-    admin: 'bg-blue-100 text-blue-700',
-    dev: 'bg-purple-100 text-purple-700',
+    startup: 'bg-cyan-100 text-cyan-700 hover:bg-cyan-100',
+    cxo: 'bg-amber-100 text-amber-700 hover:bg-amber-100',
+    vc: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100',
+    admin: 'bg-blue-100 text-blue-700 hover:bg-blue-100',
+    dev: 'bg-purple-100 text-purple-700 hover:bg-purple-100',
   };
-  return m[tier] ?? 'bg-gray-100 text-gray-700';
+  return m[tier] ?? 'bg-gray-100 text-gray-700 hover:bg-gray-100';
 }
 
 function statusBadgeClass(status: string): string {
   const m: Record<string, string> = {
-    confirmed: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    cancelled: 'bg-red-100 text-red-700',
+    confirmed: 'bg-green-100 text-green-700 hover:bg-green-100',
+    pending: 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100',
+    cancelled: 'bg-red-100 text-red-700 hover:bg-red-100',
   };
-  return m[status] ?? 'bg-gray-100 text-gray-700';
+  return m[status] ?? 'bg-gray-100 text-gray-700 hover:bg-gray-100';
 }
 
 /* ──────────────────── Content Tab ──────────────────────────── */
@@ -1893,12 +1893,29 @@ export default function AdminEventDetail(): JSX.Element {
           attendees: form.attendees,
           description: form.description,
           overview: form.overview,
-          lifecycleStatus: form.lifecycleStatus,
-          registrationOpen: form.registrationOpen,
-          lumaUrl: form.lumaUrl,
+          heroImage: form.heroImage,
+          heroImageMobile: form.heroImageMobile,
+          bannerImage: form.bannerImage,
+          cardImage: form.cardImage,
           venueName: form.venueName,
           venueAddress: form.venueAddress,
           venueDescription: form.venueDescription,
+          venueImage: form.venueImage,
+          venueMapEmbedUrl: form.venueMapEmbedUrl,
+          ctaPrimaryLabel: form.ctaPrimaryLabel,
+          ctaPrimaryUrl: form.ctaPrimaryUrl,
+          ctaIsExternal: form.ctaIsExternal,
+          ctaSecondaryLabel: form.ctaSecondaryLabel,
+          ctaSecondaryUrl: form.ctaSecondaryUrl,
+          lumaUrl: form.lumaUrl,
+          highlights: form.highlights.split('\n').map((h) => h.trim()).filter(Boolean),
+          highlightCards,
+          speakers,
+          sponsors,
+          itinerary,
+          livestreamUrl: form.livestreamUrl,
+          lifecycleStatus: form.lifecycleStatus,
+          registrationOpen: form.registrationOpen,
         });
 
         // Save current state as the new baseline
