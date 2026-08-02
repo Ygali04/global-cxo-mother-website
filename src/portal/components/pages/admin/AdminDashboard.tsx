@@ -175,10 +175,21 @@ export default function AdminDashboard(): JSX.Element {
               </div>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <p className="text-2xl font-bold">{s.value}</p>
+              <p className="text-2xl font-bold">
+                {!catalogHydrated ? (
+                  <span className="inline-block h-8 w-16 animate-pulse rounded bg-slate-200" />
+                ) : (
+                  s.value
+                )}
+              </p>
               {s.sub && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  {s.sub.label}: <span className="font-medium text-foreground">{s.sub.value}</span>
+                  {s.sub.label}:{' '}
+                  {!catalogHydrated ? (
+                    <span className="inline-block h-3.5 w-10 animate-pulse rounded bg-slate-200 align-middle" />
+                  ) : (
+                    <span className="font-medium text-foreground">{s.sub.value}</span>
+                  )}
                 </p>
               )}
             </CardContent>

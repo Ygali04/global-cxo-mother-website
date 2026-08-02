@@ -10,6 +10,11 @@ import { listEventsApi } from "@/portal/api/events"
 import { mapApiEventToEventDetail } from "@/portal/api/mappers"
 import eventsData from "@/data/EventsData"
 
+function formatCardDate(rawDate: string): string {
+    if (!rawDate) return '';
+    return rawDate.split('·')[0].split(' - ')[0].trim();
+}
+
 const Banner = () => {
     const [upcoming, setUpcoming] = useState({
         slug: "mlc-oakland",
@@ -154,7 +159,7 @@ const Banner = () => {
                 </span>
                 <div className="hero-event-top">
                     <span className="hero-event-badge">Upcoming Event</span>
-                    <span className="hero-event-date">{upcoming.date}</span>
+                    <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
                 </div>
                 <span className="hero-event-title">{upcoming.title}</span>
                 <span className="hero-event-meta">{upcoming.location}</span>
