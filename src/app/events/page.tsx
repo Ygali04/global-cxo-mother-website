@@ -9,6 +9,7 @@ import eventsData, { type EventDetail } from "@/data/EventsData"
 import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
 type EventCardData = {
+    slug: string
     title: string
     tagline?: string
     date: string
@@ -111,6 +112,36 @@ import { USE_API_AUTH } from "@/portal/api/config"
 import { listEventsApi } from "@/portal/api/events"
 import { mapApiEventToEventDetail } from "@/portal/api/mappers"
 
+function mergeWithStaticEvents(loaded: EventDetail[]): EventDetail[] {
+    const staticMap = new Map(eventsData.map((e) => [e.slug, e]))
+    const merged = new Map<string, EventDetail>()
+
+    for (const ev of eventsData) {
+        merged.set(ev.slug, ev)
+    }
+    for (const ev of loaded) {
+        const staticEv = staticMap.get(ev.slug)
+        if (staticEv) {
+            merged.set(ev.slug, {
+                ...staticEv,
+                ...ev,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+                cardImage: staticEv.cardImage || ev.cardImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+            })
+        } else {
+            merged.set(ev.slug, ev)
+        }
+    }
+    return Array.from(merged.values())
+}
+
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
@@ -135,7 +166,7 @@ const EventsPageContent = () => {
                     list.unshift(cricket);
                 }
                 if (isMounted && list.length > 0) {
-                    setAllEvents(list);
+                    setAllEvents(mergeWithStaticEvents(list));
                 }
             } catch {}
         };
@@ -144,12 +175,13 @@ const EventsPageContent = () => {
     }, []);
 
     useEffect(() => {
-        if (searchParams.get("tab") === "past") setTab("past")
-    }, [searchParams])
+        if (searchParams.get("tab") === "past") setTab("past");
+    }, [searchParams]);
 
     const upcomingEvents: EventCardData[] = allEvents
         .filter((e) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived')
         .map((e) => ({
+            slug: e.slug,
             title: e.title,
             tagline: e.tagline,
             date: e.date,
@@ -158,13 +190,14 @@ const EventsPageContent = () => {
             attendeesSuffix: " attendees expected",
             description: e.description,
             image: e.cardImage || e.bannerImage || e.heroImage,
-            href: e.cta?.isExternal && e.cta.primaryUrl ? e.cta.primaryUrl : `/events/${e.slug}`,
-            external: e.cta?.isExternal,
-        }))
+            href: `/events/${e.slug}`,
+            external: false,
+        }));
 
     const pastEvents: EventCardData[] = allEvents
-        .filter((e) => e.registrationOpen === false || e.lifecycleStatus === 'past')
+        .filter((e) => e.registrationOpen === false || e.lifecycleStatus === 'past' || e.lifecycleStatus === 'archived')
         .map((e) => ({
+            slug: e.slug,
             title: e.title,
             tagline: e.tagline,
             date: e.date,
@@ -174,19 +207,15 @@ const EventsPageContent = () => {
             description: e.description,
             image: e.cardImage || e.bannerImage || e.heroImage,
             href: `/events/${e.slug}`,
-        }))
+            external: false,
+        }));
 
-    const list = tab === "upcoming" ? upcomingEvents : pastEvents
-
-    useEffect(() => {
-        if (searchParams.get("tab") === "past") setTab("past")
-    }, [searchParams])
+    const list = tab === "upcoming" ? upcomingEvents : pastEvents;
 
     return (
         <>
             <Header />
-            <main className="main-area fix">
-                {/* Hero */}
+            <main>
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
                     <div className="container">
                         <div className="row justify-content-center text-center">
@@ -252,7 +281,7 @@ const EventsPageContent = () => {
                         ) : (
                             <div className="row gutter-y-30 justify-content-center">
                                 {list.map((ev, i) => (
-                                    <div key={ev.title} className="col-lg-4 col-md-6">
+                                    <div key={ev.slug} className="col-lg-4 col-md-6">
                                         <AnimateOnScroll delay={0.08 * (i % 3)} className="h-100">
                                             <EventCard ev={ev} imageHeight={tab === "upcoming" ? 270 : undefined} />
                                         </AnimateOnScroll>
