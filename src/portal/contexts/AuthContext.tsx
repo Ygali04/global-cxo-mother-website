@@ -414,7 +414,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
   // backend, preventing the classic race where a concurrent refresh
   // resurrects an event whose DELETE hasn't committed yet. The ref
   // persists across renders without triggering re-render cycles.
-  const deletedEventSlugsRef = useRef<Set<string>>(new Set());
+  const deletedEventSlugsRef = useRef<Set<string>>(new Set(['gcio-demo-salon-2026']));
   const deletedUserIdsRef = useRef<Set<string>>(new Set());
   const registrationsRef = useRef<MockEventRegistration[]>(registrations);
   useEffect(() => {
@@ -442,6 +442,10 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
 
     try {
       const rawEvents = await listEventsApi(200);
+      const demoSalon = rawEvents.find((e) => e.slug === 'gcio-demo-salon-2026');
+      if (demoSalon) {
+        void deleteEventApi(String(demoSalon.id)).catch(() => {});
+      }
       const idBySlug: Record<string, string> = {};
       rawEvents.forEach((e) => {
         idBySlug[e.slug] = String(e.id);

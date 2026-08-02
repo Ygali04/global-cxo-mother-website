@@ -1402,10 +1402,13 @@ function SettingsTab({
                 Display this event as the floating promo toast card in the homepage hero section.
               </p>
             </div>
-            <Switch
-              checked={form.showHeroPromo}
-              onCheckedChange={(v) => setForm((prev) => ({ ...prev, showHeroPromo: v }))}
-            />
+            <div className="flex items-center gap-3">
+              <Switch
+                checked={form.showHeroPromo}
+                onCheckedChange={(v) => setForm((prev) => ({ ...prev, showHeroPromo: v }))}
+              />
+              <span className="text-sm"><strong>{form.showHeroPromo ? 'On' : 'Off'}</strong></span>
+            </div>
           </div>
         </CardContent>
       </Card>

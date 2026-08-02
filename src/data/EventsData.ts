@@ -179,58 +179,6 @@ export const eventsData: EventDetail[] = [
     },
   },
   {
-    id: 4,
-    slug: 'gcio-demo-salon-2026',
-    title: 'GCIO Demo Salon 2026',
-    tagline: 'A proof-of-concept event for testing registration, dashboards, and admin workflows.',
-    date: 'April 24, 2026',
-    location: 'San Francisco, California',
-    description:
-      'A compact mock event created specifically for the GCIO product demo environment. It exercises the dashboard, registration, startup linking, and admin attendee workflows without implying a live production summit.',
-    attendees: '40+',
-    heroImage: sfConferenceImages.card,
-    heroImageMobile: sfConferenceImages.card,
-    cardImage: sfConferenceImages.card,
-    bannerImage: sfConferenceImages.banner,
-    gallery: [],
-    overview:
-      'This event exists purely as a product proof of concept. Use it to demonstrate how a founder, CIO, VC, or admin would move through the GCIO experience: log in, register, review the dashboard, and verify the attendee record in the admin console. It is intentionally lightweight but fully wired into the mock demo state.',
-    objectives: [
-      'Validate the mock registration flow for all user tiers.',
-      'Demonstrate startup profile creation for unlinked founder accounts.',
-      'Show real-time admin visibility into attendee changes.',
-    ],
-    speakers: [],
-    sponsors: [],
-    itinerary: [],
-    highlights: [
-      'Dedicated sandbox event for platform demos.',
-      'Supports founder, CIO, VC, admin, and dev test accounts.',
-      'Safe environment for end-to-end workflow walkthroughs.',
-    ],
-    highlightCards: [],
-    registrationOpen: false,
-    lifecycleStatus: 'archived',
-    cta: {
-      primaryLabel: 'Open Demo Dashboard',
-      primaryUrl: '/dashboard',
-    },
-    metadata: {
-      title: 'Global CIO Circle | GCIO Demo Salon 2026',
-      description:
-        'A sandbox event used to demonstrate the GCIO dashboard, startup registration flow, and admin attendee management experience.',
-      image: sfConferenceImages.banner,
-    },
-    venue: {
-      name: 'GCIO Innovation Studio',
-      address: 'Palo Alto / San Francisco Demo Environment',
-      description:
-        'A fictional venue used for the product demo. All event activity is mock-only and intended for internal testing and stakeholder presentations.',
-      image: sfConferenceImages.card,
-      mapEmbedUrl: 'https://maps.google.com/maps?q=Palo%20Alto%20Art%20Center&output=embed',
-    },
-  },
-  {
     id: 2,
     slug: 'sf-conference-2025',
     title: 'Silicon Valley AI Thought Leadership Summit',

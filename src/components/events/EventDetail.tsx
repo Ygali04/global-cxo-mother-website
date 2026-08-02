@@ -186,7 +186,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
 
     return (
         <>
-            <Header />
+            <Header solidNavbar={true} />
             <main className="main-area fix">
                 {/* Hero */}
                 <section className="event-hero" style={{ position: "relative", overflow: "hidden" }}>

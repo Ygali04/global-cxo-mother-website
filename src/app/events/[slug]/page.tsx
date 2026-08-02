@@ -2,10 +2,21 @@ import type { Metadata } from "next"
 import EventDetail from "@/components/events/EventDetail"
 import eventsData from "@/data/EventsData"
 
-const DETAIL_SLUGS = eventsData.map((e) => e.slug);
+const ALL_EVENT_SLUGS = Array.from(
+    new Set([
+        ...eventsData.map((e) => e.slug),
+        "cio-100",
+        "cio-100-awards-conference",
+        "mlc-oakland",
+        "sri-lanka-2025",
+        "sf-conference-2025",
+        "dubai-summit-2026",
+        "gcio-demo-salon-2026",
+    ])
+);
 
 export function generateStaticParams() {
-    return DETAIL_SLUGS.map((slug) => ({ slug }));
+    return ALL_EVENT_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

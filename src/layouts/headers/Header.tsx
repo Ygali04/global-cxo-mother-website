@@ -15,7 +15,7 @@ import type { MockUser } from "@/portal/data/mock/types"
 
 let cachedAuthUser: MockUser | null = null;
 
-const Header = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
+const Header = ({ hideSignIn = false, solidNavbar = false }: { hideSignIn?: boolean; solidNavbar?: boolean }) => {
 
    const { sticky } = UseSticky();
    const [sidebar, setSidebar] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const Header = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
    return (
       <>
          <header>
-            <div id="sticky-header" className={`tg-header__area tg-header__style-five ${sticky ? "sticky-menu" : ""}`}>
+            <div id="sticky-header" className={`tg-header__area tg-header__style-five ${sticky ? "sticky-menu" : ""} ${solidNavbar ? "solid-navbar" : ""}`}>
                <div className="container custom-container">
                   <div className="row">
                      <div className="col-12">
@@ -201,7 +201,29 @@ const Header = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
           </header>
 
          <style jsx>{`
-            :global(#sticky-header.tg-header__area) {
+            :global(#sticky-header.tg-header__area.solid-navbar) {
+               position: relative !important;
+               top: 0 !important;
+               left: 0 !important;
+               width: 100% !important;
+               z-index: 1000 !important;
+               background: #ffffff !important;
+               border-bottom: 1px solid rgba(10, 60, 194, 0.12) !important;
+               box-shadow: 0 4px 20px rgba(11, 26, 74, 0.08) !important;
+               padding: 14px 0 !important;
+            }
+            :global(#sticky-header.tg-header__area.solid-navbar.sticky-menu) {
+               position: fixed !important;
+               top: 0 !important;
+               left: 0 !important;
+               width: 100% !important;
+               background: rgba(255, 255, 255, 0.98) !important;
+               backdrop-filter: blur(12px) !important;
+               box-shadow: 0 4px 20px rgba(11, 26, 74, 0.08) !important;
+               padding: 12px 0 !important;
+               transition: all 0.3s ease !important;
+            }
+            :global(#sticky-header.tg-header__area:not(.solid-navbar)) {
                position: absolute !important;
                top: 0 !important;
                left: 0 !important;
@@ -212,7 +234,7 @@ const Header = ({ hideSignIn = false }: { hideSignIn?: boolean }) => {
                box-shadow: none !important;
                padding: 22px 0 !important;
             }
-            :global(#sticky-header.tg-header__area.sticky-menu) {
+            :global(#sticky-header.tg-header__area.sticky-menu:not(.solid-navbar)) {
                position: fixed !important;
                top: 0 !important;
                left: 0 !important;
