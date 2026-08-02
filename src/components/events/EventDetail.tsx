@@ -8,6 +8,36 @@ import eventsData, { type EventDetail as EventDetailType } from "@/data/EventsDa
 import type { ItineraryItem } from "@/data/itinerary"
 import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
+function mergeWithStaticEvents(loaded: EventDetailType[]): EventDetailType[] {
+    const staticMap = new Map(eventsData.map((e) => [e.slug, e]))
+    const merged = new Map<string, EventDetailType>()
+
+    for (const ev of eventsData) {
+        merged.set(ev.slug, ev)
+    }
+    for (const ev of loaded) {
+        const staticEv = staticMap.get(ev.slug)
+        if (staticEv) {
+            merged.set(ev.slug, {
+                ...staticEv,
+                ...ev,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+                cardImage: staticEv.cardImage || ev.cardImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+            })
+        } else {
+            merged.set(ev.slug, ev)
+        }
+    }
+    return Array.from(merged.values())
+}
+
 /* ---- Icons ---- */
 const CalendarIcon = ({ s = 22 }: { s?: number }) => (
     <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -135,7 +165,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                     list.unshift(cricket as EventDetailType);
                 }
                 if (isMounted && list.length > 0) {
-                    setAllEvents(list);
+                    setAllEvents(mergeWithStaticEvents(list))
                 }
             } catch {}
         };
@@ -207,11 +237,44 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                             {event.tagline && (
                                 <p className="event-hero-tagline" style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
                             )}
-                            <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)" }}>
+                            <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)", marginBottom: (event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl)) ? "26px" : 0 }}>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><CalendarIcon s={20} />{event.date}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
                             </div>
+                            {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px", marginTop: "24px" }}>
+                                    <a
+                                        href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
+                                        target={event.cta?.isExternal ? "_blank" : "_self"}
+                                        rel={event.cta?.isExternal ? "noopener noreferrer" : undefined}
+                                        className="hero-cta-btn"
+                                        style={{
+                                            display: "inline-flex", alignItems: "center", gap: "10px",
+                                            background: "var(--tg-color-gradient)", color: "#fff",
+                                            padding: "14px 32px", borderRadius: "100px", fontWeight: 700,
+                                            fontSize: "15px", textDecoration: "none",
+                                            boxShadow: "0 8px 24px rgba(10,60,194,0.35)", transition: "all 0.3s ease",
+                                        }}
+                                    >
+                                        {event.cta?.primaryLabel || "Register Now"} <ArrowIcon />
+                                    </a>
+                                    {event.cta?.secondaryLabel && event.cta?.secondaryUrl && (
+                                        <a
+                                            href={event.cta.secondaryUrl}
+                                            style={{
+                                                display: "inline-flex", alignItems: "center", gap: "8px",
+                                                background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)",
+                                                color: "#fff", padding: "14px 28px", borderRadius: "100px",
+                                                fontWeight: 700, fontSize: "15px", textDecoration: "none",
+                                                border: "1px solid rgba(255,255,255,0.35)", transition: "all 0.3s ease",
+                                            }}
+                                        >
+                                            {event.cta.secondaryLabel}
+                                        </a>
+                                    )}
+                                </div>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -228,6 +291,36 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                     {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
                                 </button>
                             )}
+                        </div>
+                    )}
+
+                    {/* Objectives */}
+                    {event.objectives && event.objectives.length > 0 && (
+                        <div style={{ marginBottom: "80px" }}>
+                            <SectionTitle>Key Takeaways &amp; Objectives</SectionTitle>
+                            <div className="row gutter-y-20">
+                                {event.objectives.map((obj, i) => (
+                                    <div key={i} className="col-md-6">
+                                        <div style={{
+                                            background: "#fff", borderRadius: "14px", padding: "20px 24px",
+                                            border: "1px solid var(--tg-border-1)", boxShadow: "0 4px 16px rgba(11,26,74,0.04)",
+                                            display: "flex", alignItems: "flex-start", gap: "14px", height: "100%",
+                                        }}>
+                                            <span style={{
+                                                background: "rgba(10,60,194,0.1)", color: "var(--tg-theme-primary)",
+                                                width: "28px", height: "28px", borderRadius: "50%",
+                                                display: "flex", alignItems: "center", justifyContent: "center",
+                                                fontWeight: 800, fontSize: "13px", flexShrink: 0,
+                                            }}>
+                                                {i + 1}
+                                            </span>
+                                            <p style={{ margin: 0, fontSize: "15px", color: "var(--tg-heading-color)", lineHeight: 1.6, fontWeight: 500 }}>
+                                                {obj}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
@@ -424,6 +517,38 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Registration Card Banner */}
+                    {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                        <div style={{ marginTop: "60px", marginBottom: "40px", maxWidth: "1000px", margin: "60px auto 40px" }}>
+                            <div style={{
+                                background: "linear-gradient(135deg, #060c22 0%, #0a3cc2 100%)",
+                                borderRadius: "24px", padding: "48px 32px", textAlign: "center", color: "#fff",
+                                boxShadow: "0 16px 40px rgba(10,60,194,0.22)",
+                            }}>
+                                <h3 style={{ fontSize: "clamp(24px, 3.5vw, 36px)", fontWeight: 800, color: "#fff", marginBottom: "14px" }}>
+                                    Ready to Join {event.title}?
+                                </h3>
+                                <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.9)", maxWidth: "600px", margin: "0 auto 28px", lineHeight: 1.6 }}>
+                                    Reserve your spot to connect with top technology executives, enterprise leaders, and startup founders.
+                                </p>
+                                <a
+                                    href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
+                                    target={event.cta?.isExternal ? "_blank" : "_self"}
+                                    rel={event.cta?.isExternal ? "noopener noreferrer" : undefined}
+                                    style={{
+                                        display: "inline-flex", alignItems: "center", gap: "10px",
+                                        background: "#ffffff", color: "#0a3cc2", padding: "16px 40px",
+                                        borderRadius: "100px", fontWeight: 800, fontSize: "16px",
+                                        textDecoration: "none", boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+                                        transition: "all 0.3s ease",
+                                    }}
+                                >
+                                    {event.cta?.primaryLabel || "Register Now"} <ArrowIcon />
+                                </a>
                             </div>
                         </div>
                     )}
