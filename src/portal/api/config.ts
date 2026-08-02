@@ -7,9 +7,9 @@ const rawBase =
 
 export const API_BASE_URL = rawBase.replace(/\/$/, '');
 
-/** When true and a base URL is set, login/bootstrap use HTTP instead of local mock session. Defaults to false for testing & dummy login. */
+/** When true and a base URL is set, login/bootstrap use HTTP instead of local mock session. Defaults to true to target the live Railway backend. */
 export const USE_API_AUTH: boolean =
-  (process.env.NEXT_PUBLIC_USE_API_AUTH ?? 'false') === 'true';
+  (process.env.NEXT_PUBLIC_USE_API_AUTH ?? 'true') !== 'false';
 
 // ---------------------------------------------------------------------------
 // Cal.com — THREE distinct URLs, do not mix them up
