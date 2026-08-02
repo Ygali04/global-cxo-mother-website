@@ -4,6 +4,7 @@ export interface PlatformConfig {
   demo_mode_enabled: boolean;
   public_registration_enabled: boolean;
   maintenance_mode: boolean;
+  show_hero_event_toast?: boolean;
   cors_origins: string;
   default_timezone: string;
   booking_min_notice: string;

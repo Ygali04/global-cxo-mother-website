@@ -16,12 +16,30 @@ function formatCardDate(rawDate: string): string {
 }
 
 const Banner = () => {
+    const [showToast, setShowToast] = useState<boolean>(true);
     const [upcoming, setUpcoming] = useState({
         slug: "mlc-oakland",
         title: "Major League Cricket S4 Final",
         date: "18 Jul 2026",
         location: "Oakland Coliseum",
     });
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const checkToastSetting = () => {
+            const val = localStorage.getItem("gcio_show_hero_toast");
+            if (val !== null) {
+                setShowToast(val === "true");
+            }
+        };
+        checkToastSetting();
+        window.addEventListener("storage", checkToastSetting);
+        window.addEventListener("gcio_hero_toast_change", checkToastSetting);
+        return () => {
+            window.removeEventListener("storage", checkToastSetting);
+            window.removeEventListener("gcio_hero_toast_change", checkToastSetting);
+        };
+    }, []);
 
     useEffect(() => {
         let isMounted = true;
@@ -151,19 +169,21 @@ const Banner = () => {
             </AuroraBackground>
 
             {/* Event promo card — desktop: absolute bottom-left; mobile: flows in at the bottom of the hero */}
-            <Link href={`/events/${upcoming.slug}`} className="hero-event-card" aria-label={`${upcoming.title} — view event details`}>
-                <span className="hero-event-arrow" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M13 5l7 7-7 7" />
-                    </svg>
-                </span>
-                <div className="hero-event-top">
-                    <span className="hero-event-badge">Upcoming Event</span>
-                    <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
-                </div>
-                <span className="hero-event-title">{upcoming.title}</span>
-                <span className="hero-event-meta">{upcoming.location}</span>
-            </Link>
+            {showToast && (
+                <Link href={`/events/${upcoming.slug}`} className="hero-event-card" aria-label={`${upcoming.title} — view event details`}>
+                    <span className="hero-event-arrow" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14M13 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                    <div className="hero-event-top">
+                        <span className="hero-event-badge">Upcoming Event</span>
+                        <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
+                    </div>
+                    <span className="hero-event-title">{upcoming.title}</span>
+                    <span className="hero-event-meta">{upcoming.location}</span>
+                </Link>
+            )}
 
             {/* Scroll indicator */}
             <div

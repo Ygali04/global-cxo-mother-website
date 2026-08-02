@@ -1,9 +1,12 @@
 import type { JSX } from 'react';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { Plus, Calendar, MapPin, Users } from 'lucide-react';
 import { Badge } from '@/portal/components/ui/badge';
 import { Button } from '@/portal/components/ui/button';
 import { Card } from '@/portal/components/ui/card';
+import { Switch } from '@/portal/components/ui/switch';
+import { toast } from 'sonner';
 import { useAuth } from '@/portal/hooks/useAuth';
 import { resolveEventLifecycle } from '@/portal/lib/eventLifecycle';
 import { EventCardListSkeleton } from '@/portal/components/ui/admin-skeletons';
@@ -16,6 +19,19 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function AdminEvents(): JSX.Element {
   const { events, catalogHydrated } = useAuth();
+  const [showHeroToast, setShowHeroToast] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem('gcio_show_hero_toast') !== 'false';
+  });
+
+  const handleToggleToast = (v: boolean) => {
+    setShowHeroToast(v);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('gcio_show_hero_toast', String(v));
+      window.dispatchEvent(new Event('gcio_hero_toast_change'));
+    }
+    toast.success(v ? 'Hero event promo toast enabled' : 'Hero event promo toast disabled');
+  };
 
   const sorted = [...events].sort((a, b) => {
     const order = { current: 0, past: 1, archived: 2 };
@@ -31,12 +47,18 @@ export default function AdminEvents(): JSX.Element {
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Events ({events.length})</h1>
           <p className="text-sm text-slate-500">Manage all GCXO events, attendees, and settings.</p>
         </div>
-        <Button asChild className="w-full sm:w-auto">
-          <Link to="/admin/events/new">
-            <Plus className="mr-2 h-4 w-4" />
-            New Event
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2 rounded-lg border bg-white px-3 py-1.5 shadow-sm">
+            <span className="text-xs font-medium text-slate-700">Hero Promo Toast</span>
+            <Switch checked={showHeroToast} onCheckedChange={handleToggleToast} />
+          </div>
+          <Button asChild className="w-full sm:w-auto">
+            <Link to="/admin/events/new">
+              <Plus className="mr-2 h-4 w-4" />
+              New Event
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {!catalogHydrated && events.length === 0 ? (
