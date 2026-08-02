@@ -88,6 +88,7 @@ export interface EventDetail {
   pastHighlights?: string;
   lifecycleStatus?: EventLifecycleStatus;
   registrationOpen?: boolean;
+  showHeroPromo?: boolean;
   price?: string;
   isTeaser?: boolean;
   cta?: CTAConfig;
@@ -120,6 +121,65 @@ const sriLankaHighlightCards: HighlightCard[] = [
 ];
 
 export const eventsData: EventDetail[] = [
+  {
+    id: 5,
+    slug: 'cio-100-awards-conference',
+    title: 'CIO 100',
+    tagline: '100 Award Winners | Fortune 500 CIOs | 50+ Speakers | 3 Days | One CIO Community',
+    date: '8/18/2026 – 8/20/2026',
+    location: 'Frisco, TX',
+    description:
+      'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results. Global CxO Circle is a sponsor and is bringing 3 top-funded startups.',
+    attendees: '400+ CIOs and CxOs',
+    heroImage: 'https://www.cio.com/wp-content/uploads/2025/05/2096110-0-25615700-1747025505-CIO-CSO-Nominate-2.png?w=1024',
+    heroImageMobile: 'https://www.cio.com/wp-content/uploads/2025/05/2096110-0-25615700-1747025505-CIO-CSO-Nominate-2.png?w=1024',
+    cardImage: 'https://www.cio.com/wp-content/uploads/2025/05/2096110-0-25615700-1747025505-CIO-CSO-Nominate-2.png?w=1024',
+    bannerImage: 'https://event.foundryco.com/wp-content/uploads/sites/10/2024/02/USA_full.png',
+    gallery: [],
+    overview:
+      'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results.\n\nFor more than four decades, the CIO 100 Awards has recognized organizations that use technology to drive business value, innovation, and competitive advantage. Today, the CIO 100 Awards & Conference brings together the leaders behind those achievements to share what’s working—and what’s next.',
+    objectives: [
+      'Celebrate top 100 IT organizations and visionary leaders.',
+      'Unpack enterprise AI, cloud architecture, and cybersecurity trends.',
+      'Network with 400+ enterprise executives, VCs, and founders.',
+    ],
+    speakers: [],
+    sponsors: [],
+    itinerary: [],
+    highlights: [
+      '400+ CIOS and CxOs',
+      'Awards & Conference',
+      'Thought Leadership Discussions',
+      'Roundtables and Panels',
+      'Networking Reception',
+      'Photo Opportunities and Entertainment',
+    ],
+    highlightCards: [],
+    registrationOpen: true,
+    lifecycleStatus: 'current',
+    showHeroPromo: true,
+    cta: {
+      primaryLabel: 'View Details',
+      primaryUrl: '/events/cio-100-awards-conference',
+      isExternal: false,
+    },
+    metadata: {
+      title: 'Global CXO Circle | CIO 100 Awards & Conference',
+      description:
+        'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results.',
+      image:
+        'https://www.omnihotels.com/-/media/images/hotels/dalpga/photogallery/resort/omni_dalpga_exterior-1170x660.jpg?mw=1536&hash=A1D5BD9E622343C24ED00138BD0C4AF26A59D4B6',
+    },
+    venue: {
+      name: 'Omni PGA Frisco Resort & Spa',
+      address: '4341 PGA Parkway, Frisco, Texas 75033',
+      description:
+        'Omni PGA Frisco Resort & Spa is a premier golf-oriented destination located in the Fields development in Frisco, Texas — adjacent to the PGA of America’s headquarters.',
+      image:
+        'https://www.omnihotels.com/-/media/images/hotels/dalpga/photogallery/resort/omni_dalpga_exterior-1170x660.jpg?mw=1536&hash=A1D5BD9E622343C24ED00138BD0C4AF26A59D4B6',
+      mapEmbedUrl: 'https://maps.google.com/maps?q=Omni+PGA+Frisco+Resort&output=embed',
+    },
+    },
   {
     id: 1,
     slug: 'sri-lanka-2025',
@@ -175,57 +235,6 @@ export const eventsData: EventDetail[] = [
       image: globalInnovationSummitImages.venue,
       mapEmbedUrl:
         'https://maps.google.com/maps?q=Taj+Samudra+Hotel,+25+Galle+Face+Centre+Road,+Colombo,+Sri+Lanka&t=&z=15&ie=UTF8&iwloc=&output=embed',
-    },
-  },
-  {
-    id: 4,
-    slug: 'gcio-demo-salon-2026',
-    title: 'GCXO Demo Salon 2026',
-    tagline: 'A proof-of-concept event for testing registration, dashboards, and admin workflows.',
-    date: 'April 24, 2026',
-    location: 'San Francisco, California',
-    description:
-      'A compact mock event created specifically for the GCXO product demo environment. It exercises the dashboard, registration, startup linking, and admin attendee workflows without implying a live production summit.',
-    attendees: '40+',
-    heroImage: sfConferenceImages.card,
-    heroImageMobile: sfConferenceImages.card,
-    cardImage: sfConferenceImages.card,
-    bannerImage: sfConferenceImages.banner,
-    gallery: [],
-    overview:
-      'This event exists purely as a product proof of concept. Use it to demonstrate how a founder, CIO, VC, or admin would move through the GCXO experience: log in, register, review the dashboard, and verify the attendee record in the admin console. It is intentionally lightweight but fully wired into the mock demo state.',
-    objectives: [
-      'Validate the mock registration flow for all user tiers.',
-      'Demonstrate startup profile creation for unlinked founder accounts.',
-      'Show real-time admin visibility into attendee changes.',
-    ],
-    speakers: [],
-    sponsors: [],
-    itinerary: [],
-    highlights: [
-      'Dedicated sandbox event for platform demos.',
-      'Supports founder, CIO, VC, admin, and dev test accounts.',
-      'Safe environment for end-to-end workflow walkthroughs.',
-    ],
-    highlightCards: [],
-    registrationOpen: true,
-    cta: {
-      primaryLabel: 'Open Demo Dashboard',
-      primaryUrl: '/dashboard',
-    },
-    metadata: {
-      title: 'Global CXO Circle | GCXO Demo Salon 2026',
-      description:
-        'A sandbox event used to demonstrate the GCXO dashboard, startup registration flow, and admin attendee management experience.',
-      image: sfConferenceImages.banner,
-    },
-    venue: {
-      name: 'GCXO Innovation Studio',
-      address: 'Palo Alto / San Francisco Demo Environment',
-      description:
-        'A fictional venue used for the product demo. All event activity is mock-only and intended for internal testing and stakeholder presentations.',
-      image: sfConferenceImages.card,
-      mapEmbedUrl: 'https://maps.google.com/maps?q=Palo%20Alto%20Art%20Center&output=embed',
     },
   },
   {
@@ -315,7 +324,9 @@ export const eventsData: EventDetail[] = [
       'Partnership tiers (Entry through Platinum) cover lodging, transportation, primetime pitches, dedicated rooms, curated dining tables, and recognition across the retreat.',
     ],
     highlightCards: dubaiSummitHighlightCards,
-    registrationOpen: true,
+    registrationOpen: false,
+    lifecycleStatus: 'past',
+    showHeroPromo: false,
     cta: {
       primaryLabel: 'Request VIP Invite',
       primaryUrl: 'https://lu.ma/globalcio-dubai',
@@ -336,6 +347,116 @@ export const eventsData: EventDetail[] = [
       mapEmbedUrl: 'https://maps.google.com/maps?q=InterContinental%20Dubai%20Festival%20City&output=embed',
     },
     livestreamUrl: 'https://www.youtube.com/embed/woI3-ARzql0?si=ySOHc-NRXa-wol_c',
+  },
+  {
+    id: 4,
+    slug: 'mlc-oakland',
+    title: 'Major League Cricket — Season 04 Final',
+    tagline: 'VIP Experience · CXO Networking',
+    date: 'Saturday, 18 July 2026 · 4:30 PM',
+    location: 'The Oakland Coliseum',
+    description:
+      'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.',
+    attendees: '200+',
+    heroImage: '/events/mlc_main_banner.webp',
+    heroImageMobile: '/events/mlc_main_banner.webp',
+    cardImage: '/events/mlc_main_banner.webp',
+    bannerImage: '/events/mlc_main_banner.webp',
+    gallery: ['/events/mlc_main_banner.webp', '/events/sponsors.webp'],
+    overview:
+      'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience at the Oakland Coliseum. Experience restaurant-style hospitality, private balcony seating, and curated 1-on-1 networking with top enterprise leaders at the season finale.',
+    objectives: [
+      'Connect 200+ enterprise CXOs and 100+ startups for premier networking',
+      'Experience restaurant-style hospitality at the Private Club Level',
+      'Enjoy private balcony seating with field views',
+      'Meet cricket legends and take photos with the championship trophy',
+    ],
+    speakers: [],
+    sponsors: [],
+    itinerary: [
+      {
+        date: 'Day 1',
+        time: '2:45 PM',
+        title: 'Arrival, Parking & Check-In',
+        description: 'Gates open. Collect VIP credentials & wristbands.',
+        type: 'arrival',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'Day 1',
+        time: '3:00 PM',
+        title: 'Pre-Event VIP Reception',
+        description: 'Food, beer & wine. Restaurant-style hospitality, Private Club Level. Startup introductions & curated 1:1s with CXOs.',
+        type: 'networking',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'Day 1',
+        time: '4:30 PM',
+        title: 'T20 Final — Private Balcony Seating',
+        description: 'TVs + glass windows overlooking the field. Premium seating.',
+        type: 'cultural',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'Day 1',
+        time: 'Post-Match',
+        title: 'Legends Meet & Greet + Trophy Photo',
+        description: 'Connect with legends, photos, celebrate the finale.',
+        type: 'cocktails',
+        timeOfDay: 'evening',
+      },
+    ],
+    highlights: [
+      'Private Club level access with restaurant-style hospitality',
+      'Food, beer & wine included throughout the match',
+      'Premium balcony seating with glass windows overlooking the field',
+      'Legends meet & greet + trophy photo session post-match',
+    ],
+    highlightCards: [
+      {
+        icon: '/assets/icons/global.png',
+        title: 'Private Club Access',
+        text: 'Restaurant-style hospitality with food, beer & wine included.',
+      },
+      {
+        icon: '/assets/icons/founders.png',
+        title: 'Balcony Seating',
+        text: 'Glass windows overlooking the field with premium seating.',
+      },
+      {
+        icon: '/assets/icons/meetings.png',
+        title: 'Curated 1-on-1s',
+        text: 'Startup introductions and networking with 200+ CXOs.',
+      },
+      {
+        icon: '/assets/icons/vacation.png',
+        title: 'Legends Meet & Greet',
+        text: 'Trophy photo and exclusive meet & greet post-match.',
+      },
+    ],
+    registrationOpen: false,
+    lifecycleStatus: 'past',
+    price: 'VIP Invite',
+    cta: {
+      primaryLabel: 'Register Now',
+      primaryUrl: 'https://withjoy.com/GCxO-July182026/registration',
+      isExternal: true,
+    },
+    metadata: {
+      title: 'Major League Cricket Season 04 Final VIP Experience | Global CXO Circle',
+      description:
+        'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience at the Oakland Coliseum.',
+      image: '/events/mlc_main_banner.webp',
+    },
+    venue: {
+      name: 'The Oakland Coliseum',
+      address: '7000 Coliseum Way, Oakland, CA 94621',
+      description:
+        'Experience the T20 Cricket VIP Experience from the Private Club Level with private balcony seating, restaurant-style hospitality, and curated executive networking.',
+      image: '/events/mlc_main_banner.webp',
+      mapEmbedUrl: 'https://maps.google.com/maps?q=Oakland+Coliseum&t=&z=15&ie=UTF8&iwloc=&output=embed',
+    },
   },
 ];
 
