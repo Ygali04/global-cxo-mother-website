@@ -406,8 +406,6 @@ export const eventsData: EventDetail[] = [
         type: 'cocktails',
         timeOfDay: 'evening',
       },
-        timeOfDay: 'evening',
-      },
     ],
     highlights: [
       '200+ CIOs and CxOs',
