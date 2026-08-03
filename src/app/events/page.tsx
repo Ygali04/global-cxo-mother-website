@@ -142,6 +142,24 @@ function mergeWithStaticEvents(loaded: EventDetail[]): EventDetail[] {
     return Array.from(merged.values())
 }
 
+function parseEventDateTimestamp(event: EventDetail): number {
+    if ((event as any).date_start) {
+        const t = new Date((event as any).date_start).getTime();
+        if (!isNaN(t)) return t;
+    }
+    const raw = event.date || '';
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}/.test(raw)) {
+        const firstPart = raw.split('–')[0].split('-')[0].trim();
+        const [m, d, y] = firstPart.split('/');
+        const t = new Date(Number(y), Number(m) - 1, Number(d)).getTime();
+        if (!isNaN(t)) return t;
+    }
+    const cleaned = raw.replace(/^[A-Za-z]+,\s*/, '').split('·')[0].split('–')[0].split('-')[0].trim();
+    const parsed = Date.parse(cleaned);
+    if (!isNaN(parsed)) return parsed;
+    return 0;
+}
+
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
@@ -180,6 +198,7 @@ const EventsPageContent = () => {
 
     const upcomingEvents: EventCardData[] = allEvents
         .filter((e) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived')
+        .sort((a, b) => parseEventDateTimestamp(b) - parseEventDateTimestamp(a))
         .map((e) => ({
             slug: e.slug,
             title: e.title,
@@ -196,6 +215,7 @@ const EventsPageContent = () => {
 
     const pastEvents: EventCardData[] = allEvents
         .filter((e) => e.lifecycleStatus === 'past' || (e.registrationOpen === false && e.lifecycleStatus !== 'archived'))
+        .sort((a, b) => parseEventDateTimestamp(b) - parseEventDateTimestamp(a))
         .map((e) => ({
             slug: e.slug,
             title: e.title,
