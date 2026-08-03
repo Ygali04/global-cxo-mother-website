@@ -162,7 +162,8 @@ function parseEventDateTimestamp(event: EventDetail): number {
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
-    const [allEvents, setAllEvents] = useState<EventDetail[]>(eventsData)
+    const [allEvents, setAllEvents] = useState<EventDetail[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
         let isMounted = true;
@@ -182,10 +183,16 @@ const EventsPageContent = () => {
                 if (cricket && !list.some((e) => e.slug === cricket.slug)) {
                     list.unshift(cricket);
                 }
-                if (isMounted && list.length > 0) {
-                    setAllEvents(mergeWithStaticEvents(list));
+                if (isMounted) {
+                    setAllEvents(mergeWithStaticEvents(list.length > 0 ? list : eventsData));
+                    setIsLoading(false);
                 }
-            } catch {}
+            } catch {
+                if (isMounted) {
+                    setAllEvents(eventsData);
+                    setIsLoading(false);
+                }
+            }
         };
         void loadEvents();
         return () => { isMounted = false; };
@@ -286,7 +293,25 @@ const EventsPageContent = () => {
                             </div>
                         </div>
 
-                        {list.length === 0 ? (
+                        {isLoading ? (
+                            <div className="row gutter-y-30 justify-content-center">
+                                {[1, 2].map((n) => (
+                                    <div key={n} className="col-lg-4 col-md-6">
+                                        <div style={{
+                                            background: "#fff", borderRadius: "18px", overflow: "hidden", height: "380px",
+                                            border: "1px solid var(--tg-border-1)", opacity: 0.75,
+                                        }}>
+                                            <div style={{ width: "100%", height: "220px", background: "#f1f5f9" }} />
+                                            <div style={{ padding: "26px 26px 22px" }}>
+                                                <div style={{ width: "40%", height: "14px", background: "#e2e8f0", borderRadius: "4px", marginBottom: "12px" }} />
+                                                <div style={{ width: "80%", height: "22px", background: "#e2e8f0", borderRadius: "4px", marginBottom: "16px" }} />
+                                                <div style={{ width: "60%", height: "14px", background: "#e2e8f0", borderRadius: "4px" }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : list.length === 0 ? (
                             <div className="text-center" style={{ padding: "60px 20px" }}>
                                 <h3 style={{ fontSize: "24px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>
                                     Something Big Is Coming
