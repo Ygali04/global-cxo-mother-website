@@ -406,17 +406,20 @@ export const eventsData: EventDetail[] = [
         type: 'cocktails',
         timeOfDay: 'evening',
       },
+        timeOfDay: 'evening',
+      },
     ],
     highlights: [
-      'Private Club level access with restaurant-style hospitality',
-      'Food, beer & wine included throughout the match',
-      'Premium balcony seating with glass windows overlooking the field',
-      'Legends meet & greet + trophy photo session post-match',
+      '200+ CIOs and CxOs',
+      'Oakland Coliseum Luxury Suite',
+      'Field-View Balcony Seating',
+      'All-Inclusive Food & Drinks',
+      'Trophy Photo & Player Meet & Greet',
     ],
     highlightCards: [
       {
-        icon: '/assets/icons/global.png',
-        title: 'Private Club Access',
+        icon: '/assets/icons/global-summit.png',
+        title: 'Field-View Suite',
         text: 'Restaurant-style hospitality with food, beer & wine included.',
       },
       {
@@ -439,9 +442,9 @@ export const eventsData: EventDetail[] = [
     lifecycleStatus: 'past',
     price: 'VIP Invite',
     cta: {
-      primaryLabel: 'Register Now',
-      primaryUrl: 'https://withjoy.com/GCxO-July182026/registration',
-      isExternal: true,
+      primaryLabel: 'View Event Gallery',
+      primaryUrl: '/gallery/mlc-oakland-2026',
+      isExternal: false,
     },
     metadata: {
       title: 'Major League Cricket Season 04 Final VIP Experience | Global CXO Circle',

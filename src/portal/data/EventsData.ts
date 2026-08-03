@@ -439,9 +439,9 @@ export const eventsData: EventDetail[] = [
     lifecycleStatus: 'past',
     price: 'VIP Invite',
     cta: {
-      primaryLabel: 'Register Now',
-      primaryUrl: 'https://withjoy.com/GCxO-July182026/registration',
-      isExternal: true,
+      primaryLabel: 'View Event Gallery',
+      primaryUrl: '/gallery/mlc-oakland-2026',
+      isExternal: false,
     },
     metadata: {
       title: 'Major League Cricket Season 04 Final VIP Experience | Global CXO Circle',
