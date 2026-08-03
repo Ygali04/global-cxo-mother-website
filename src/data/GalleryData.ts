@@ -125,18 +125,6 @@ const MLC_2026_BASE = "/assets/events/MLC 2026"
 
 const galleries: EventGallery[] = [
     {
-        slug: "sri-lanka-2025",
-        title: "Global Innovation Summit 2025",
-        location: "Colombo, Sri Lanka",
-        dateRange: "September 2–5, 2025",
-        coverImage: "/assets/events/SriLanka/venue/colombo-picture.jpg",
-        photos: sriLankaFilenames.map((f) => ({
-            thumb: `${SRI_LANKA_BASE}/thumbs/${f}`,
-            full: `${SRI_LANKA_BASE}/${f}`,
-            alt: "Global Innovation Summit 2025 — Colombo, Sri Lanka",
-        })),
-    },
-    {
         slug: "mlc-oakland-2026",
         title: "Major League Cricket — Season 04 Final",
         location: "The Oakland Coliseum",
@@ -146,6 +134,18 @@ const galleries: EventGallery[] = [
             thumb: `${MLC_2026_BASE}/${f}`,
             full: `${MLC_2026_BASE}/${f}`,
             alt: "Major League Cricket — Season 04 Final — Oakland, California",
+        })),
+    },
+    {
+        slug: "sri-lanka-2025",
+        title: "Global Innovation Summit 2025",
+        location: "Colombo, Sri Lanka",
+        dateRange: "September 2–5, 2025",
+        coverImage: "/assets/events/SriLanka/venue/colombo-picture.jpg",
+        photos: sriLankaFilenames.map((f) => ({
+            thumb: `${SRI_LANKA_BASE}/thumbs/${f}`,
+            full: `${SRI_LANKA_BASE}/${f}`,
+            alt: "Global Innovation Summit 2025 — Colombo, Sri Lanka",
         })),
     },
 ]
