@@ -259,7 +259,7 @@ export function mapApiEventToEventDetail(raw: ApiEventJson, registrationCount: n
     location: raw.location,
     description: raw.description,
     attendees:
-      registrationCount > 0 ? `${registrationCount} registration(s)` : 'Registrations from API',
+      registrationCount > 0 ? `${registrationCount} attendees` : template?.attendees || raw.attendees || '100+ attendees',
     heroImage,
     heroImageMobile,
     cardImage,

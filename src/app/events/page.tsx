@@ -53,7 +53,6 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
     const meta = [
         { icon: <CalendarIcon />, text: ev.date },
         { icon: <PinIcon />, text: ev.location },
-        { icon: <UsersIcon />, text: `${ev.attendees}${ev.attendeesSuffix || ""}` },
     ]
     const inner = (
         <div className="event-card" style={{
@@ -206,7 +205,6 @@ const EventsPageContent = () => {
             date: e.date,
             location: e.location,
             attendees: e.attendees,
-            attendeesSuffix: " attendees expected",
             description: e.description,
             image: e.cardImage || e.bannerImage || e.heroImage,
             href: `/events/${e.slug}`,
@@ -223,7 +221,6 @@ const EventsPageContent = () => {
             date: e.date,
             location: e.location,
             attendees: e.attendees,
-            attendeesSuffix: " attendees",
             description: e.description,
             image: e.cardImage || e.bannerImage || e.heroImage,
             href: `/events/${e.slug}`,
