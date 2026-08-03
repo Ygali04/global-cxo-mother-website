@@ -243,12 +243,12 @@ export function ActivityLogPanel() {
                         {group.target_type}
                       </Badge>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">
-                          {group.entries[0].summary ?? humanize(group.action)}
-                          <Badge variant="outline" className="ml-2 text-[10px] px-1.5 py-0">
+                        <div className="text-sm font-medium flex items-center gap-1.5">
+                          <span>{group.entries[0].summary ?? humanize(group.action)}</span>
+                          <Badge variant="outline" className="text-[10px] px-1.5 py-0">
                             {group.entries.length}
                           </Badge>
-                        </p>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <span className="text-xs text-muted-foreground" title={new Date(lastEntry.created_at).toLocaleString()}>
