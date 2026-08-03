@@ -47,11 +47,12 @@ function formatCardDate(rawDate: string): string {
 
 const Banner = () => {
     const [showToast, setShowToast] = useState<boolean>(true);
+    const [isPromoLoading, setIsPromoLoading] = useState<boolean>(true);
     const [upcoming, setUpcoming] = useState({
-        slug: "cio-100",
+        slug: "cio-100-awards-conference",
         title: "CIO 100 Awards & Conference 2026",
-        date: "August 14, 2026",
-        location: "San Jose Convention Center, CA",
+        date: "8/18/2026",
+        location: "Frisco, TX",
     });
 
     useEffect(() => {
@@ -96,18 +97,23 @@ const Banner = () => {
                         e.lifecycleStatus !== 'archived' &&
                         e.showHeroPromo !== false
                 );
-                if (found && isMounted) {
-                    setUpcoming({
-                        slug: found.slug,
-                        title: found.title,
-                        date: found.date,
-                        location: found.location,
-                    });
-                    setShowToast(true);
-                } else if (isMounted) {
-                    setShowToast(false);
+                if (isMounted) {
+                    if (found) {
+                        setUpcoming({
+                            slug: found.slug,
+                            title: found.title,
+                            date: found.date,
+                            location: found.location,
+                        });
+                        setShowToast(true);
+                    } else {
+                        setShowToast(false);
+                    }
+                    setIsPromoLoading(false);
                 }
-            } catch {}
+            } catch {
+                if (isMounted) setIsPromoLoading(false);
+            }
         };
         void fetchEvents();
         return () => { isMounted = false; };
@@ -206,7 +212,16 @@ const Banner = () => {
             </AuroraBackground>
 
             {/* Event promo card — desktop: absolute bottom-left; mobile: flows in at the bottom of the hero */}
-            {showToast && (
+            {isPromoLoading ? (
+                <div className="hero-event-card hero-event-card--skeleton" style={{ opacity: 0.75, pointerEvents: "none" }}>
+                    <div className="hero-event-top" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <span style={{ width: "85px", height: "16px", background: "rgba(255,255,255,0.22)", borderRadius: "100px", display: "inline-block" }} />
+                        <span style={{ width: "65px", height: "14px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", display: "inline-block" }} />
+                    </div>
+                    <div style={{ width: "180px", height: "18px", background: "rgba(255,255,255,0.25)", borderRadius: "4px", marginTop: "8px" }} />
+                    <div style={{ width: "120px", height: "12px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", marginTop: "6px" }} />
+                </div>
+            ) : showToast && (
                 <Link href={`/events/${upcoming.slug}`} className="hero-event-card" aria-label={`${upcoming.title} — view event details`}>
                     <span className="hero-event-arrow" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
