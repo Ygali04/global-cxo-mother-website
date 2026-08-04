@@ -242,7 +242,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
                             </div>
-                            {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                            {event.registrationOpen !== false && event.slug !== 'cio-100-awards-conference' && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
                                 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px", marginTop: "24px" }}>
                                     <a
                                         href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
@@ -293,6 +293,69 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                             )}
                         </div>
                     )}
+
+                    {/* ── CIO 100: Video Bites + Tee Times (side by side) ── */}
+                    {event.slug === 'cio-100-awards-conference' && (() => {
+                        const cardBoxStyle: React.CSSProperties = {
+                            flex: 1, minWidth: "260px",
+                            border: "1px solid var(--tg-border-1)", borderRadius: "14px",
+                            padding: "28px 26px", display: "flex", flexDirection: "column", gap: "12px",
+                        };
+                        const buttonStyle: React.CSSProperties = {
+                            marginTop: "4px", display: "inline-flex", alignItems: "center", gap: "8px",
+                            background: "var(--tg-color-gradient)", color: "#fff",
+                            padding: "11px 22px", borderRadius: "100px",
+                            fontWeight: 700, fontSize: "14px", textDecoration: "none",
+                            alignSelf: "flex-start", transition: "opacity 0.2s ease",
+                        };
+                        const rawLumaUrl = event.cta?.primaryUrl && event.cta.primaryUrl !== '/events/cio-100-awards-conference'
+                            ? event.cta.primaryUrl
+                            : ((event as any).lumaUrl || (event as any).lumaEventUrl || null);
+                        const lumaHref = rawLumaUrl || "https://lu.ma";
+                        const isExternalLuma = !!rawLumaUrl || event.cta?.isExternal;
+
+                        return (
+                            <div style={{ display: "flex", gap: "20px", marginBottom: "80px", flexWrap: "wrap" }}>
+                                {/* Video Bites */}
+                                <div style={cardBoxStyle}>
+                                    <p style={{ margin: 0, fontWeight: 700, fontSize: "11px", textTransform: "uppercase", letterSpacing: "1.2px", color: "var(--tg-theme-primary)" }}>🎥 Video Bites</p>
+                                    <h3 style={{ margin: 0, fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3 }}>Book a 1-on-1 Video Call</h3>
+                                    <p style={{ margin: 0, fontSize: "14px", color: "var(--tg-body-color)", lineHeight: 1.6 }}>
+                                        Schedule a short video meeting with our team ahead of CIO 100.
+                                    </p>
+                                    <a
+                                        href="https://calendly.com/leningali/cio100"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        id="cio100-video-bites-calendly-btn"
+                                        className="cio-action-btn"
+                                        style={buttonStyle}
+                                    >
+                                        Schedule on Calendly <ArrowIcon />
+                                    </a>
+                                </div>
+
+                                {/* Tee Times */}
+                                <div style={cardBoxStyle}>
+                                    <p style={{ margin: 0, fontWeight: 700, fontSize: "11px", textTransform: "uppercase", letterSpacing: "1.2px", color: "var(--tg-theme-primary)" }}>⛳ Tee Times</p>
+                                    <h3 style={{ margin: 0, fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3 }}>Golf at PGA Frisco</h3>
+                                    <p style={{ margin: 0, fontSize: "14px", color: "var(--tg-body-color)", lineHeight: 1.6 }}>
+                                        Reserve a tee time and network with fellow CIOs on the course.
+                                    </p>
+                                    <a
+                                        href={lumaHref}
+                                        target={isExternalLuma ? "_blank" : "_self"}
+                                        rel={isExternalLuma ? "noopener noreferrer" : undefined}
+                                        id="cio100-tee-times-luma-btn"
+                                        className="cio-action-btn"
+                                        style={buttonStyle}
+                                    >
+                                        Register on Luma <ArrowIcon />
+                                    </a>
+                                </div>
+                            </div>
+                        );
+                    })()}
 
                     {/* Objectives */}
                     {event.objectives && event.objectives.length > 0 && (
@@ -480,7 +543,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
 
                     {/* Banner */}
                     {(event.bannerImage || event.heroImage) && (
-                        <div style={{ marginBottom: "80px", maxWidth: "1000px", margin: "0 auto 80px" }}>
+                        <div style={{ maxWidth: "1000px", margin: "0 auto 80px" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={event.bannerImage || event.heroImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
                         </div>
@@ -522,7 +585,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                     )}
 
                     {/* Registration Card Banner */}
-                    {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                    {event.registrationOpen !== false && event.slug !== 'cio-100-awards-conference' && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
                         <div style={{ marginTop: "60px", marginBottom: "40px", maxWidth: "1000px", margin: "60px auto 40px" }}>
                             <div style={{
                                 background: "linear-gradient(135deg, #060c22 0%, #0a3cc2 100%)",
@@ -601,6 +664,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                 .venue-map-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.18); }
                 .back-to-events-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(10,60,194,0.3); filter: brightness(1.05); }
                 .show-more-btn:hover { background: var(--tg-color-gradient) !important; color: #fff !important; border-color: transparent !important; box-shadow: 0 8px 22px rgba(10,60,194,0.25); }
+                .cio-action-btn:hover { opacity: 0.88 !important; }
             `}</style>
         </>
     )
