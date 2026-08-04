@@ -79,9 +79,63 @@ const sriLankaFilenames = [
     "GIS_5th-503.jpg",
 ]
 
+const mlc2026Filenames = [
+    "Global-CXO-10.jpg",
+    "Global-CXO-100.jpg",
+    "Global-CXO-108.jpg",
+    "Global-CXO-11.jpg",
+    "Global-CXO-114.jpg",
+    "Global-CXO-115.jpg",
+    "Global-CXO-118.jpg",
+    "Global-CXO-12.jpg",
+    "Global-CXO-121.jpg",
+    "Global-CXO-124.jpg",
+    "Global-CXO-128.jpg",
+    "Global-CXO-129.jpg",
+    "Global-CXO-145.jpg",
+    "Global-CXO-152.jpg",
+    "Global-CXO-16.jpg",
+    "Global-CXO-165.jpg",
+    "Global-CXO-174.jpg",
+    "Global-CXO-176.jpg",
+    "Global-CXO-195.jpg",
+    "Global-CXO-197.jpg",
+    "Global-CXO-199.jpg",
+    "Global-CXO-2.jpg",
+    "Global-CXO-210.jpg",
+    "Global-CXO-212.jpg",
+    "Global-CXO-222.jpg",
+    "Global-CXO-226.jpg",
+    "Global-CXO-232.jpg",
+    "Global-CXO-26.jpg",
+    "Global-CXO-3.jpg",
+    "Global-CXO-34.jpg",
+    "Global-CXO-6.jpg",
+    "Global-CXO-67.jpg",
+    "Global-CXO-68.jpg",
+    "Global-CXO-69.jpg",
+    "Global-CXO-71.jpg",
+    "Global-CXO-79.jpg",
+    "Global-CXO-84.jpg",
+    "Global-CXO-93.jpg",
+]
+
 const SRI_LANKA_BASE = "/assets/events/SriLanka/photos"
+const MLC_2026_BASE = "/assets/events/MLC 2026"
 
 const galleries: EventGallery[] = [
+    {
+        slug: "mlc-oakland-2026",
+        title: "Major League Cricket — Season 04 Final",
+        location: "The Oakland Coliseum",
+        dateRange: "Saturday, 18 July 2026 · 4:30 PM",
+        coverImage: "/assets/events/MLC 2026/Global-CXO-108.jpg",
+        photos: mlc2026Filenames.map((f) => ({
+            thumb: `${MLC_2026_BASE}/${f}`,
+            full: `${MLC_2026_BASE}/${f}`,
+            alt: "Major League Cricket — Season 04 Final — Oakland, California",
+        })),
+    },
     {
         slug: "sri-lanka-2025",
         title: "Global Innovation Summit 2025",
