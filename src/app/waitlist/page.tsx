@@ -174,7 +174,7 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "hero" })
             cursor: submitting ? "not-allowed" : "pointer", opacity: submitting ? 0.7 : 1,
             boxShadow: "0 10px 30px rgba(10,60,194,0.2)", transition: "all 0.3s ease",
           }}>
-          {submitting ? "Submitting..." : isHero ? "Join the Waitlist" : "Request Early Access"}
+          {submitting ? "Submitting..." : isHero ? "Apply for Membership" : "Request Early Access"}
         </motion.button>
         {/* Server-side failures show inline below the button — the form stays
             visible and editable so the user can correct and retry (previously
