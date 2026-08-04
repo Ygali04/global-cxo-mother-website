@@ -476,6 +476,131 @@ export const eventsData: EventDetail[] = [
         'https://maps.google.com/maps?q=Taj+Samudra+Hotel,+25+Galle+Face+Centre+Road,+Colombo,+Sri+Lanka&t=&z=15&ie=UTF8&iwloc=&output=embed',
     },
   },
+  {
+    id: 5,
+    slug: 'mlc-oakland',
+    title: 'Major League Cricket Season 04 Final',
+    tagline: '200+ CXOs & 100+ Founders for T20 Cricket, Networking & VIP Hospitality',
+    date: 'Saturday, 18 July 2026 · 4:30 PM',
+    location: 'The Oakland Coliseum · Oakland, California',
+    description:
+      'Global CXO Circle presents an exclusive executive gathering at the Season 04 Final of Major League Cricket (MLC). Experience premium glass-window balcony seating overlooking the field, restaurant-style dining with complimentary drinks, curated 1-on-1 networking between 200+ CXOs and 100+ tech founders, and a post-match trophy meet & greet.',
+    attendees: '200+ CXOs & 100+ Startups',
+    heroImage: '/events/mlc_main_banner.webp',
+    heroImageMobile: '/events/mlc_main_banner.webp',
+    cardImage: '/events/mlc_main_banner.webp',
+    bannerImage: '/events/mlc_main_banner.webp',
+    gallery: [],
+    overview:
+      'Major League Cricket (MLC) is America’s premier professional T20 cricket league, featuring world-class international stars and top US talent. For the Season 04 Championship Final, Global CXO Circle hosts a private VIP executive experience inside the Oakland Coliseum’s luxury suites.\n\nEnjoy prime balcony views of the field, all-inclusive food and beverages, and structured networking with enterprise tech leaders, VC partners, and high-growth startup founders. The event concludes with an exclusive trophy presentation photo opportunity and player meet & greet.',
+    objectives: [
+      'Bring together 200+ enterprise CXOs and 100+ startup founders for high-impact executive networking.',
+      'Provide VIP hospitality including field-view balcony seating, full dining, and complimentary drinks.',
+      'Facilitate curated 1-on-1 introductions between enterprise decision-makers and emerging tech leaders.',
+      'Offer post-match trophy access and exclusive player meet & greet opportunities.',
+    ],
+    speakers: [],
+    sponsors: [],
+    itinerary: [
+      {
+        date: 'July 18, 2026',
+        time: '04:30 PM',
+        title: 'VIP Gate Arrival & Suite Check-In',
+        description: 'Exclusive suite entrance access, badge pickup, and welcome refreshments.',
+        type: 'arrival',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'July 18, 2026',
+        time: '05:00 PM',
+        title: 'Curated 1-on-1 CXO & Founder Networking',
+        description: 'Structured introductions between enterprise executives, VCs, and startup leaders.',
+        type: 'networking',
+        timeOfDay: 'afternoon',
+      },
+      {
+        date: 'July 18, 2026',
+        time: '06:00 PM',
+        title: 'Match Start & Restaurant-Style Dining',
+        description: 'First innings action with premium hot buffet dining, craft beer, and wine.',
+        type: 'dinner',
+        timeOfDay: 'evening',
+      },
+      {
+        date: 'July 18, 2026',
+        time: '07:45 PM',
+        title: 'Mid-Innings Executive Roundtable',
+        description: 'Brief thought leadership discussion and dessert lounge networking.',
+        type: 'panel',
+        timeOfDay: 'evening',
+      },
+      {
+        date: 'July 18, 2026',
+        time: '08:15 PM',
+        title: 'Second Innings & Championship Finish',
+        description: 'Thrilling T20 second innings finish from field-view glass balcony seats.',
+        type: 'networking',
+        timeOfDay: 'evening',
+      },
+      {
+        date: 'July 18, 2026',
+        time: '09:45 PM',
+        title: 'Post-Match Trophy Photo & Player Meet & Greet',
+        description: 'Exclusive on-field / suite access for trophy photos and player interactions.',
+        type: 'cultural',
+        timeOfDay: 'evening',
+      },
+    ],
+    highlights: [
+      '200+ CXOs & 100+ Startups',
+      'Oakland Coliseum Luxury Suite',
+      'Field-View Balcony Seating',
+      'All-Inclusive Food & Drinks',
+      'Trophy Photo & Player Meet & Greet',
+    ],
+    highlightCards: [
+      {
+        icon: '/assets/icons/global-summit.png',
+        title: 'Field-View Suite',
+        text: 'Restaurant-style hospitality with food, beer & wine included.',
+      },
+      {
+        icon: '/assets/icons/founders.png',
+        title: 'Balcony Seating',
+        text: 'Glass windows overlooking the field with premium seating.',
+      },
+      {
+        icon: '/assets/icons/meetings.png',
+        title: 'Curated 1-on-1s',
+        text: 'Startup introductions and networking with 200+ CXOs.',
+      },
+      {
+        icon: '/assets/icons/vacation.png',
+        title: 'Legends Meet & Greet',
+        text: 'Trophy photo and exclusive meet & greet post-match.',
+      },
+    ],
+    registrationOpen: false,
+    cta: {
+      primaryLabel: 'View Event Gallery',
+      primaryUrl: '/gallery/mlc-oakland-2026',
+      isExternal: false,
+    },
+    metadata: {
+      title: 'Major League Cricket Season 04 Final VIP Experience | Global CXO Circle',
+      description:
+        'Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience at the Oakland Coliseum.',
+      image: '/events/mlc_main_banner.webp',
+    },
+    venue: {
+      name: 'The Oakland Coliseum',
+      address: '7000 S Coliseum Way, Oakland, CA 94621',
+      description:
+        'Historic Bay Area sports stadium featuring private luxury suites, field-view balcony lounges, and prime transport accessibility.',
+      image: '/events/mlc_main_banner.webp',
+      mapEmbedUrl: 'https://maps.google.com/maps?q=Oakland+Coliseum&output=embed',
+    },
+  },
 ];
 
 export default eventsData;
