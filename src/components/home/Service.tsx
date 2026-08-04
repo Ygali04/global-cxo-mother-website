@@ -128,7 +128,7 @@ const Service = () => {
                            background: "var(--tg-color-gradient)", color: "#fff", padding: "12px 24px", borderRadius: "10px",
                            fontWeight: 600, fontSize: "14px", textDecoration: "none"
                         }}>
-                           Join Waitlist
+                           Apply for Membership
                         </Link>
                         <button onClick={() => setModalCircle(null)} style={{
                            background: "#f1f5f9", color: "var(--tg-heading-color)", padding: "12px 24px", borderRadius: "10px",
