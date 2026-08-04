@@ -311,8 +311,8 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                         const rawLumaUrl = event.cta?.primaryUrl && event.cta.primaryUrl !== '/events/cio-100-awards-conference'
                             ? event.cta.primaryUrl
                             : ((event as any).lumaUrl || (event as any).lumaEventUrl || null);
-                        const lumaHref = rawLumaUrl || "https://lu.ma";
-                        const isExternalLuma = !!rawLumaUrl || event.cta?.isExternal;
+const lumaHref = rawLumaUrl || "https://lu.ma";
+const isExternalLuma = /^https?:\/\//.test(lumaHref);
 
                         return (
                             <div style={{ display: "flex", gap: "20px", marginBottom: "80px", flexWrap: "wrap" }}>
