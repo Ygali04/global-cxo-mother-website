@@ -212,7 +212,7 @@ const Login: React.FC = () => {
                   </Button>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-navy-500">
+                <p className="mt-5 text-center text-sm text-navy-500">
                   Don&apos;t have an account?{' '}
                   <Link to="/waitlist" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                     Sign Up

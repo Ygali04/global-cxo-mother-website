@@ -42,9 +42,8 @@ const columns: FooterColumn[] = [
 
 const CONTACT_EMAIL = "contactus@globalcxocircle.com"
 
-const FooterThree = () => {
+const Footer = () => {
    const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
-      // Smooth-scroll for on-page hash links when already on the homepage.
       if (link.startsWith('/#') && typeof window !== 'undefined' && window.location.pathname === '/') {
          const targetId = link.substring(2);
          if (targetId) {
@@ -57,12 +56,10 @@ const FooterThree = () => {
 
    return (
       <footer className="site-footer" style={{ backgroundColor: "#0B1A4A", color: "#fff", position: "relative" }}>
-         {/* Gradient accent line */}
          <div style={{ height: "3px", width: "100%", background: "var(--tg-color-gradient)" }} />
 
          <div className="container" style={{ paddingTop: "72px" }}>
             <div className="row gutter-y-40" style={{ paddingBottom: "48px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-               {/* Brand + contact */}
                <div className="col-lg-4 col-md-12 mb-2 mb-lg-0" style={{ paddingRight: "24px" }}>
                   <Link href="/" style={{ display: "inline-block", marginBottom: "18px" }}>
                      {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -79,7 +76,6 @@ const FooterThree = () => {
                   </a>
                </div>
 
-               {/* Link columns */}
                {columns.map((col) => (
                   <div key={col.title} className="col-lg-2 col-md-3 col-6">
                      <h4 style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255,255,255,0.9)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "1.4px" }}>
@@ -103,7 +99,6 @@ const FooterThree = () => {
                ))}
             </div>
 
-            {/* Bottom bar */}
             <div style={{ padding: "24px 0 30px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
                <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", margin: 0 }}>
                   © {new Date().getFullYear()} Global CXO Circle. All rights reserved.
@@ -137,4 +132,4 @@ const FooterThree = () => {
    )
 }
 
-export default FooterThree
+export default Footer;

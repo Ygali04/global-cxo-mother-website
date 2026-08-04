@@ -3,8 +3,8 @@
 import { useState, useRef, type ReactNode, type CSSProperties } from "react"
 import Link from "next/link"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 
 const API_BASE_URL = "https://gcio-backend-production.up.railway.app/api"
 
@@ -200,7 +200,7 @@ export default function WaitlistPage() {
 
   return (
     <div className="overflow-x-hidden">
-      <HeaderFive hideSignIn />
+      <Header hideSignIn />
 
       {/* ══════════════════════════════════════════════════════════════ */}
       {/* HERO                                                          */}
@@ -474,7 +474,7 @@ export default function WaitlistPage() {
         </div>
       </section>
 
-      <FooterThree />
+      <Footer />
 
       <style jsx global>{`
         @keyframes scroll {

@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -67,7 +67,7 @@ const CirclesPage = () => {
 
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix" style={{ paddingTop: "120px", paddingBottom: "120px", backgroundColor: "#f8f9fa" }}>
                 <div className="container">
                     <div className="row justify-content-center text-center" style={{ marginBottom: "60px" }}>
@@ -220,7 +220,7 @@ const CirclesPage = () => {
                     }
                 `}</style>
             </main>
-            <FooterThree />
+            <Footer />
         </>
     )
 }

@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
-import eventsData from "@/data/EventsData"
+import eventsData, { type EventDetail } from "@/data/EventsData"
+import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
 type EventCardData = {
+    slug: string
     title: string
     tagline?: string
     date: string
@@ -42,39 +44,6 @@ const ExternalIcon = () => (
     </svg>
 )
 
-/* ---- Cricket event (lives on its own page) ---- */
-const cricketEvent: EventCardData = {
-    title: "Major League Cricket — Season 04 Final",
-    tagline: "VIP Experience · CXO Networking",
-    date: "Saturday, 18 July 2026 · 4:30 PM",
-    location: "The Oakland Coliseum",
-    attendees: "200+",
-    attendeesSuffix: " attendees expected",
-    description:
-        "Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.",
-    image: "/events/mlc_main_banner.webp",
-    href: "/events/mlc-oakland",
-}
-
-/* ---- Past events, pulled from the shared events data ---- */
-const pastOrder = ["dubai-summit-2026", "sf-conference-2025", "sri-lanka-2025"]
-const pastEvents: EventCardData[] = pastOrder
-    .map((slug) => eventsData.find((e) => e.slug === slug))
-    .filter((e): e is NonNullable<typeof e> => Boolean(e))
-    .map((e) => ({
-        title: e.title,
-        tagline: e.tagline,
-        date: e.date,
-        location: e.location,
-        attendees: e.attendees,
-        attendeesSuffix: " attendees",
-        description: e.description,
-        image: e.cardImage || e.heroImage,
-        href: `/events/${e.slug}`,
-    }))
-
-const upcomingEvents: EventCardData[] = [cricketEvent]
-
 function truncate(text: string, max = 155) {
     if (text.length <= max) return text
     return `${text.slice(0, max).trimEnd()}…`
@@ -84,7 +53,6 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
     const meta = [
         { icon: <CalendarIcon />, text: ev.date },
         { icon: <PinIcon />, text: ev.location },
-        { icon: <UsersIcon />, text: `${ev.attendees}${ev.attendeesSuffix || ""}` },
     ]
     const inner = (
         <div className="event-card" style={{
@@ -139,20 +107,139 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
     )
 }
 
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+
+function mergeWithStaticEvents(loaded: EventDetail[]): EventDetail[] {
+    const staticMap = new Map(eventsData.map((e) => [e.slug, e]))
+    const merged = new Map<string, EventDetail>()
+
+    for (const ev of eventsData) {
+        merged.set(ev.slug, ev)
+    }
+    for (const ev of loaded) {
+        const staticEv = staticMap.get(ev.slug)
+        if (staticEv) {
+            merged.set(ev.slug, {
+                ...staticEv,
+                ...ev,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+                cardImage: staticEv.cardImage || ev.cardImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+            })
+        } else {
+            merged.set(ev.slug, ev)
+        }
+    }
+    return Array.from(merged.values())
+}
+
+function parseEventDateTimestamp(event: EventDetail): number {
+    if ((event as any).date_start) {
+        const t = new Date((event as any).date_start).getTime();
+        if (!isNaN(t)) return t;
+    }
+    const raw = event.date || '';
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}/.test(raw)) {
+        const firstPart = raw.split('–')[0].split('-')[0].trim();
+        const [m, d, y] = firstPart.split('/');
+        const t = new Date(Number(y), Number(m) - 1, Number(d)).getTime();
+        if (!isNaN(t)) return t;
+    }
+    const cleaned = raw.replace(/^[A-Za-z]+,\s*/, '').split('·')[0].split('–')[0].split('-')[0].trim();
+    const parsed = Date.parse(cleaned);
+    if (!isNaN(parsed)) return parsed;
+    return 0;
+}
+
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
-    const list = tab === "upcoming" ? upcomingEvents : pastEvents
+    const [allEvents, setAllEvents] = useState<EventDetail[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
-        if (searchParams.get("tab") === "past") setTab("past")
-    }, [searchParams])
+        let isMounted = true;
+        const loadEvents = async () => {
+            try {
+                let list: EventDetail[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(200);
+                        list = raw.map((e) => mapApiEventToEventDetail(e, 0));
+                    } catch {}
+                }
+                if (!list.length) {
+                    list = loadMockDatabaseSnapshot().events;
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !list.some((e) => e.slug === cricket.slug)) {
+                    list.unshift(cricket);
+                }
+                if (isMounted) {
+                    setAllEvents(mergeWithStaticEvents(list.length > 0 ? list : eventsData));
+                    setIsLoading(false);
+                }
+            } catch {
+                if (isMounted) {
+                    setAllEvents(eventsData);
+                    setIsLoading(false);
+                }
+            }
+        };
+        void loadEvents();
+        return () => { isMounted = false; };
+    }, []);
+
+    useEffect(() => {
+        if (searchParams.get("tab") === "past") setTab("past");
+    }, [searchParams]);
+
+    const upcomingEvents: EventCardData[] = allEvents
+        .filter((e) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived')
+        .sort((a, b) => parseEventDateTimestamp(b) - parseEventDateTimestamp(a))
+        .map((e) => ({
+            slug: e.slug,
+            title: e.title,
+            tagline: e.tagline,
+            date: e.date,
+            location: e.location,
+            attendees: e.attendees,
+            description: e.description,
+            image: e.cardImage || e.bannerImage || e.heroImage,
+            href: `/events/${e.slug}`,
+            external: false,
+        }));
+
+    const pastEvents: EventCardData[] = allEvents
+        .filter((e) => e.lifecycleStatus === 'past' || (e.registrationOpen === false && e.lifecycleStatus !== 'archived'))
+        .sort((a, b) => parseEventDateTimestamp(b) - parseEventDateTimestamp(a))
+        .map((e) => ({
+            slug: e.slug,
+            title: e.title,
+            tagline: e.tagline,
+            date: e.date,
+            location: e.location,
+            attendees: e.attendees,
+            description: e.description,
+            image: e.cardImage || e.bannerImage || e.heroImage,
+            href: `/events/${e.slug}`,
+            external: false,
+        }));
+
+    const list = tab === "upcoming" ? upcomingEvents : pastEvents;
 
     return (
         <>
-            <HeaderFive />
-            <main className="main-area fix">
-                {/* Hero */}
+            <Header />
+            <main>
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
                     <div className="container">
                         <div className="row justify-content-center text-center">
@@ -206,7 +293,25 @@ const EventsPageContent = () => {
                             </div>
                         </div>
 
-                        {list.length === 0 ? (
+                        {isLoading ? (
+                            <div className="row gutter-y-30 justify-content-center">
+                                {[1, 2].map((n) => (
+                                    <div key={n} className="col-lg-4 col-md-6">
+                                        <div style={{
+                                            background: "#fff", borderRadius: "18px", overflow: "hidden", height: "380px",
+                                            border: "1px solid var(--tg-border-1)", opacity: 0.75,
+                                        }}>
+                                            <div style={{ width: "100%", height: "220px", background: "#f1f5f9" }} />
+                                            <div style={{ padding: "26px 26px 22px" }}>
+                                                <div style={{ width: "40%", height: "14px", background: "#e2e8f0", borderRadius: "4px", marginBottom: "12px" }} />
+                                                <div style={{ width: "80%", height: "22px", background: "#e2e8f0", borderRadius: "4px", marginBottom: "16px" }} />
+                                                <div style={{ width: "60%", height: "14px", background: "#e2e8f0", borderRadius: "4px" }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : list.length === 0 ? (
                             <div className="text-center" style={{ padding: "60px 20px" }}>
                                 <h3 style={{ fontSize: "24px", fontWeight: 700, color: "var(--tg-heading-color)", marginBottom: "12px" }}>
                                     Something Big Is Coming
@@ -218,7 +323,7 @@ const EventsPageContent = () => {
                         ) : (
                             <div className="row gutter-y-30 justify-content-center">
                                 {list.map((ev, i) => (
-                                    <div key={ev.title} className="col-lg-4 col-md-6">
+                                    <div key={ev.slug} className="col-lg-4 col-md-6">
                                         <AnimateOnScroll delay={0.08 * (i % 3)} className="h-100">
                                             <EventCard ev={ev} imageHeight={tab === "upcoming" ? 270 : undefined} />
                                         </AnimateOnScroll>
@@ -229,7 +334,7 @@ const EventsPageContent = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx>{`
                 .event-card-link:hover .event-card {

@@ -1,15 +1,15 @@
-import HeaderFive from "@/layouts/headers/HeaderFive"
+import Header from "@/layouts/headers/Header"
 import PrivacyPolicyArea from "./PrivacyPolicyArea"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Footer from "@/layouts/footers/Footer"
 
 const PrivacyPolicy = () => {
    return (
       <>
-         <HeaderFive />
+         <Header />
          <main className="main-area fix">
             <PrivacyPolicyArea />
          </main>
-         <FooterThree />
+         <Footer />
       </>
    )
 }

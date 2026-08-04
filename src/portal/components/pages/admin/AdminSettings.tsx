@@ -12,6 +12,7 @@ import { apiFetch } from '@/portal/api/client';
 import { patchUserApi } from '@/portal/api/users';
 import { useAuth } from '@/portal/hooks/useAuth';
 import { usePlatformConfig, useUpdatePlatformConfig } from '@/portal/hooks/useAdminConfig';
+import type { PlatformConfig } from '@/portal/api/admin';
 import { SettingsFormSkeleton, SkeletonBlock } from '@/portal/components/ui/admin-skeletons';
 import {
   useFieldSchemas, useCreateFieldSchema, useDeleteFieldSchema, useReorderFieldSchemas,
@@ -84,12 +85,35 @@ export default function AdminSettings(): JSX.Element {
   const [adminName, setAdminName] = useState('');
   const [savingName, setSavingName] = useState(false);
   const [resetBusy, setResetBusy] = useState(false);
+  const [showHeroToast, setShowHeroToast] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem('gcio_show_hero_toast') !== 'false';
+  });
 
   useEffect(() => {
     if (config) {
       setCors(config.cors_origins || '');
+      if (config.show_hero_event_toast !== undefined) {
+        setShowHeroToast(config.show_hero_event_toast);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('gcio_show_hero_toast', String(config.show_hero_event_toast));
+          window.dispatchEvent(new Event('gcio_hero_toast_change'));
+        }
+      }
     }
   }, [config]);
+
+  const handleToggleHeroToast = (v: boolean) => {
+    setShowHeroToast(v);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('gcio_show_hero_toast', String(v));
+      window.dispatchEvent(new Event('gcio_hero_toast_change'));
+    }
+    updateConfig.mutate({ show_hero_event_toast: v } as Partial<PlatformConfig>, {
+      onSuccess: () => toast.success(v ? 'Hero event toast enabled' : 'Hero event toast disabled'),
+      onError: () => toast.error('Failed to update setting.'),
+    });
+  };
 
   useEffect(() => {
     setAdminName(user.name);
@@ -189,6 +213,17 @@ export default function AdminSettings(): JSX.Element {
             <Switch
               checked={config?.maintenance_mode ?? false}
               onCheckedChange={(v) => handleToggle('maintenance_mode', v)}
+              disabled={updateConfig.isPending}
+            />
+          </div>
+          <div className="flex items-center justify-between rounded-xl border px-4 py-3">
+            <div>
+              <p className="font-medium text-slate-900">Hero Section Event Toast</p>
+              <p className="text-sm text-slate-500">Display the floating upcoming event promo card in the homepage hero section.</p>
+            </div>
+            <Switch
+              checked={showHeroToast}
+              onCheckedChange={(v) => handleToggleHeroToast(v)}
               disabled={updateConfig.isPending}
             />
           </div>

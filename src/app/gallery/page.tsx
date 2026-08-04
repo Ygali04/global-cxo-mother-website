@@ -1,8 +1,8 @@
 "use client"
 import React from "react"
 import Link from "next/link"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 import galleries from "@/data/GalleryData"
 
@@ -21,7 +21,7 @@ const CameraIcon = () => (
 const GalleryPage = () => {
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "60px", backgroundColor: "#ffffff" }}>
@@ -94,7 +94,7 @@ const GalleryPage = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx>{`
                 .gallery-cover-link:hover .gallery-cover-card {

@@ -1,11 +1,42 @@
 "use client"
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import Link from "next/link"
 import Marquee from "react-fast-marquee"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
-import eventsData from "@/data/EventsData"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
+import eventsData, { type EventDetail as EventDetailType } from "@/data/EventsData"
 import type { ItineraryItem } from "@/data/itinerary"
+import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
+
+function mergeWithStaticEvents(loaded: EventDetailType[]): EventDetailType[] {
+    const staticMap = new Map(eventsData.map((e) => [e.slug, e]))
+    const merged = new Map<string, EventDetailType>()
+
+    for (const ev of eventsData) {
+        merged.set(ev.slug, ev)
+    }
+    for (const ev of loaded) {
+        const staticEv = staticMap.get(ev.slug)
+        if (staticEv) {
+            merged.set(ev.slug, {
+                ...staticEv,
+                ...ev,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+                cardImage: staticEv.cardImage || ev.cardImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+            })
+        } else {
+            merged.set(ev.slug, ev)
+        }
+    }
+    return Array.from(merged.values())
+}
 
 /* ---- Icons ---- */
 const CalendarIcon = ({ s = 22 }: { s?: number }) => (
@@ -107,8 +138,45 @@ const ItineraryRow = ({ item }: { item: ItineraryItem }) => {
     )
 }
 
-const EventDetail = ({ slug }: { slug: string }) => {
-    const event = eventsData.find((e) => e.slug === slug)
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+
+const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: EventDetailType }) => {
+    const [allEvents, setAllEvents] = useState<EventDetailType[]>(eventsData)
+
+    useEffect(() => {
+        if (previewEvent) return;
+        let isMounted = true;
+        const loadEvents = async () => {
+            try {
+                let list: EventDetailType[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(200);
+                        list = raw.map((e) => mapApiEventToEventDetail(e, 0)) as EventDetailType[];
+                    } catch {}
+                }
+                if (!list.length) {
+                    list = loadMockDatabaseSnapshot().events as EventDetailType[];
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !list.some((e) => e.slug === cricket.slug)) {
+                    list.unshift(cricket as EventDetailType);
+                }
+                if (isMounted && list.length > 0) {
+                    setAllEvents(mergeWithStaticEvents(list))
+                }
+            } catch {}
+        };
+        void loadEvents();
+        return () => { isMounted = false; };
+    }, [previewEvent]);
+
+    const event = useMemo(() => {
+        if (previewEvent) return previewEvent;
+        return allEvents.find((e) => e.slug === slug) || eventsData.find((e) => e.slug === slug);
+    }, [previewEvent, allEvents, slug]);
 
     const [overviewExpanded, setOverviewExpanded] = useState(false)
     const [activeDay, setActiveDay] = useState(0)
@@ -130,14 +198,14 @@ const EventDetail = ({ slug }: { slug: string }) => {
     if (!event) {
         return (
             <>
-                <HeaderFive />
+                <Header />
                 <main className="main-area fix" style={{ paddingTop: "160px", paddingBottom: "160px", textAlign: "center" }}>
                     <div className="container">
                         <h1 style={{ color: "var(--tg-heading-color)", marginBottom: "16px" }}>Event not found</h1>
                         <Link href="/events" style={{ color: "var(--tg-theme-primary)", fontWeight: 700 }}>← Back to Events</Link>
                     </div>
                 </main>
-                <FooterThree />
+                <Footer />
             </>
         )
     }
@@ -148,7 +216,7 @@ const EventDetail = ({ slug }: { slug: string }) => {
 
     return (
         <>
-            <HeaderFive />
+            <Header solidNavbar={true} />
             <main className="main-area fix">
                 {/* Hero */}
                 <section className="event-hero" style={{ position: "relative", overflow: "hidden" }}>
@@ -160,8 +228,6 @@ const EventDetail = ({ slug }: { slug: string }) => {
                         <img src={event.heroImage} alt={event.title} className="event-hero-img" />
                     </picture>
                     <div className="event-hero-overlay" />
-                    {/* light top scrim: fades the image into the page bg so the dark navbar stays legible */}
-                    <div className="event-hero-scrim" />
                     <div className="event-hero-content">
                       <div className="container">
                         <div style={{ maxWidth: "820px", color: "#fff" }}>
@@ -171,11 +237,44 @@ const EventDetail = ({ slug }: { slug: string }) => {
                             {event.tagline && (
                                 <p className="event-hero-tagline" style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
                             )}
-                            <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)" }}>
+                            <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)", marginBottom: (event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl)) ? "26px" : 0 }}>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><CalendarIcon s={20} />{event.date}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
                             </div>
+                            {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px", marginTop: "24px" }}>
+                                    <a
+                                        href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
+                                        target={event.cta?.isExternal ? "_blank" : "_self"}
+                                        rel={event.cta?.isExternal ? "noopener noreferrer" : undefined}
+                                        className="hero-cta-btn"
+                                        style={{
+                                            display: "inline-flex", alignItems: "center", gap: "10px",
+                                            background: "var(--tg-color-gradient)", color: "#fff",
+                                            padding: "14px 32px", borderRadius: "100px", fontWeight: 700,
+                                            fontSize: "15px", textDecoration: "none",
+                                            boxShadow: "0 8px 24px rgba(10,60,194,0.35)", transition: "all 0.3s ease",
+                                        }}
+                                    >
+                                        {event.cta?.primaryLabel || "Register Now"} <ArrowIcon />
+                                    </a>
+                                    {event.cta?.secondaryLabel && event.cta?.secondaryUrl && (
+                                        <a
+                                            href={event.cta.secondaryUrl}
+                                            style={{
+                                                display: "inline-flex", alignItems: "center", gap: "8px",
+                                                background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)",
+                                                color: "#fff", padding: "14px 28px", borderRadius: "100px",
+                                                fontWeight: 700, fontSize: "15px", textDecoration: "none",
+                                                border: "1px solid rgba(255,255,255,0.35)", transition: "all 0.3s ease",
+                                            }}
+                                        >
+                                            {event.cta.secondaryLabel}
+                                        </a>
+                                    )}
+                                </div>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -183,18 +282,50 @@ const EventDetail = ({ slug }: { slug: string }) => {
 
                 <div className="container" style={{ paddingTop: "80px", paddingBottom: "40px" }}>
                     {/* Overview */}
-                    <div style={{ marginBottom: "80px" }}>
-                        <SectionTitle>Overview</SectionTitle>
-                        <p style={{ fontSize: "17px", color: "var(--tg-body-color)", lineHeight: 1.8, maxWidth: "980px" }}>{overviewText}</p>
-                        {event.overview.length > 320 && (
-                            <button onClick={() => setOverviewExpanded(!overviewExpanded)} style={{ marginTop: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--tg-theme-primary)", fontWeight: 700, fontSize: "15px", padding: 0 }}>
-                                {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
-                            </button>
-                        )}
-                    </div>
+                    {event.overview && event.overview.trim().length > 0 && (
+                        <div style={{ marginBottom: "80px" }}>
+                            <SectionTitle>Overview</SectionTitle>
+                            <p style={{ fontSize: "17px", color: "var(--tg-body-color)", lineHeight: 1.8, maxWidth: "980px" }}>{overviewText}</p>
+                            {event.overview.length > 320 && (
+                                <button onClick={() => setOverviewExpanded(!overviewExpanded)} style={{ marginTop: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--tg-theme-primary)", fontWeight: 700, fontSize: "15px", padding: 0 }}>
+                                    {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
+                                </button>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Objectives */}
+                    {event.objectives && event.objectives.length > 0 && (
+                        <div style={{ marginBottom: "80px" }}>
+                            <SectionTitle>Key Takeaways &amp; Objectives</SectionTitle>
+                            <div className="row gutter-y-20">
+                                {event.objectives.map((obj, i) => (
+                                    <div key={i} className="col-md-6">
+                                        <div style={{
+                                            background: "#fff", borderRadius: "14px", padding: "20px 24px",
+                                            border: "1px solid var(--tg-border-1)", boxShadow: "0 4px 16px rgba(11,26,74,0.04)",
+                                            display: "flex", alignItems: "flex-start", gap: "14px", height: "100%",
+                                        }}>
+                                            <span style={{
+                                                background: "rgba(10,60,194,0.1)", color: "var(--tg-theme-primary)",
+                                                width: "28px", height: "28px", borderRadius: "50%",
+                                                display: "flex", alignItems: "center", justifyContent: "center",
+                                                fontWeight: 800, fontSize: "13px", flexShrink: 0,
+                                            }}>
+                                                {i + 1}
+                                            </span>
+                                            <p style={{ margin: 0, fontSize: "15px", color: "var(--tg-heading-color)", lineHeight: 1.6, fontWeight: 500 }}>
+                                                {obj}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Sponsors */}
-                    {event.sponsors && event.sponsors.length > 0 && (
+                    {event.sponsors && event.sponsors.length > 0 && event.sponsors.some(s => s.logo || s.name) && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Partners</SectionTitle>
                             <Marquee gradient={false} speed={40} pauseOnHover>
@@ -230,7 +361,7 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     )}
 
                     {/* Livestream */}
-                    {event.livestreamUrl && (
+                    {event.livestreamUrl && event.livestreamUrl.trim().length > 0 && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Live Stream</SectionTitle>
                             <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: "16px", overflow: "hidden", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }}>
@@ -348,15 +479,15 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     )}
 
                     {/* Banner */}
-                    {event.bannerImage && (
+                    {(event.bannerImage || event.heroImage) && (
                         <div style={{ marginBottom: "80px", maxWidth: "1000px", margin: "0 auto 80px" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={event.bannerImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
+                            <img src={event.bannerImage || event.heroImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
                         </div>
                     )}
 
                     {/* Venue */}
-                    {event.venue && (
+                    {event.venue && (event.venue.name?.trim() || event.venue.address?.trim() || event.venue.image?.trim() || event.venue.description?.trim()) && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Venue</SectionTitle>
                             <div style={{ background: "#fff", borderRadius: "20px", overflow: "hidden", boxShadow: "0 10px 40px rgba(11,26,74,0.08)", border: "1px solid var(--tg-border-1)", maxWidth: "1000px", margin: "0 auto" }}>
@@ -389,6 +520,38 @@ const EventDetail = ({ slug }: { slug: string }) => {
                             </div>
                         </div>
                     )}
+
+                    {/* Registration Card Banner */}
+                    {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                        <div style={{ marginTop: "60px", marginBottom: "40px", maxWidth: "1000px", margin: "60px auto 40px" }}>
+                            <div style={{
+                                background: "linear-gradient(135deg, #060c22 0%, #0a3cc2 100%)",
+                                borderRadius: "24px", padding: "48px 32px", textAlign: "center", color: "#fff",
+                                boxShadow: "0 16px 40px rgba(10,60,194,0.22)",
+                            }}>
+                                <h3 style={{ fontSize: "clamp(24px, 3.5vw, 36px)", fontWeight: 800, color: "#fff", marginBottom: "14px" }}>
+                                    Ready to Join {event.title}?
+                                </h3>
+                                <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.9)", maxWidth: "600px", margin: "0 auto 28px", lineHeight: 1.6 }}>
+                                    Reserve your spot to connect with top technology executives, enterprise leaders, and startup founders.
+                                </p>
+                                <a
+                                    href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
+                                    target={event.cta?.isExternal ? "_blank" : "_self"}
+                                    rel={event.cta?.isExternal ? "noopener noreferrer" : undefined}
+                                    style={{
+                                        display: "inline-flex", alignItems: "center", gap: "10px",
+                                        background: "#ffffff", color: "#0a3cc2", padding: "16px 40px",
+                                        borderRadius: "100px", fontWeight: 800, fontSize: "16px",
+                                        textDecoration: "none", boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+                                        transition: "all 0.3s ease",
+                                    }}
+                                >
+                                    {event.cta?.primaryLabel || "Register Now"} <ArrowIcon />
+                                </a>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Back to events */}
@@ -405,7 +568,7 @@ const EventDetail = ({ slug }: { slug: string }) => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx>{`
                 /* Hero fills a defined tall area and crops as a cover image at every size, so the
@@ -417,10 +580,6 @@ const EventDetail = ({ slug }: { slug: string }) => {
                 .event-hero-overlay {
                     position: absolute; inset: 0; pointer-events: none;
                     background: linear-gradient(to top, rgba(6,12,34,0.92) 0%, rgba(6,12,34,0.55) 42%, rgba(6,12,34,0) 78%);
-                }
-                .event-hero-scrim {
-                    position: absolute; top: 0; left: 0; right: 0; height: 150px; pointer-events: none;
-                    background: linear-gradient(to bottom, #f8f9fa 0%, rgba(248,249,250,0.6) 42%, rgba(248,249,250,0) 100%);
                 }
                 .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
                 /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */

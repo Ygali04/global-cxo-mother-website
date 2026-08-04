@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react"
 import Link from "next/link"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
 
 type Person = {
@@ -122,7 +122,7 @@ const SectionHeading = ({ eyebrow, title, subtitle }: { eyebrow: string; title: 
 const AboutUsPage = () => {
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 {/* Page hero */}
                 <section style={{ paddingTop: "120px", paddingBottom: "70px", backgroundColor: "#ffffff" }}>
@@ -286,7 +286,7 @@ const AboutUsPage = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
 
             <style jsx>{`
                 .founder-card:hover {

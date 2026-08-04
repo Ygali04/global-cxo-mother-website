@@ -4,6 +4,7 @@ import { Input } from '@/portal/components/ui/input';
 import { Button } from '@/portal/components/ui/button';
 import { API_BASE_URL } from '@/portal/api/config';
 import { getStoredAccessToken } from '@/portal/api/tokenStorage';
+import { toast } from 'sonner';
 
 interface ImageUploadProps {
   value: string;
@@ -25,6 +26,15 @@ export function ImageUpload({
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [mode, setMode] = useState<'url' | 'upload'>('url');
+
+  const readAsDataUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleFileChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,23 +58,29 @@ export function ImageUpload({
         });
 
         if (!res.ok) {
-          const err = await res.json().catch(() => ({ detail: 'Upload failed' }));
-          throw new Error(err.detail || 'Upload failed');
+          const err = await res.json().catch(() => ({ detail: 'Upload server returned an error' }));
+          throw new Error(err.detail || 'Upload server error');
         }
 
         const data: { url: string; ftp_synced?: boolean } = await res.json();
         onChange(data.url);
-        if (data.ftp_synced) {
-          // Image is already live on GoDaddy
-        }
+        toast.success(`Image uploaded: ${file.name}`);
       } catch (err) {
-        console.error('Upload failed:', err);
+        console.warn('Backend image upload endpoint error, using client-side Data URL fallback:', err);
+        try {
+          const dataUrl = await readAsDataUrl(file);
+          onChange(dataUrl);
+          toast.success(`Attached image file: ${file.name}`);
+        } catch (readErr) {
+          console.error('Failed to read image file:', readErr);
+          toast.error(`Could not read image file ${file.name}`);
+        }
       } finally {
         setUploading(false);
         if (fileRef.current) fileRef.current.value = '';
       }
     },
-    [onChange],
+    [folder, onChange],
   );
 
   return (
@@ -107,7 +123,7 @@ export function ImageUpload({
           <input
             ref={fileRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/svg+xml,image/avif,image/*"
             className="hidden"
             onChange={handleFileChange}
             disabled={uploading}

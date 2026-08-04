@@ -1,7 +1,8 @@
 "use client"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import AnimateOnScroll from "@/components/ui/AnimateOnScroll"
+import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
 
 const CalendarIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -15,11 +16,75 @@ const PinIcon = () => (
 )
 const UsersIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 1 0 7.75" />
     </svg>
 )
 
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+import eventsData from "@/data/EventsData"
+
 const UpcomingEvent = () => {
+    const [event, setEvent] = useState<{
+        slug: string;
+        title: string;
+        tagline?: string;
+        date: string;
+        location: string;
+        attendees: string;
+        description: string;
+        bannerImage: string;
+    }>({
+        slug: "cio-100",
+        title: "CIO 100 Awards & Conference 2026",
+        tagline: "Recognizing Exceptional IT Leadership & Innovation",
+        date: "August 14, 2026",
+        location: "San Jose Convention Center, CA",
+        attendees: "250+ attendees expected",
+        description: "The premier annual gathering of top 100 CIOs, CTOs, and tech leaders recognizing game-changing technology implementations and executive leadership.",
+        bannerImage: "/assets/events/SF/banner.png",
+    });
+
+    useEffect(() => {
+        let isMounted = true;
+        const fetchEvents = async () => {
+            try {
+                let events: any[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(50);
+                        events = raw.map((e) => mapApiEventToEventDetail(e, 0));
+                    } catch {}
+                }
+                if (!events.length) {
+                    events = loadMockDatabaseSnapshot().events;
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !events.some((e) => e.slug === cricket.slug)) {
+                    events.unshift(cricket);
+                }
+                const found = events.find(
+                    (e: any) => e.registrationOpen !== false && e.lifecycleStatus !== 'past' && e.lifecycleStatus !== 'archived'
+                );
+                if (found && isMounted) {
+                    setEvent({
+                        slug: found.slug,
+                        title: found.title,
+                        tagline: found.tagline || "VIP Experience · CXO Networking",
+                        date: found.date,
+                        location: found.location,
+                        attendees: `${found.attendees} attendees expected`,
+                        description: found.description,
+                        bannerImage: found.bannerImage || found.heroImage || "/events/mlc_main_banner.webp",
+                    });
+                }
+            } catch {}
+        };
+        void fetchEvents();
+        return () => { isMounted = false; };
+    }, []);
+
     return (
         <section className="section-py-130" style={{ backgroundColor: "#fff" }}>
             <div className="container">
@@ -41,47 +106,48 @@ const UpcomingEvent = () => {
                 </AnimateOnScroll>
 
                 <AnimateOnScroll delay={0.1}>
-                    <Link href="/events/mlc-oakland" className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "560px", margin: "0 auto" }}>
+                    <Link href={`/events/${event.slug}`} className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "560px", margin: "0 auto" }}>
                         <div className="upcoming-event-card" style={{
                             background: "#fff", borderRadius: "20px", overflow: "hidden",
                             border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
                             transition: "all 0.3s ease",
                         }}>
-                            {/* Landscape banner across the top (shown in full — it's a banner, not a poster) */}
+                            {/* Landscape banner across the top */}
                             <div style={{ position: "relative", width: "100%", aspectRatio: "1366 / 768", overflow: "hidden", background: "#0b1020" }}>
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src="/events/mlc_main_banner.webp" alt="MLC T20 Cricket Finals — Saturday, 18 July 2026 at The Oakland Coliseum. 100+ Enterprise CXOs confirmed."
+                                <img src={event.bannerImage} alt={event.title}
                                     className="upcoming-event-img"
                                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }} />
                             </div>
                             <div style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
-                                <span style={{
-                                    background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                                    fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px", fontSize: "12px",
-                                    marginBottom: "12px", display: "inline-block",
-                                }}>
-                                    VIP Experience · CXO Networking
-                                </span>
+                                {event.tagline && (
+                                    <span style={{
+                                        background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                                        fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px", fontSize: "12px",
+                                        marginBottom: "12px", display: "inline-block",
+                                    }}>
+                                        {event.tagline}
+                                    </span>
+                                )}
                                 <h3 style={{ fontSize: "clamp(22px, 2.6vw, 28px)", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3, marginBottom: "18px" }}>
-                                    Major League Cricket — Season 04 Final
+                                    {event.title}
                                 </h3>
                                 <div style={{ display: "flex", flexWrap: "wrap", gap: "16px 26px", marginBottom: "18px" }}>
                                     <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
                                         <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><CalendarIcon /></span>
-                                        Saturday, 18 July 2026 · 4:30 PM
+                                        {event.date}
                                     </span>
                                     <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
                                         <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><PinIcon /></span>
-                                        The Oakland Coliseum
+                                        {event.location}
                                     </span>
                                     <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
                                         <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><UsersIcon /></span>
-                                        200+ attendees expected
+                                        {event.attendees}
                                     </span>
                                 </div>
                                 <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "24px", maxWidth: "680px" }}>
-                                    Join 200+ CXOs and 100+ startups for the T20 Cricket VIP Experience — restaurant-style
-                                    hospitality, private balcony seating, and curated 1:1s with enterprise leaders at the season finale.
+                                    {event.description}
                                 </p>
                                 <span className="upcoming-event-cta" style={{
                                     display: "inline-flex", alignItems: "center", gap: "8px", color: "var(--tg-heading-color)",

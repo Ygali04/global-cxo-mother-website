@@ -41,6 +41,7 @@ export default function AdminDashboard(): JSX.Element {
   const [emailQueueLoading, setEmailQueueLoading] = useState(false);
   const [emailQueueError, setEmailQueueError] = useState<string | null>(null);
   const [flushing, setFlushing] = useState(false);
+  const [showAllEmailQueue, setShowAllEmailQueue] = useState(false);
 
   const fetchEmailQueue = useCallback(async () => {
     if (!USE_API_AUTH) return;
@@ -174,10 +175,21 @@ export default function AdminDashboard(): JSX.Element {
               </div>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-              <p className="text-2xl font-bold">{s.value}</p>
+              <p className="text-2xl font-bold">
+                {!catalogHydrated ? (
+                  <span className="inline-block h-8 w-16 animate-pulse rounded bg-slate-200" />
+                ) : (
+                  s.value
+                )}
+              </p>
               {s.sub && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  {s.sub.label}: <span className="font-medium text-foreground">{s.sub.value}</span>
+                  {s.sub.label}:{' '}
+                  {!catalogHydrated ? (
+                    <span className="inline-block h-3.5 w-10 animate-pulse rounded bg-slate-200 align-middle" />
+                  ) : (
+                    <span className="font-medium text-foreground">{s.sub.value}</span>
+                  )}
                 </p>
               )}
             </CardContent>
@@ -262,7 +274,7 @@ export default function AdminDashboard(): JSX.Element {
                     </tr>
                   </thead>
                   <tbody>
-                    {emailQueue.map((entry) => (
+                    {(showAllEmailQueue ? emailQueue : emailQueue.slice(0, 10)).map((entry) => (
                       <tr key={entry.id} className="border-b last:border-0">
                         <td className="py-2 pr-4 text-slate-900">
                           {entry.user_name ?? '-'}
@@ -300,6 +312,20 @@ export default function AdminDashboard(): JSX.Element {
                   </tbody>
                 </table>
               </FadedScroll>
+              {emailQueue.length > 10 && (
+                <div className="mt-3 flex justify-center border-t border-slate-100 pt-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs font-semibold text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                    onClick={() => setShowAllEmailQueue(!showAllEmailQueue)}
+                  >
+                    {showAllEmailQueue
+                      ? 'Show Less'
+                      : `View All (${emailQueue.length} emails)`}
+                  </Button>
+                </div>
+              )}
             </CardContent>
           )}
         </Card>

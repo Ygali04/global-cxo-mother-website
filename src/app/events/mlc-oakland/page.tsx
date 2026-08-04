@@ -1,7 +1,7 @@
 "use client"
 import React from "react"
-import HeaderFive from "@/layouts/headers/HeaderFive"
-import FooterThree from "@/layouts/footers/FooterThree"
+import Header from "@/layouts/headers/Header"
+import Footer from "@/layouts/footers/Footer"
 import Image from "next/image"
 
 // ponytail: single hardcoded event page. Make /events a list + data file only when there's a 2nd event.
@@ -35,7 +35,7 @@ const RegisterBtn = ({ style }: { style?: React.CSSProperties }) => (
 const page = () => {
     return (
         <>
-            <HeaderFive />
+            <Header />
             <main className="main-area fix">
                 <section style={{ padding: "140px 0 60px", background: "linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #eef1ff 100%)" }}>
                     <div className="container">
@@ -113,7 +113,7 @@ const page = () => {
                     </div>
                 </section>
             </main>
-            <FooterThree />
+            <Footer />
         </>
     )
 }

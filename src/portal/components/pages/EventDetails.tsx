@@ -401,27 +401,31 @@ const EventDetails = ({ previewEvent }: { previewEvent?: EventDetail }) => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Overview - Collapsible */}
-        <div className="mb-20">
-          <h2 className="text-4xl font-bold text-navy-dark mb-8">Overview</h2>
-          <div className="bg-transparent p-0">
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {isOverviewExpanded
-                ? event.overview
-                : `${event.overview.substring(0, 300)}...`
-              }
-            </p>
-            <button
-              onClick={() => setIsOverviewExpanded(!isOverviewExpanded)}
-              className="flex items-center gap-2 text-blue-600 font-semibold mt-4 hover:text-blue-700 transition-colors"
-            >
-              {isOverviewExpanded ? 'Read Less' : 'Read More'}
-              {isOverviewExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
+        {event.overview && event.overview.trim().length > 0 && (
+          <div className="mb-20">
+            <h2 className="text-4xl font-bold text-navy-dark mb-8">Overview</h2>
+            <div className="bg-transparent p-0">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {isOverviewExpanded || event.overview.length <= 300
+                  ? event.overview
+                  : `${event.overview.substring(0, 300)}...`
+                }
+              </p>
+              {event.overview.length > 300 && (
+                <button
+                  onClick={() => setIsOverviewExpanded(!isOverviewExpanded)}
+                  className="flex items-center gap-2 text-blue-600 font-semibold mt-4 hover:text-blue-700 transition-colors"
+                >
+                  {isOverviewExpanded ? 'Read Less' : 'Read More'}
+                  {isOverviewExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Sponsors Section */}
-        {event.sponsors && event.sponsors.length > 0 && (
+        {event.sponsors && event.sponsors.length > 0 && event.sponsors.some(s => s.logo || s.name) && (
           <div className="mb-20">
             <SponsorsGallery sponsors={event.sponsors} />
           </div>
@@ -463,7 +467,7 @@ const EventDetails = ({ previewEvent }: { previewEvent?: EventDetail }) => {
         )}
 
         {/* Livestream Section */}
-        {event.livestreamUrl && (
+        {event.livestreamUrl && event.livestreamUrl.trim().length > 0 && (
           <div id="livestream-section" className="mb-24">
             <h2 className="text-3xl font-bold text-navy-dark mb-10">Live Stream</h2>
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -1001,24 +1005,27 @@ const EventDetails = ({ previewEvent }: { previewEvent?: EventDetail }) => {
         )}
 
         {/* Banner Section */}
-        <div className="mb-24">
-          <div className="max-w-5xl mx-auto">
-            <img
-              src={event.bannerImage}
-              alt={`${event.title} banner`}
-              className="w-full rounded-2xl shadow-lg cursor-pointer lg:cursor-default"
-              onClick={() => {
-                // Enable click-to-zoom on mobile and tablet (below lg breakpoint - 1024px)
-                if (window.innerWidth < 1024) {
-                  setShowBannerModal(true);
-                }
-              }}
-            />
+        {(event.bannerImage || event.heroImage) && (
+          <div className="mb-24">
+            <div className="max-w-5xl mx-auto">
+              <img
+                src={event.bannerImage || event.heroImage}
+                alt={`${event.title} banner`}
+                className="w-full rounded-2xl shadow-lg cursor-pointer lg:cursor-default"
+                onClick={() => {
+                  // Enable click-to-zoom on mobile and tablet (below lg breakpoint - 1024px)
+                  if (window.innerWidth < 1024) {
+                    setShowBannerModal(true);
+                  }
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Venue Section with Maps Integration */}
-        <div className="mb-24">
+        {event.venue && (event.venue.name?.trim() || event.venue.address?.trim() || event.venue.image?.trim() || event.venue.description?.trim()) && (
+          <div className="mb-24">
           <h2 className="text-3xl font-bold text-navy-dark mb-10">Venue</h2>
           <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-5xl mx-auto">
             {/* Venue Content */}
@@ -1080,6 +1087,7 @@ const EventDetails = ({ previewEvent }: { previewEvent?: EventDetail }) => {
             )}
           </div>
         </div>
+        )}
 
         {/* Registration/Action Section */}
         <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 text-center">

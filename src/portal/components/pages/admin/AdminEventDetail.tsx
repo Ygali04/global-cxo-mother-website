@@ -96,7 +96,7 @@ import {
   visibilityPresets,
   type MockUser,
 } from '@/portal/data/mock';
-import type { EventLifecycleStatus, EventDetail } from '@/portal/data/EventsData';
+import type { EventLifecycleStatus, EventDetail as EventDetailType } from '@/portal/data/EventsData';
 import type { Speaker } from '@/portal/data/speakers';
 import type { Sponsor } from '@/portal/data/sponsors';
 import type { ItineraryItem } from '@/portal/data/itinerary';
@@ -110,7 +110,7 @@ import {
   type AttendeeSheetRowInput,
 } from '@/portal/lib/attendeeSheets';
 import { mapVisibilityToApi } from '@/portal/api/mappers';
-import EventDetails from '@/portal/components/pages/EventDetails';
+import EventDetail from '@/components/events/EventDetail';
 import { ImageUpload } from '@/portal/components/ui/image-upload';
 import { cn } from '@/portal/lib/utils';
 
@@ -155,13 +155,14 @@ interface EditorState {
   livestreamUrl: string;
   lifecycleStatus: EventLifecycleStatus;
   registrationOpen: boolean;
+  showHeroPromo: boolean;
   price: string;
   metaTitle: string;
   metaDescription: string;
   metaImage: string;
 }
 
-function buildEditorState(event: EventDetail): EditorState {
+function buildEditorState(event: EventDetailType): EditorState {
   return {
     title: event.title,
     tagline: event.tagline ?? '',
@@ -190,6 +191,7 @@ function buildEditorState(event: EventDetail): EditorState {
     livestreamUrl: event.livestreamUrl ?? '',
     lifecycleStatus: event.lifecycleStatus ?? (event.registrationOpen ? 'current' : 'past'),
     registrationOpen: event.registrationOpen ?? false,
+    showHeroPromo: event.showHeroPromo ?? (event.lifecycleStatus === 'current' && event.registrationOpen !== false),
     price: event.price ?? '',
     metaTitle: event.metadata.title,
     metaDescription: event.metadata.description,
@@ -215,22 +217,22 @@ function redactEmail(email: string): string {
 
 function tierBadgeClass(tier: string): string {
   const m: Record<string, string> = {
-    startup: 'bg-cyan-100 text-cyan-700',
-    cxo: 'bg-amber-100 text-amber-700',
-    vc: 'bg-emerald-100 text-emerald-700',
-    admin: 'bg-blue-100 text-blue-700',
-    dev: 'bg-purple-100 text-purple-700',
+    startup: 'bg-cyan-100 text-cyan-700 hover:bg-cyan-100',
+    cxo: 'bg-amber-100 text-amber-700 hover:bg-amber-100',
+    vc: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100',
+    admin: 'bg-blue-100 text-blue-700 hover:bg-blue-100',
+    dev: 'bg-purple-100 text-purple-700 hover:bg-purple-100',
   };
-  return m[tier] ?? 'bg-gray-100 text-gray-700';
+  return m[tier] ?? 'bg-gray-100 text-gray-700 hover:bg-gray-100';
 }
 
 function statusBadgeClass(status: string): string {
   const m: Record<string, string> = {
-    confirmed: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    cancelled: 'bg-red-100 text-red-700',
+    confirmed: 'bg-green-100 text-green-700 hover:bg-green-100',
+    pending: 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100',
+    cancelled: 'bg-red-100 text-red-700 hover:bg-red-100',
   };
-  return m[status] ?? 'bg-gray-100 text-gray-700';
+  return m[status] ?? 'bg-gray-100 text-gray-700 hover:bg-gray-100';
 }
 
 /* ──────────────────── Content Tab ──────────────────────────── */
@@ -1375,16 +1377,38 @@ function SettingsTab({
         </CardContent>
       </Card>
 
-      {/* Registration */}
+      {/* Registration & Feature Settings */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Registration</CardTitle>
-          <CardDescription>Control whether new registrations are accepted.</CardDescription>
+          <CardTitle className="text-base">Registration &amp; Hero Visibility</CardTitle>
+          <CardDescription>Control whether new registrations are accepted and homepage hero promo card visibility.</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-3">
-            <Switch checked={form.registrationOpen} onCheckedChange={(v) => setForm((prev) => ({ ...prev, registrationOpen: v }))} />
-            <span className="text-sm">Registration is <strong>{form.registrationOpen ? 'open' : 'closed'}</strong></span>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="font-semibold text-slate-900">Registration Open</Label>
+              <p className="text-xs text-slate-500">Allow users to register for this event.</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Switch checked={form.registrationOpen} onCheckedChange={(v) => setForm((prev) => ({ ...prev, registrationOpen: v }))} />
+              <span className="text-sm"><strong>{form.registrationOpen ? 'Open' : 'Closed'}</strong></span>
+            </div>
+          </div>
+
+          <div className="border-t pt-4 flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="font-semibold text-slate-900">Hero Section Promo Card</Label>
+              <p className="text-xs text-slate-500">
+                Display this event as the floating promo toast card in the homepage hero section.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Switch
+                checked={form.showHeroPromo}
+                onCheckedChange={(v) => setForm((prev) => ({ ...prev, showHeroPromo: v }))}
+              />
+              <span className="text-sm"><strong>{form.showHeroPromo ? 'On' : 'Off'}</strong></span>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -1602,7 +1626,7 @@ function PreviewDeployTab({
     return result;
   }, [form, savedForm, speakers, savedSpeakers, sponsors, savedSponsors, itinerary, savedItinerary, highlightCards, savedHighlightCards]);
 
-  const buildPreviewEvent = useCallback((): EventDetail => {
+  const buildPreviewEvent = useCallback((): EventDetailType => {
     return {
       id: 0,
       slug,
@@ -1729,7 +1753,7 @@ function PreviewDeployTab({
             Exit Preview
           </Button>
           <div>
-            <EventDetails previewEvent={buildPreviewEvent()} />
+            <EventDetail previewEvent={buildPreviewEvent()} />
           </div>
         </div>
       )}
@@ -1746,7 +1770,7 @@ export default function AdminEventDetail(): JSX.Element {
 
   // Editor form state
   const [form, setForm] = useState<EditorState>(() =>
-    event ? buildEditorState(event) : buildEditorState({} as EventDetail),
+    event ? buildEditorState(event) : buildEditorState({} as EventDetailType),
   );
   const [speakers, setSpeakers] = useState<Speaker[]>(() => event?.speakers ?? []);
   const [sponsors, setSponsors] = useState<Sponsor[]>(() => event?.sponsors ?? []);
@@ -1755,7 +1779,7 @@ export default function AdminEventDetail(): JSX.Element {
 
   // Saved state (for diff and discard)
   const [savedForm, setSavedForm] = useState<EditorState>(() =>
-    event ? buildEditorState(event) : buildEditorState({} as EventDetail),
+    event ? buildEditorState(event) : buildEditorState({} as EventDetailType),
   );
   const [savedSpeakers, setSavedSpeakers] = useState<Speaker[]>(() => event?.speakers ?? []);
   const [savedSponsors, setSavedSponsors] = useState<Sponsor[]>(() => event?.sponsors ?? []);
@@ -1763,6 +1787,59 @@ export default function AdminEventDetail(): JSX.Element {
   const [savedHighlightCards, setSavedHighlightCards] = useState<Array<{ icon: string; title: string; text: string }>>(() => event?.highlightCards ?? []);
 
   const [deploying, setDeploying] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  const buildPreviewEvent = useCallback((): EventDetailType => {
+    return {
+      id: 0,
+      slug: slug || 'preview-event',
+      title: form.title,
+      tagline: form.tagline,
+      date: form.dateStart
+        ? new Date(form.dateStart).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })
+        : (event?.date || 'TBD'),
+      location: form.location,
+      description: form.description,
+      attendees: form.attendees,
+      heroImage: form.heroImage,
+      heroImageMobile: form.heroImageMobile || form.heroImage,
+      cardImage: form.cardImage || form.heroImage,
+      bannerImage: form.bannerImage,
+      gallery: [],
+      overview: form.overview,
+      objectives: [],
+      speakers,
+      sponsors,
+      itinerary,
+      highlights: form.highlights ? form.highlights.split('\n').map((h) => h.trim()).filter(Boolean) : [],
+      highlightCards,
+      lifecycleStatus: form.lifecycleStatus,
+      registrationOpen: form.registrationOpen,
+      price: form.price || undefined,
+      cta: form.ctaPrimaryLabel
+        ? {
+            primaryLabel: form.ctaPrimaryLabel,
+            primaryUrl: form.ctaPrimaryUrl,
+            isExternal: form.ctaIsExternal,
+            secondaryLabel: form.ctaSecondaryLabel || undefined,
+            secondaryUrl: form.ctaSecondaryUrl || undefined,
+          }
+        : undefined,
+      metadata: {
+        title: `Global CXO Circle | ${form.title}`,
+        description: form.description,
+        image: form.bannerImage || form.heroImage,
+      },
+      venue: {
+        name: form.venueName,
+        address: form.venueAddress,
+        description: form.venueDescription,
+        image: form.venueImage || form.heroImage,
+        mapEmbedUrl: form.venueMapEmbedUrl,
+      },
+      livestreamUrl: form.livestreamUrl || undefined,
+    };
+  }, [form, speakers, sponsors, itinerary, highlightCards, slug, event?.date]);
 
   // Try to fetch real date_start/date_end from backend
   const fetchedDates = useRef(false);
@@ -1893,12 +1970,30 @@ export default function AdminEventDetail(): JSX.Element {
           attendees: form.attendees,
           description: form.description,
           overview: form.overview,
-          lifecycleStatus: form.lifecycleStatus,
-          registrationOpen: form.registrationOpen,
-          lumaUrl: form.lumaUrl,
+          heroImage: form.heroImage,
+          heroImageMobile: form.heroImageMobile,
+          bannerImage: form.bannerImage,
+          cardImage: form.cardImage,
           venueName: form.venueName,
           venueAddress: form.venueAddress,
           venueDescription: form.venueDescription,
+          venueImage: form.venueImage,
+          venueMapEmbedUrl: form.venueMapEmbedUrl,
+          ctaPrimaryLabel: form.ctaPrimaryLabel,
+          ctaPrimaryUrl: form.ctaPrimaryUrl,
+          ctaIsExternal: form.ctaIsExternal,
+          ctaSecondaryLabel: form.ctaSecondaryLabel,
+          ctaSecondaryUrl: form.ctaSecondaryUrl,
+          lumaUrl: form.lumaUrl,
+          lifecycleStatus: form.lifecycleStatus,
+          registrationOpen: form.registrationOpen,
+          showHeroPromo: form.showHeroPromo,
+          highlights: form.highlights.split('\n').map((h) => h.trim()).filter(Boolean),
+          highlightCards,
+          speakers,
+          sponsors,
+          itinerary,
+          livestreamUrl: form.livestreamUrl,
         });
 
         // Save current state as the new baseline
@@ -1949,23 +2044,31 @@ export default function AdminEventDetail(): JSX.Element {
   return (
     <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
-        <div className="mb-3 flex items-center gap-3">
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/admin">
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Link>
-          </Button>
-          <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100">
-            Event Editor Studio
-          </Badge>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div className="mb-3 flex items-center gap-3">
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/admin">
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Link>
+            </Button>
+            <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100">
+              Event Editor Studio
+            </Badge>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{event.title}</h1>
+          <p className="text-sm text-slate-500">
+            {event.date} &middot; {event.location} &middot;{' '}
+            {registrations.filter((r) => r.eventId === event.slug).length} registrations
+          </p>
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900">{event.title}</h1>
-        <p className="text-sm text-slate-500">
-          {event.date} &middot; {event.location} &middot;{' '}
-          {registrations.filter((r) => r.eventId === event.slug).length} registrations
-        </p>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => setPreviewOpen(true)}>
+            <Eye className="h-4 w-4" />
+            Preview Event Page
+          </Button>
+        </div>
       </div>
 
       {/* Unsaved changes banner */}
@@ -2035,6 +2138,24 @@ export default function AdminEventDetail(): JSX.Element {
           />
         </TabsContent>
       </Tabs>
+
+      {/* Full-screen Preview Overlay */}
+      {previewOpen && (
+        <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            className="fixed top-4 right-4 z-[60] gap-1 bg-white shadow-lg border-slate-300"
+            onClick={() => setPreviewOpen(false)}
+          >
+            <X className="h-4 w-4" />
+            Exit Preview
+          </Button>
+          <div>
+            <EventDetail previewEvent={buildPreviewEvent()} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

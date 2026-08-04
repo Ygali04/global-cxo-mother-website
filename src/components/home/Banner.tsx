@@ -1,9 +1,124 @@
 "use client"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { AuroraBackground } from "@/components/ui/aurora-background"
 import { motion } from "framer-motion"
+import { loadMockDatabaseSnapshot } from "@/portal/lib/mockDatabase"
+
+import { USE_API_AUTH } from "@/portal/api/config"
+import { listEventsApi } from "@/portal/api/events"
+import { mapApiEventToEventDetail } from "@/portal/api/mappers"
+import eventsData from "@/data/EventsData"
+
+function mergeWithStaticEvents(loaded: any[]): any[] {
+    const staticMap = new Map(eventsData.map((e) => [e.slug, e]))
+    const merged = new Map<string, any>()
+
+    for (const ev of eventsData) {
+        merged.set(ev.slug, ev)
+    }
+    for (const ev of loaded) {
+        const staticEv = staticMap.get(ev.slug)
+        if (staticEv) {
+            merged.set(ev.slug, {
+                ...staticEv,
+                ...ev,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+                cardImage: staticEv.cardImage || ev.cardImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+            })
+        } else {
+            merged.set(ev.slug, ev)
+        }
+    }
+    return Array.from(merged.values())
+}
+
+function formatCardDate(rawDate: string): string {
+    if (!rawDate) return '';
+    return rawDate.split('·')[0].split(' - ')[0].trim();
+}
 
 const Banner = () => {
+    const [showToast, setShowToast] = useState<boolean>(true);
+    const [isPromoLoading, setIsPromoLoading] = useState<boolean>(true);
+    const [upcoming, setUpcoming] = useState({
+        slug: "cio-100-awards-conference",
+        title: "CIO 100 Awards & Conference 2026",
+        date: "8/18/2026",
+        location: "Frisco, TX",
+    });
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const checkToastSetting = () => {
+            const val = localStorage.getItem("gcio_show_hero_toast");
+            if (val !== null) {
+                setShowToast(val === "true");
+            }
+        };
+        checkToastSetting();
+        window.addEventListener("storage", checkToastSetting);
+        window.addEventListener("gcio_hero_toast_change", checkToastSetting);
+        return () => {
+            window.removeEventListener("storage", checkToastSetting);
+            window.removeEventListener("gcio_hero_toast_change", checkToastSetting);
+        };
+    }, []);
+
+    useEffect(() => {
+        let isMounted = true;
+        const fetchEvents = async () => {
+            try {
+                let events: any[] = [];
+                if (USE_API_AUTH) {
+                    try {
+                        const raw = await listEventsApi(50);
+                        events = raw.map((e) => mapApiEventToEventDetail(e, 0));
+                    } catch {}
+                }
+                if (!events.length) {
+                    events = loadMockDatabaseSnapshot().events;
+                }
+                const cricket = eventsData.find((e) => e.slug === 'mlc-oakland');
+                if (cricket && !events.some((e) => e.slug === cricket.slug)) {
+                    events.unshift(cricket);
+                }
+                const found = mergeWithStaticEvents(events).find(
+                    (e: any) =>
+                        e.registrationOpen !== false &&
+                        e.lifecycleStatus !== 'past' &&
+                        e.lifecycleStatus !== 'archived' &&
+                        e.showHeroPromo !== false
+                );
+                if (isMounted) {
+                    if (found) {
+                        setUpcoming({
+                            slug: found.slug,
+                            title: found.title,
+                            date: found.date,
+                            location: found.location,
+                        });
+                        setShowToast(true);
+                    } else {
+                        setShowToast(false);
+                    }
+                    setIsPromoLoading(false);
+                }
+            } catch {
+                if (isMounted) setIsPromoLoading(false);
+            }
+        };
+        void fetchEvents();
+        return () => { isMounted = false; };
+    }, []);
+
     return (
         <section className="hero-section" style={{ minHeight: "clamp(760px, 100vh, 1040px)", position: "relative", overflow: "hidden", marginTop: "0" }}>
             {/* Mobile gradient blobs - hidden on desktop, animated on mobile */}
@@ -26,7 +141,7 @@ const Banner = () => {
                     <span className="planet planet-three"></span>
                 </div>
             </div>
-            <AuroraBackground className="hero-aurora-wrap" style={{ minHeight: "clamp(760px, 100vh, 1040px)", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <AuroraBackground className="hero-aurora-wrap" style={{ minHeight: "100vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <motion.div
                     initial={{ opacity: 0.0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -97,19 +212,30 @@ const Banner = () => {
             </AuroraBackground>
 
             {/* Event promo card — desktop: absolute bottom-left; mobile: flows in at the bottom of the hero */}
-            <Link href="/events/mlc-oakland" className="hero-event-card" aria-label="Major League Cricket Season 04 Final VIP Experience — view event details">
-                <span className="hero-event-arrow" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M13 5l7 7-7 7" />
-                    </svg>
-                </span>
-                <div className="hero-event-top">
-                    <span className="hero-event-badge">Upcoming Event</span>
-                    <span className="hero-event-date">18 Jul 2026</span>
+            {isPromoLoading ? (
+                <div className="hero-event-card hero-event-card--skeleton" style={{ opacity: 0.75, pointerEvents: "none" }}>
+                    <div className="hero-event-top" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <span style={{ width: "85px", height: "16px", background: "rgba(255,255,255,0.22)", borderRadius: "100px", display: "inline-block" }} />
+                        <span style={{ width: "65px", height: "14px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", display: "inline-block" }} />
+                    </div>
+                    <div style={{ width: "180px", height: "18px", background: "rgba(255,255,255,0.25)", borderRadius: "4px", marginTop: "8px" }} />
+                    <div style={{ width: "120px", height: "12px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", marginTop: "6px" }} />
                 </div>
-                <span className="hero-event-title">Major League Cricket S4 Final</span>
-                <span className="hero-event-meta">Oakland Coliseum</span>
-            </Link>
+            ) : showToast && (
+                <Link href={`/events/${upcoming.slug}`} className="hero-event-card" aria-label={`${upcoming.title} — view event details`}>
+                    <span className="hero-event-arrow" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14M13 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                    <div className="hero-event-top">
+                        <span className="hero-event-badge">Upcoming Event</span>
+                        <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
+                    </div>
+                    <span className="hero-event-title">{upcoming.title}</span>
+                    <span className="hero-event-meta">{upcoming.location}</span>
+                </Link>
+            )}
 
             {/* Scroll indicator */}
             <div
@@ -151,7 +277,17 @@ const Banner = () => {
             <style jsx>{`
                 .hero-section {
                     margin-top: 0;
-                    min-height: clamp(760px, 100vh, 1040px);
+                    min-height: 100vh;
+                }
+                @media (min-width: 992px) {
+                    .hero-section {
+                        height: 100vh;
+                        min-height: auto;
+                    }
+                    .hero-aurora-wrap {
+                        min-height: 100vh !important;
+                        height: 100vh !important;
+                    }
                 }
                 .orbit-scene {
                     position: absolute;
@@ -361,14 +497,13 @@ const Banner = () => {
                     margin-top: clamp(0.9rem, 1.8vw, 1.6rem) !important;
                 }
 
-                /* Short desktop/laptop viewports (e.g. a 13" MacBook, wide but only
-                   ~750-900px tall): scale the CONTENT down so the vertically-centered
+                /* Desktop: scale the CONTENT down so the vertically-centered
                    block stays compact and clears the absolute bottom-left promo card
                    (which remains pinned/visible on wide screens). Deliberately touches
                    only the inner elements — never .hero-section or .hero-aurora-wrap
                    padding/min-height — so the aurora keeps filling the section and no
                    white gap can appear. */
-                @media (min-width: 992px) and (max-height: 900px) {
+                @media (min-width: 992px) {
                     .hero-subtitle {
                         margin-bottom: 16px !important;
                     }

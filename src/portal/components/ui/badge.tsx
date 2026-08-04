@@ -28,8 +28,12 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
+  const hasCustomBg = Boolean(className && /\bbg-[^\s]+|\bbg-\w+-\d+/.test(className));
+  const hasHoverBg = Boolean(className && /\bhover:bg-/.test(className));
+  const safeClassName = (hasCustomBg && !hasHoverBg) ? `${className} hover:bg-inherit` : className;
+
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), safeClassName)} {...props} />
   )
 }
 

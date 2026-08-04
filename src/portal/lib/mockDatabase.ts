@@ -44,7 +44,7 @@ export function loadMockDatabaseSnapshot(): MockDatabaseSnapshot {
       ...fallback,
       ...parsed,
       currentUserId: null,
-      events: parsed.events ?? fallback.events,
+      events: (parsed.events ?? fallback.events).filter((e) => e.slug !== 'gcio-demo-salon-2026'),
       users: parsed.users ?? fallback.users,
       startups: parsed.startups ?? fallback.startups,
       userStartupLinks: parsed.userStartupLinks ?? fallback.userStartupLinks,
