@@ -1380,18 +1380,16 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         })
       );
 
-      try {
-        const snap = loadMockDatabaseSnapshot();
-        snap.events = snap.events.map((e) => {
-          if (e.slug === slug) return updated;
-          if (nextShowHeroPromo) return { ...e, showHeroPromo: false };
-          return e;
-        });
-        if (!snap.events.some((e) => e.slug === slug)) {
-          snap.events.unshift(updated);
-        }
-        void persistMockDatabaseSnapshot(snap);
-      } catch {}
+      const snap = loadMockDatabaseSnapshot();
+      snap.events = snap.events.map((e) => {
+        if (e.slug === slug) return updated;
+        if (nextShowHeroPromo) return { ...e, showHeroPromo: false };
+        return e;
+      });
+      if (!snap.events.some((e) => e.slug === slug)) {
+        snap.events.unshift(updated);
+      }
+      void persistMockDatabaseSnapshot(snap);
 
       if (USE_API_AUTH) {
         const bid = backendEventIdBySlug[slug];

@@ -26,6 +26,7 @@ import { mapApiEventToEventDetail } from "@/portal/api/mappers"
 import eventsData from "@/data/EventsData"
 
 const UpcomingEvent = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [event, setEvent] = useState<{
         slug: string;
         title: string;
@@ -34,17 +35,8 @@ const UpcomingEvent = () => {
         location: string;
         attendees: string;
         description: string;
-        bannerImage: string;
-    }>({
-        slug: "cio-100",
-        title: "CIO 100 Awards & Conference 2026",
-        tagline: "Recognizing Exceptional IT Leadership & Innovation",
-        date: "August 14, 2026",
-        location: "San Jose Convention Center, CA",
-        attendees: "250+ attendees expected",
-        description: "The premier annual gathering of top 100 CIOs, CTOs, and tech leaders recognizing game-changing technology implementations and executive leadership.",
-        bannerImage: "/assets/events/SF/banner.png",
-    });
+        heroImage: string;
+    } | null>(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -76,10 +68,12 @@ const UpcomingEvent = () => {
                         location: found.location,
                         attendees: `${found.attendees} attendees expected`,
                         description: found.description,
-                        bannerImage: found.bannerImage || found.heroImage || "/events/mlc_main_banner.webp",
+                        heroImage: found.heroImage || found.cardImage || found.bannerImage || "",
                     });
                 }
-            } catch {}
+            } catch {} finally {
+                if (isMounted) setIsLoading(false);
+            }
         };
         void fetchEvents();
         return () => { isMounted = false; };
@@ -105,60 +99,69 @@ const UpcomingEvent = () => {
                     </div>
                 </AnimateOnScroll>
 
-                <AnimateOnScroll delay={0.1}>
-                    <Link href={`/events/${event.slug}`} className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "560px", margin: "0 auto" }}>
-                        <div className="upcoming-event-card" style={{
-                            background: "#fff", borderRadius: "20px", overflow: "hidden",
-                            border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
-                            transition: "all 0.3s ease",
-                        }}>
-                            {/* Landscape banner across the top */}
-                            <div style={{ position: "relative", width: "100%", aspectRatio: "1366 / 768", overflow: "hidden", background: "#0b1020" }}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={event.bannerImage} alt={event.title}
-                                    className="upcoming-event-img"
-                                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }} />
-                            </div>
-                            <div style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
-                                {event.tagline && (
-                                    <span style={{
-                                        background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                                        fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px", fontSize: "12px",
-                                        marginBottom: "12px", display: "inline-block",
-                                    }}>
-                                        {event.tagline}
-                                    </span>
+                {isLoading ? (
+                    <div style={{ maxWidth: "560px", margin: "0 auto", padding: "40px", textAlign: "center", background: "#f8fafc", borderRadius: "20px", border: "1px solid var(--tg-border-1)" }}>
+                        <div className="spinner-border text-primary" role="status" style={{ width: "2.5rem", height: "2.5rem" }}>
+                            <span className="visually-hidden">Loading upcoming event...</span>
+                        </div>
+                    </div>
+                ) : event ? (
+                    <AnimateOnScroll delay={0.1}>
+                        <Link href={`/events/${event.slug}`} className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "560px", margin: "0 auto" }}>
+                            <div className="upcoming-event-card" style={{
+                                background: "#fff", borderRadius: "20px", overflow: "hidden",
+                                border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
+                                transition: "all 0.3s ease",
+                            }}>
+                                {event.heroImage && (
+                                    <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden", background: "#0b1020" }}>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={event.heroImage} alt={event.title}
+                                            className="upcoming-event-img"
+                                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }} />
+                                    </div>
                                 )}
-                                <h3 style={{ fontSize: "clamp(22px, 2.6vw, 28px)", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3, marginBottom: "18px" }}>
-                                    {event.title}
-                                </h3>
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "16px 26px", marginBottom: "18px" }}>
-                                    <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
-                                        <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><CalendarIcon /></span>
-                                        {event.date}
-                                    </span>
-                                    <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
-                                        <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><PinIcon /></span>
-                                        {event.location}
-                                    </span>
-                                    <span style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
-                                        <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><UsersIcon /></span>
-                                        {event.attendees}
+                                <div style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
+                                    {event.tagline && (
+                                        <span style={{
+                                            background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                                            fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px", fontSize: "12px",
+                                            marginBottom: "12px", display: "inline-block",
+                                        }}>
+                                            {event.tagline}
+                                        </span>
+                                    )}
+                                    <h3 style={{ fontSize: "clamp(22px, 2.6vw, 28px)", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3, marginBottom: "18px" }}>
+                                        {event.title}
+                                    </h3>
+                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "16px 26px", marginBottom: "18px" }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "10px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
+                                            <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><CalendarIcon /></span>
+                                            <span>{event.date}</span>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "10px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
+                                            <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><PinIcon /></span>
+                                            <span>{event.location}</span>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "10px", color: "var(--tg-body-color)", fontSize: "14.5px" }}>
+                                            <span style={{ color: "var(--tg-theme-primary)", display: "flex" }}><UsersIcon /></span>
+                                            <span>{event.attendees}</span>
+                                        </div>
+                                    </div>
+                                    <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "24px", maxWidth: "680px" }}>
+                                        {event.description}
+                                    </p>
+                                    <span className="upcoming-event-cta" style={{
+                                        display: "inline-flex", alignItems: "center", gap: "8px", color: "var(--tg-heading-color)",
+                                        fontWeight: 700, fontSize: "15px", transition: "gap 0.3s ease",
+                                    }}>
+                                        Learn More <span aria-hidden="true">→</span>
                                     </span>
                                 </div>
-                                <p style={{ fontSize: "15px", color: "var(--tg-body-color)", lineHeight: 1.7, marginBottom: "24px", maxWidth: "680px" }}>
-                                    {event.description}
-                                </p>
-                                <span className="upcoming-event-cta" style={{
-                                    display: "inline-flex", alignItems: "center", gap: "8px", color: "var(--tg-heading-color)",
-                                    fontWeight: 700, fontSize: "15px", transition: "gap 0.3s ease",
-                                }}>
-                                    Learn More <span aria-hidden="true">→</span>
-                                </span>
                             </div>
-                        </div>
-                    </Link>
-                </AnimateOnScroll>
+                        </Link>
+                    </AnimateOnScroll>
+                ) : null}
 
                 <AnimateOnScroll delay={0.2}>
                     <div className="text-center" style={{ marginTop: "40px" }}>

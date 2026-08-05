@@ -23,15 +23,15 @@ function mergeWithStaticEvents(loaded: any[]): any[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: staticEv.heroImage || ev.heroImage,
-                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
-                cardImage: staticEv.cardImage || ev.cardImage,
-                bannerImage: staticEv.bannerImage || ev.bannerImage,
-                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
-                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
-                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
-                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
-                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+                heroImage: ev.heroImage || staticEv.heroImage,
+                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
+                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
+                bannerImage: ev.bannerImage || staticEv.bannerImage,
+                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
+                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
+                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
+                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
+                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -51,8 +51,9 @@ const Banner = () => {
     const [upcoming, setUpcoming] = useState({
         slug: "cio-100-awards-conference",
         title: "CIO 100 Awards & Conference 2026",
-        date: "8/18/2026",
-        location: "Frisco, TX",
+        date: "8/17/2026",
+        location: "Frisco, Texas",
+        heroImage: "",
     });
 
     useEffect(() => {
@@ -104,6 +105,7 @@ const Banner = () => {
                             title: found.title,
                             date: found.date,
                             location: found.location,
+                            heroImage: found.heroImage || '',
                         });
                         setShowToast(true);
                     } else {
@@ -211,7 +213,7 @@ const Banner = () => {
                 </motion.div>
             </AuroraBackground>
 
-            {/* Event promo card — desktop: absolute bottom-left; mobile: flows in at the bottom of the hero */}
+            {/* Event promo card — desktop: absolute bottom-left; mobile: flows at top */}
             {isPromoLoading ? (
                 <div className="hero-event-card hero-event-card--skeleton" style={{ opacity: 0.75, pointerEvents: "none" }}>
                     <div className="hero-event-top" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -608,9 +610,9 @@ const Banner = () => {
                         box-shadow: 0 0 0 2px rgba(255,255,255,0.14), 0 0 14px rgba(10, 60, 194, 0.22);
                     }
                     .hero-aurora-wrap {
-                        min-height: 100vh !important;
-                        padding-top: 48px !important;
-                        padding-bottom: 32px !important;
+                        min-height: auto !important;
+                        padding-top: 12px !important;
+                        padding-bottom: 20px !important;
                         background: transparent !important;
                     }
                     .hero-content-wrap {
@@ -697,8 +699,8 @@ const Banner = () => {
                 
                 @media (max-width: 480px) {
                     .hero-aurora-wrap {
-                        padding-top: 42px !important;
-                        padding-bottom: 28px !important;
+                        padding-top: 8px !important;
+                        padding-bottom: 16px !important;
                     }
                      .hero-title {
                         font-size: 26px !important;
@@ -729,7 +731,7 @@ const Banner = () => {
                 
                 @media (max-width: 360px) {
                     .hero-aurora-wrap {
-                        padding-top: 36px !important;
+                        padding-top: 6px !important;
                     }
                      .hero-title {
                         font-size: 24px !important;

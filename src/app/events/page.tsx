@@ -62,7 +62,7 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
         }}>
             <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ev.image} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
+                <img src={ev.image ? (ev.image.includes('%20') ? ev.image : encodeURI(ev.image)) : ''} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }} />
             </div>
             <div style={{ padding: "26px 26px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
@@ -124,15 +124,15 @@ function mergeWithStaticEvents(loaded: EventDetail[]): EventDetail[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: staticEv.heroImage || ev.heroImage,
-                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
-                cardImage: staticEv.cardImage || ev.cardImage,
-                bannerImage: staticEv.bannerImage || ev.bannerImage,
-                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
-                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
-                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
-                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
-                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+                heroImage: ev.heroImage || staticEv.heroImage,
+                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
+                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
+                bannerImage: ev.bannerImage || staticEv.bannerImage,
+                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
+                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
+                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
+                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
+                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -162,8 +162,8 @@ function parseEventDateTimestamp(event: EventDetail): number {
 const EventsPageContent = () => {
     const searchParams = useSearchParams()
     const [tab, setTab] = useState<"upcoming" | "past">("upcoming")
-    const [allEvents, setAllEvents] = useState<EventDetail[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [allEvents, setAllEvents] = useState<EventDetail[]>(eventsData)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
         let isMounted = true;
@@ -213,7 +213,7 @@ const EventsPageContent = () => {
             location: e.location,
             attendees: e.attendees,
             description: e.description,
-            image: e.cardImage || e.bannerImage || e.heroImage,
+            image: e.heroImage || e.cardImage || e.bannerImage,
             href: `/events/${e.slug}`,
             external: false,
         }));
@@ -229,7 +229,7 @@ const EventsPageContent = () => {
             location: e.location,
             attendees: e.attendees,
             description: e.description,
-            image: e.cardImage || e.bannerImage || e.heroImage,
+            image: e.heroImage || e.cardImage || e.bannerImage,
             href: `/events/${e.slug}`,
             external: false,
         }));
@@ -325,7 +325,7 @@ const EventsPageContent = () => {
                                 {list.map((ev, i) => (
                                     <div key={ev.slug} className="col-lg-4 col-md-6">
                                         <AnimateOnScroll delay={0.08 * (i % 3)} className="h-100">
-                                            <EventCard ev={ev} imageHeight={tab === "upcoming" ? 270 : undefined} />
+                                            <EventCard ev={ev} imageHeight={tab === "upcoming" ? 320 : undefined} />
                                         </AnimateOnScroll>
                                     </div>
                                 ))}

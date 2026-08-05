@@ -65,7 +65,12 @@ export async function persistMockDatabaseSnapshot(snapshot: MockDatabaseSnapshot
   await Promise.resolve();
   const { currentUserId: _sessionOmitted, ...rest } = snapshot;
   const persistable: MockDatabaseSnapshot = { ...rest, currentUserId: null };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable));
+  } catch (err) {
+    console.error('Failed to persist mock database snapshot to localStorage:', err);
+    throw new Error('Browser storage is full. Please use image URLs instead of uploading large files directly.');
+  }
 }
 
 export async function resetMockDatabaseSnapshot(): Promise<void> {
