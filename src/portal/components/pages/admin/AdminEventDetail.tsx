@@ -826,11 +826,11 @@ function AttendeesTab({ slug }: { slug: string }): JSX.Element {
           </SelectContent>
         </Select>
         <Button variant="outline" size="sm" className="gap-1" onClick={() => fileInputRef.current?.click()}>
-          <Upload className="h-4 w-4" /> Import
+          <Download className="h-4 w-4" /> Import
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1"><Download className="h-4 w-4" /> Export</Button>
+            <Button variant="outline" size="sm" className="gap-1"><Upload className="h-4 w-4" /> Export</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => handleExport('filtered', 'csv')}>Export filtered as CSV</DropdownMenuItem>
