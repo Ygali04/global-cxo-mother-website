@@ -62,7 +62,7 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
         }}>
             <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ev.image ? (ev.image.includes('%20') ? ev.image : encodeURI(ev.image)) : ''} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
+                <img src={ev.image ? (ev.image.includes('%20') ? ev.image : encodeURI(ev.image)) : undefined} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }} />
             </div>
             <div style={{ padding: "26px 26px 22px", display: "flex", flexDirection: "column", flex: 1 }}>

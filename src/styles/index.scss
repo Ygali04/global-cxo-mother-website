@@ -153,7 +153,7 @@ html, body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-/* Desktop (≥1280px): the card becomes an absolute bottom-left overlay so it
+/* Desktop (≥992px): the card becomes an absolute bottom-left overlay so it
    floats over the hero's side gutter instead of taking vertical space. */
 @media (min-width: 992px) {
     .hero-event-card {
