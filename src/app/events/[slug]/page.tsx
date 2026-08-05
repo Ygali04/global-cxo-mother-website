@@ -2,6 +2,15 @@ import type { Metadata } from "next"
 import EventDetail from "@/components/events/EventDetail"
 import eventsData from "@/data/EventsData"
 
+const SLUG_ALIASES: Record<string, string> = {
+    "cio-100": "cio-100-awards-conference",
+    "cio100": "cio-100-awards-conference",
+};
+
+export function resolveEventSlug(slug: string): string {
+    return SLUG_ALIASES[slug] || slug;
+}
+
 const ALL_EVENT_SLUGS = Array.from(
     new Set([
         ...eventsData.map((e) => e.slug),
@@ -21,7 +30,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const { slug } = await params
-    const ev = eventsData.find((e) => e.slug === slug)
+    const resolvedSlug = resolveEventSlug(slug)
+    const ev = eventsData.find((e) => e.slug === resolvedSlug)
     if (!ev) return { title: "Events | Global CXO Circle" }
     return {
         title: ev.metadata?.title || `${ev.title} | Global CXO Circle`,
@@ -31,5 +41,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
-    return <EventDetail slug={slug} />
+    const resolvedSlug = resolveEventSlug(slug)
+    return <EventDetail slug={resolvedSlug} />
 }

@@ -175,7 +175,8 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
 
     const event = useMemo(() => {
         if (previewEvent) return previewEvent;
-        return allEvents.find((e) => e.slug === slug) || eventsData.find((e) => e.slug === slug);
+        const normalizedSlug = slug === 'cio-100' || slug === 'cio100' ? 'cio-100-awards-conference' : slug;
+        return allEvents.find((e) => e.slug === normalizedSlug) || eventsData.find((e) => e.slug === normalizedSlug);
     }, [previewEvent, allEvents, slug]);
 
     const [overviewExpanded, setOverviewExpanded] = useState(false)

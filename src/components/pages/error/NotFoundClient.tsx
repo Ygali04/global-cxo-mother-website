@@ -5,14 +5,16 @@ import dynamic from 'next/dynamic';
 import NotFound from '@/components/pages/error';
 import Wrapper from '@/layouts/Wrapper';
 
+import EventDetail from '@/components/events/EventDetail';
+
 const PortalApp = dynamic(() => import('@/portal/PortalApp'), { ssr: false });
 
 /**
- * Paths owned by the client-side portal app. Deep links with dynamic
- * segments (e.g. /verify-login/<token>, /admin/events/<slug>) have no
- * statically exported HTML file, so the host serves the 404 page. When the
- * requested path belongs to the portal we mount the SPA instead of showing
- * a 404 — react-router then resolves the real URL from the address bar.
+ * Paths owned by the client-side portal app or dynamic event detail pages.
+ * Deep links with dynamic segments (e.g. /verify-login/<token>, /events/<slug>)
+ * have no statically exported HTML file on some static hosts, so the host serves
+ * the 404 page. When the requested path belongs to the portal or events area, we mount
+ * the interactive component instead of showing a static 404 page.
  */
 const PORTAL_PREFIXES = [
   '/admin',
@@ -32,15 +34,25 @@ const isPortalPath = (pathname: string) =>
   PORTAL_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
 export default function NotFoundClient() {
-  // null = undecided (first render / SSG pass); render nothing to avoid a 404 flash
-  const [portal, setPortal] = useState<boolean | null>(null);
+  const [pathname, setPathname] = useState<string | null>(null);
 
   useEffect(() => {
-    setPortal(isPortalPath(window.location.pathname));
+    setPathname(window.location.pathname);
   }, []);
 
-  if (portal === null) return null;
-  if (portal) return <PortalApp />;
+  if (pathname === null) return null;
+
+  if (isPortalPath(pathname)) {
+    return <PortalApp />;
+  }
+
+  if (pathname.startsWith('/events/')) {
+    const parts = pathname.split('/').filter(Boolean);
+    const eventSlug = parts[1];
+    if (eventSlug && eventSlug !== 'page') {
+      return <EventDetail slug={eventSlug} />;
+    }
+  }
 
   return (
     <Wrapper>
