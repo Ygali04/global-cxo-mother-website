@@ -69,7 +69,9 @@ export async function persistMockDatabaseSnapshot(snapshot: MockDatabaseSnapshot
     localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable));
   } catch (err) {
     console.error('Failed to persist mock database snapshot to localStorage:', err);
-    throw new Error('Browser storage is full. Please use image URLs instead of uploading large files directly.');
+    throw new Error(
+      'Unable to save to browser storage (it may be full or disabled). Please use image URLs instead of uploading large files directly.'
+    );
   }
 }
 

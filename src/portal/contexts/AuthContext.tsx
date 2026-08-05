@@ -1389,7 +1389,9 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
       if (!snap.events.some((e) => e.slug === slug)) {
         snap.events.unshift(updated);
       }
-      void persistMockDatabaseSnapshot(snap);
+      void persistMockDatabaseSnapshot(snap).catch(() => {
+        // Keep the UI optimistic even if local persistence fails.
+      });
 
       if (USE_API_AUTH) {
         const bid = backendEventIdBySlug[slug];
