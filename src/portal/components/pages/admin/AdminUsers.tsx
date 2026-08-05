@@ -569,7 +569,7 @@ export default function AdminUsers(): JSX.Element {
             onClick={() => fileInputRef.current?.click()}
             title="Import members from Excel/CSV"
           >
-            <Download className="h-4 w-4 mr-1" />
+            <Upload className="h-4 w-4 mr-1" />
             {importing ? 'Importing...' : 'Import'}
           </Button>
           <Button
@@ -578,7 +578,7 @@ export default function AdminUsers(): JSX.Element {
             onClick={() => handleExport('xlsx')}
             title="Export filtered members to Excel"
           >
-            <Upload className="h-4 w-4 mr-1" />
+            <Download className="h-4 w-4 mr-1" />
             Export
           </Button>
           <Button

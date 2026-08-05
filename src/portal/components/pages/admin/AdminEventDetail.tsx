@@ -826,11 +826,11 @@ function AttendeesTab({ slug }: { slug: string }): JSX.Element {
           </SelectContent>
         </Select>
         <Button variant="outline" size="sm" className="gap-1" onClick={() => fileInputRef.current?.click()}>
-          <Download className="h-4 w-4" /> Import
+          <Upload className="h-4 w-4" /> Import
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1"><Upload className="h-4 w-4" /> Export</Button>
+            <Button variant="outline" size="sm" className="gap-1"><Download className="h-4 w-4" /> Export</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => handleExport('filtered', 'csv')}>Export filtered as CSV</DropdownMenuItem>
@@ -1842,10 +1842,10 @@ export default function AdminEventDetail(): JSX.Element {
   }, [form, speakers, sponsors, itinerary, highlightCards, slug, event?.date]);
 
   // Try to fetch real date_start/date_end from backend
-  const fetchedDates = useRef(false);
+  const fetchedSlugRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!slug || fetchedDates.current) return;
-    fetchedDates.current = true;
+    if (!slug || fetchedSlugRef.current === slug) return;
+    fetchedSlugRef.current = slug;
     void (async () => {
       try {
         const raw = await getEventBySlugApi(slug);
