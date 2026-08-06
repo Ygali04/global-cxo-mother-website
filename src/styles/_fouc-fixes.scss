@@ -244,3 +244,14 @@
         background: var(--tg-color-gradient) !important;
     }
 }
+
+/* Ensure Mobile Menu & Backdrop ALWAYS sit on top of all page elements */
+.mobile-menu-visible #sticky-header,
+.mobile-menu-visible .tgmobile__menu,
+.tgmobile__menu {
+    z-index: 999999 !important;
+}
+.mobile-menu-visible .tgmobile__menu-backdrop,
+.tgmobile__menu-backdrop {
+    z-index: 999998 !important;
+}

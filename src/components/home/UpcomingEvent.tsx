@@ -114,14 +114,14 @@ const UpcomingEvent = () => {
                                 transition: "all 0.3s ease",
                             }}>
                                 {event.heroImage && (
-                                    <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden", background: "#0b1020" }}>
+                                    <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden", background: "#0b1020" }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={event.heroImage} alt={event.title}
                                             className="upcoming-event-img"
                                             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }} />
                                     </div>
                                 )}
-                                <div style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
+                                <div className="upcoming-event-card-body" style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
                                     {event.tagline && (
                                         <span style={{
                                             background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
@@ -194,7 +194,20 @@ const UpcomingEvent = () => {
                     background: var(--tg-color-gradient) !important;
                     color: #fff !important;
                     border-color: transparent !important;
-                    box-shadow: 0 8px 22px rgba(10,60,194,0.25);
+                    box-shadow: 0 8px 24px rgba(10,60,194,0.3) !important;
+                }
+                @media (max-width: 767px) {
+                    :global(.upcoming-event-banner-wrap) {
+                        aspect-ratio: 16 / 9 !important;
+                        max-height: 210px !important;
+                    }
+                    :global(.upcoming-event-img) {
+                        object-fit: contain !important;
+                        background: #0b1020;
+                    }
+                    :global(.upcoming-event-card-body) {
+                        padding: 20px 18px !important;
+                    }
                 }
             `}</style>
         </section>
