@@ -21,15 +21,15 @@ function mergeWithStaticEvents(loaded: EventDetailType[]): EventDetailType[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: ev.heroImage || staticEv.heroImage,
-                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
-                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
-                bannerImage: ev.bannerImage || staticEv.bannerImage,
-                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
-                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
-                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
-                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
-                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile || staticEv.heroImage,
+                cardImage: staticEv.cardImage || ev.cardImage || staticEv.heroImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -710,7 +710,7 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                 /* Hero fills a defined tall area and crops as a cover image at every size, so the
                    bottom-anchored title always sits well clear of the floating transparent navbar.
                    Mobile uses a shorter fixed height; desktop fills the viewport. */
-                .event-hero { height: clamp(420px, 64vh, 560px); }
+                .event-hero { height: clamp(400px, 50vh, 520px); }
                 .event-hero-pic { position: absolute; inset: 0; height: 100%; width: 100%; line-height: 0; }
                 .event-hero-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
                 .event-hero-overlay {
@@ -720,13 +720,22 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                 .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
                 /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */
                 @media (max-width: 767px) {
-                    .event-hero-h1 { font-size: 27px !important; margin-bottom: 10px !important; }
+                    .event-hero-2col {
+                        padding-top: 105px !important;
+                        padding-bottom: 32px !important;
+                    }
+                    .event-hero-h1 { font-size: 25px !important; margin-bottom: 10px !important; }
                     .event-hero-tagline { font-size: 14px !important; margin-bottom: 12px !important; }
                     .event-hero-meta { gap: 7px 16px !important; font-size: 13px !important; }
                     .event-hero-meta :global(svg) { width: 16px; height: 16px; }
+                    :global(.hero-cta-btn) {
+                        padding: 10px 20px !important;
+                        font-size: 13px !important;
+                        gap: 6px !important;
+                    }
                 }
                 @media (min-width: 992px) {
-                    .event-hero { height: 100vh; }
+                    .event-hero { height: 520px; }
                     .event-hero-content { padding-bottom: 64px; }
                 }
                 .detail-hl-card:hover, .detail-speaker-card:hover {

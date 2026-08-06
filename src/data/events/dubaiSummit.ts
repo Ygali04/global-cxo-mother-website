@@ -2,23 +2,23 @@ import { Speaker } from '../speakers';
 import { Sponsor } from '../sponsors';
 import { ItineraryItem } from '../itinerary';
 
-const dubaiBasePath = '/assets/events/Dubai%202026%20Junicorn';
-const dubaiSpeakerPath = `${dubaiBasePath}/Speakers%20Photos%20%26%20Info`;
-const dubaiSponsorPath = `${dubaiBasePath}/Partner%20Logos%20for%20scroll`;
+const dubaiBasePath = '/assets/events/Dubai 2026 Junicorn';
+const dubaiSpeakerPath = `${dubaiBasePath}/Speakers Photos & Info`;
+const dubaiSponsorPath = `${dubaiBasePath}/Partner Logos for scroll`;
 
 export const dubaiSummitImages = {
-  hero: `${dubaiBasePath}/Event%20Image%20wt%20Logo.webp`,
-  heroMobile: `${dubaiBasePath}/Event%20Image%20no%20Logo.webp`,
-  card: `${dubaiBasePath}/Event%20Image%20no%20Logo.webp`,
-  banner: `${dubaiBasePath}/Partners%20Banner%20wt%20Image.png`,
-  venue: `${dubaiBasePath}/Venue%201.jpg`,
+  hero: `${dubaiBasePath}/Event Image wt Logo.webp`,
+  heroMobile: `${dubaiBasePath}/Event Image no Logo.webp`,
+  card: `${dubaiBasePath}/Event Image no Logo.webp`,
+  banner: `${dubaiBasePath}/Partners Banner wt Image.png`,
+  venue: `${dubaiBasePath}/Venue 1.jpg`,
   // The old "Speaker Pages from Flyer_Reference" folder never shipped — these
   // panel slides are the real assets on disk (webp versions, compressed).
   gallery: [
-    `${dubaiBasePath}/Panel%20Slides/1%20CxO%20Panel.webp`,
-    `${dubaiBasePath}/Panel%20Slides/2%20Global%20CTO%20Panel.webp`,
-    `${dubaiBasePath}/Panel%20Slides/3%20Global%20CIO%20Panel.webp`,
-    `${dubaiBasePath}/Panel%20Slides/4%20UAE%20Business%20Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/1 CxO Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/2 Global CTO Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/3 Global CIO Panel.webp`,
+    `${dubaiBasePath}/Panel Slides/4 UAE Business Panel.webp`,
   ],
 };
 
