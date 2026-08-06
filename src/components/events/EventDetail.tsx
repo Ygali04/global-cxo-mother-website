@@ -21,15 +21,15 @@ function mergeWithStaticEvents(loaded: EventDetailType[]): EventDetailType[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: staticEv.heroImage || ev.heroImage,
-                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile || staticEv.heroImage,
-                cardImage: staticEv.cardImage || ev.cardImage || staticEv.heroImage,
-                bannerImage: staticEv.bannerImage || ev.bannerImage,
-                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
-                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
-                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
-                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
-                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+                heroImage: ev.heroImage || staticEv.heroImage,
+                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
+                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
+                bannerImage: ev.bannerImage || staticEv.bannerImage,
+                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
+                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
+                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
+                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
+                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -214,108 +214,42 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
     const overviewText = overviewExpanded || event.overview.length <= 320
         ? event.overview
         : `${event.overview.substring(0, 320)}...`
+    const isCio100 = event.slug === 'cio-100-awards-conference'
 
     return (
         <>
             <Header solidNavbar={true} />
             <main className="main-area fix">
                 {/* Hero */}
-                {event.slug === 'cio-100-awards-conference' || event.slug === 'mlc-oakland' || event.bannerImage ? (
-                    <section className="event-hero-2col" style={{ position: "relative", background: "linear-gradient(135deg, #f8faff 0%, #edf3ff 50%, #f4f7ff 100%)", paddingTop: "125px", paddingBottom: "55px", overflow: "hidden" }}>
-                        <div style={{ position: "absolute", top: "-10%", right: "-5%", width: "500px", height: "500px", borderRadius: "50%", background: "radial-gradient(circle, rgba(10,60,194,0.07) 0%, rgba(255,255,255,0) 70%)", pointerEvents: "none" }} />
-                        <div className="container" style={{ position: "relative", zIndex: 2 }}>
-                            <div className="row align-items-center g-4">
-                                <div className="col-lg-6 col-md-12">
-                                    <div style={{ paddingRight: "12px" }}>
-                                        <span style={{ display: "inline-block", padding: "6px 16px", borderRadius: "100px", background: "rgba(10, 60, 194, 0.08)", border: "1px solid rgba(10, 60, 194, 0.18)", color: "#0a3cc2", fontSize: "12px", fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "18px" }}>
-                                            {event.slug === 'cio-100-awards-conference' ? 'ANNUAL AWARDS & CONFERENCE' : 'VIP EXPERIENCE · CXO NETWORKING'}
-                                        </span>
-                                        <h1 style={{ fontSize: "clamp(30px, 3.8vw, 48px)", fontWeight: 800, color: "#0f172a", lineHeight: 1.14, marginBottom: "18px", letterSpacing: "-0.5px" }}>
-                                            {event.slug === 'cio-100-awards-conference' ? 'CIO 100 Awards' : event.title}
-                                        </h1>
-                                        {event.tagline && (
-                                            <p style={{ fontSize: "clamp(15px, 1.3vw, 17.5px)", color: "#475569", lineHeight: 1.65, marginBottom: "24px" }}>
-                                                {event.tagline}
-                                            </p>
-                                        )}
-                                            <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "15px", fontWeight: 600, color: "#334155", marginBottom: "28px" }}>
-                                                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                                    <span style={{ color: "#0a3cc2" }}><CalendarIcon s={19} /></span>
-                                                    <span suppressHydrationWarning>{event.date}</span>
-                                                </div>
-                                                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                                    <span style={{ color: "#0a3cc2" }}><PinIcon s={19} /></span>
-                                                    <span suppressHydrationWarning>{event.location}</span>
-                                                </div>
-                                            </div>
-                                        {event.registrationOpen !== false && (
-                                            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px" }}>
-                                                {event.slug === 'cio-100-awards-conference' ? (
-                                                    <>
-                                                        <a
-                                                            href="https://calendly.com/leningali/cio100"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="hero-cta-btn"
-                                                            style={{
-                                                                display: "inline-flex", alignItems: "center", gap: "10px",
-                                                                background: "var(--tg-color-gradient)", color: "#fff",
-                                                                padding: "14px 34px", borderRadius: "100px", fontWeight: 700,
-                                                                fontSize: "15px", textDecoration: "none",
-                                                                boxShadow: "0 8px 24px rgba(10,60,194,0.28)", transition: "all 0.3s ease",
-                                                            }}
-                                                        >
-                                                            Register via Calendly <ArrowIcon />
-                                                        </a>
-                                                        <a
-                                                            href="https://luma.com/cp6uhp3g"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="hero-cta-btn"
-                                                            style={{
-                                                                display: "inline-flex", alignItems: "center", gap: "10px",
-                                                                background: "#fff", color: "#0a3cc2",
-                                                                padding: "14px 34px", borderRadius: "100px", fontWeight: 700,
-                                                                fontSize: "15px", textDecoration: "none",
-                                                                border: "2px solid #0a3cc2",
-                                                                boxShadow: "0 4px 16px rgba(10,60,194,0.12)", transition: "all 0.3s ease",
-                                                            }}
-                                                        >
-                                                            Register via Luma <ArrowIcon />
-                                                        </a>
-                                                    </>
-                                                ) : (
-                                                    <a
-                                                        suppressHydrationWarning
-                                                        href={event.cta?.primaryUrl && event.cta.primaryUrl !== '/events/cio-100-awards-conference' ? event.cta.primaryUrl : ((event as any).lumaUrl || (event as any).lumaEventUrl || "https://calendly.com/leningali/cio100")}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="hero-cta-btn"
-                                                        style={{
-                                                            display: "inline-flex", alignItems: "center", gap: "10px",
-                                                            background: "var(--tg-color-gradient)", color: "#fff",
-                                                            padding: "14px 34px", borderRadius: "100px", fontWeight: 700,
-                                                            fontSize: "15px", textDecoration: "none",
-                                                            boxShadow: "0 8px 24px rgba(10,60,194,0.28)", transition: "all 0.3s ease",
-                                                        }}
-                                                    >
-                                                        Register Now <ArrowIcon />
-                                                    </a>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="col-lg-6 col-md-12">
-                                    <div style={{ borderRadius: "20px", overflow: "hidden", boxShadow: "0 20px 50px rgba(10, 60, 194, 0.16)", border: "1px solid rgba(255, 255, 255, 0.9)", background: "#ffffff" }}>
-                                        <img
-                                            suppressHydrationWarning
-                                            src={event.heroImage}
-                                            alt={event.title}
-                                            style={{ width: "100%", height: "auto", display: "block", objectFit: "cover" }}
-                                        />
-                                    </div>
-                                </div>
+                <section className={`event-hero${isCio100 ? ' event-hero--cio' : ''}`} style={{ position: "relative", overflow: "hidden" }}>
+                    <picture className="event-hero-pic">
+                        {event.heroImageMobile && (
+                            <source media="(max-width: 991px)" srcSet={event.heroImageMobile} />
+                        )}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={event.heroImage} alt={event.title} className="event-hero-img" />
+                    </picture>
+                    <div className="event-hero-overlay" />
+                    {isCio100 ? (
+                        <div className="cio-event-meta">
+                            <h1 className="visually-hidden">{event.title}</h1>
+                            <span><CalendarIcon s={18} />{event.date}</span>
+                            <span><PinIcon s={18} />{event.location}</span>
+                        </div>
+                    ) : (
+                    <div className="event-hero-content">
+                      <div className="container">
+                        <div style={{ maxWidth: "820px", color: "#fff" }}>
+                            <h1 className="event-hero-h1" style={{ fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 800, color: "#fff", lineHeight: 1.12, marginBottom: "16px" }}>
+                                {event.title}
+                            </h1>
+                            {event.tagline && (
+                                <p className="event-hero-tagline" style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
+                            )}
+                            <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)", marginBottom: (event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl)) ? "26px" : 0 }}>
+                                <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><CalendarIcon s={20} />{event.date}</span>
+                                <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
+                                <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
                             </div>
                         </div>
                     </section>
@@ -379,8 +313,10 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                             </div>
                           </div>
                         </div>
-                    </section>
-                )}
+                      </div>
+                    </div>
+                    )}
+                </section>
 
                 <div className="container" style={{ paddingTop: "80px", paddingBottom: "40px" }}>
                     {/* Overview */}
@@ -618,7 +554,7 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     {event.bannerImage && (
                         <div style={{ maxWidth: "1000px", margin: "0 auto 80px" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={event.bannerImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
+                            <img src={event.bannerImage || event.heroImage} alt={isCio100 ? "Proud sponsor flyer for CIO 100 Awards & Conference, August 17–19, 2026 at Omni PGA Frisco Resort, featuring Atomicwork, DevRev, Nanonets, the August 18 19th Hole Reception, and the August 19 Blue Carpet Welcome Reception." : `${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
                         </div>
                     )}
 
@@ -718,6 +654,16 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     background: linear-gradient(to top, rgba(6,12,34,0.92) 0%, rgba(6,12,34,0.55) 42%, rgba(6,12,34,0) 78%);
                 }
                 .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
+                .event-hero.event-hero--cio { height: auto !important; background: #28163d; }
+                .event-hero--cio .event-hero-pic { position: relative; inset: auto; display: block; height: auto; }
+                .event-hero--cio .event-hero-img { height: auto; object-fit: contain; }
+                .event-hero--cio .event-hero-overlay { display: none; }
+                .cio-event-meta {
+                    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+                    gap: 10px 24px; padding: 12px 20px; color: #fff; background: #28163d;
+                    font-size: 14px; font-weight: 600;
+                }
+                .cio-event-meta span { display: inline-flex; align-items: center; gap: 8px; }
                 /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */
                 @media (max-width: 767px) {
                     .event-hero-2col {
@@ -728,11 +674,7 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     .event-hero-tagline { font-size: 14px !important; margin-bottom: 12px !important; }
                     .event-hero-meta { gap: 7px 16px !important; font-size: 13px !important; }
                     .event-hero-meta :global(svg) { width: 16px; height: 16px; }
-                    :global(.hero-cta-btn) {
-                        padding: 10px 20px !important;
-                        font-size: 13px !important;
-                        gap: 6px !important;
-                    }
+                    .cio-event-meta { gap: 8px 16px; padding: 10px 14px; font-size: 12px; }
                 }
                 @media (min-width: 992px) {
                     .event-hero { height: 520px; }

@@ -60,6 +60,7 @@ function truncate(text: string, max = 155) {
 }
 
 function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?: number }) {
+    const isCio100 = ev.slug === "cio-100-awards-conference"
     const meta = [
         { icon: <CalendarIcon />, text: ev.date },
         { icon: <PinIcon />, text: ev.location },
@@ -70,9 +71,9 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
             border: "1px solid var(--tg-border-1)", boxShadow: "0 4px 20px rgba(11,26,74,0.05)",
             display: "flex", flexDirection: "column", transition: "all 0.3s ease",
         }}>
-            <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden" }}>
+            <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden", background: isCio100 ? "#28163d" : undefined }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={sanitizeImageUrl(ev.image)} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
+                <img src={ev.image ? (ev.image.includes('%20') ? ev.image : encodeURI(ev.image)) : undefined} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }} />
             </div>
             <div style={{ padding: "26px 26px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
@@ -134,15 +135,15 @@ function mergeWithStaticEvents(loaded: EventDetail[]): EventDetail[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: staticEv.heroImage || ev.heroImage,
-                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile || staticEv.heroImage,
-                cardImage: staticEv.cardImage || ev.cardImage || staticEv.heroImage,
-                bannerImage: staticEv.bannerImage || ev.bannerImage,
-                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
-                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
-                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
-                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
-                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+                heroImage: ev.heroImage || staticEv.heroImage,
+                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
+                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
+                bannerImage: ev.bannerImage || staticEv.bannerImage,
+                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
+                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
+                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
+                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
+                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
