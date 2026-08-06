@@ -23,15 +23,15 @@ function mergeWithStaticEvents(loaded: any[]): any[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: staticEv.heroImage || ev.heroImage,
-                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
-                cardImage: staticEv.cardImage || ev.cardImage,
-                bannerImage: staticEv.bannerImage || ev.bannerImage,
-                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
-                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
-                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
-                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
-                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+                heroImage: ev.heroImage || staticEv.heroImage,
+                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
+                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
+                bannerImage: ev.bannerImage || staticEv.bannerImage,
+                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
+                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
+                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
+                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
+                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -104,6 +104,7 @@ const Banner = () => {
                             title: found.title,
                             date: found.date,
                             location: found.location,
+                            heroImage: found.heroImage || '',
                         });
                         setShowToast(true);
                     } else {
@@ -709,8 +710,8 @@ const Banner = () => {
                 
                 @media (max-width: 480px) {
                     .hero-aurora-wrap {
-                        padding-top: 42px !important;
-                        padding-bottom: 28px !important;
+                        padding-top: 8px !important;
+                        padding-bottom: 16px !important;
                     }
                      .hero-title {
                         font-size: 26px !important;
@@ -741,7 +742,7 @@ const Banner = () => {
                 
                 @media (max-width: 360px) {
                     .hero-aurora-wrap {
-                        padding-top: 36px !important;
+                        padding-top: 6px !important;
                     }
                      .hero-title {
                         font-size: 24px !important;

@@ -21,15 +21,15 @@ function mergeWithStaticEvents(loaded: EventDetailType[]): EventDetailType[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: staticEv.heroImage || ev.heroImage,
-                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
-                cardImage: staticEv.cardImage || ev.cardImage,
-                bannerImage: staticEv.bannerImage || ev.bannerImage,
-                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
-                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
-                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
-                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
-                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
+                heroImage: ev.heroImage || staticEv.heroImage,
+                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
+                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
+                bannerImage: ev.bannerImage || staticEv.bannerImage,
+                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
+                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
+                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
+                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
+                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -175,7 +175,8 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
 
     const event = useMemo(() => {
         if (previewEvent) return previewEvent;
-        return allEvents.find((e) => e.slug === slug) || eventsData.find((e) => e.slug === slug);
+        const normalizedSlug = slug === 'cio-100' || slug === 'cio100' ? 'cio-100-awards-conference' : slug;
+        return allEvents.find((e) => e.slug === normalizedSlug) || eventsData.find((e) => e.slug === normalizedSlug);
     }, [previewEvent, allEvents, slug]);
 
     const [overviewExpanded, setOverviewExpanded] = useState(false)
@@ -250,39 +251,67 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
                             </div>
-                            {event.registrationOpen !== false && event.slug !== 'cio-100-awards-conference' && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
-                                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px", marginTop: "24px" }}>
-                                    <a
-                                        href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
-                                        target={event.cta?.isExternal ? "_blank" : "_self"}
-                                        rel={event.cta?.isExternal ? "noopener noreferrer" : undefined}
-                                        className="hero-cta-btn"
-                                        style={{
-                                            display: "inline-flex", alignItems: "center", gap: "10px",
-                                            background: "var(--tg-color-gradient)", color: "#fff",
-                                            padding: "14px 32px", borderRadius: "100px", fontWeight: 700,
-                                            fontSize: "15px", textDecoration: "none",
-                                            boxShadow: "0 8px 24px rgba(10,60,194,0.35)", transition: "all 0.3s ease",
-                                        }}
-                                    >
-                                        {event.cta?.primaryLabel || "Register Now"} <ArrowIcon />
-                                    </a>
-                                    {event.cta?.secondaryLabel && event.cta?.secondaryUrl && (
+                        </div>
+                    </section>
+                ) : (
+                    <section className="event-hero" style={{ position: "relative", overflow: "hidden" }}>
+                        <picture className="event-hero-pic">
+                            {event.heroImageMobile && (
+                                <source media="(max-width: 991px)" srcSet={event.heroImageMobile} />
+                            )}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={event.heroImage} alt={event.title} className="event-hero-img" />
+                        </picture>
+                        <div className="event-hero-overlay" />
+                        <div className="event-hero-content">
+                          <div className="container">
+                            <div style={{ maxWidth: "820px", color: "#fff" }}>
+                                <h1 className="event-hero-h1" style={{ fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 800, color: "#fff", lineHeight: 1.12, marginBottom: "16px" }}>
+                                    {event.title}
+                                </h1>
+                                {event.tagline && (
+                                    <p className="event-hero-tagline" style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
+                                )}
+                                <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)", marginBottom: (event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl)) ? "26px" : 0 }}>
+                                    <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><CalendarIcon s={20} />{event.date}</span>
+                                    <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
+                                    <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
+                                </div>
+                                {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px", marginTop: "24px" }}>
                                         <a
-                                            href={event.cta.secondaryUrl}
+                                            href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
+                                            target={event.cta?.isExternal ? "_blank" : "_self"}
+                                            rel={event.cta?.isExternal ? "noopener noreferrer" : undefined}
+                                            className="hero-cta-btn"
                                             style={{
-                                                display: "inline-flex", alignItems: "center", gap: "8px",
-                                                background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)",
-                                                color: "#fff", padding: "14px 28px", borderRadius: "100px",
-                                                fontWeight: 700, fontSize: "15px", textDecoration: "none",
-                                                border: "1px solid rgba(255,255,255,0.35)", transition: "all 0.3s ease",
+                                                display: "inline-flex", alignItems: "center", gap: "10px",
+                                                background: "var(--tg-color-gradient)", color: "#fff",
+                                                padding: "14px 32px", borderRadius: "100px", fontWeight: 700,
+                                                fontSize: "15px", textDecoration: "none",
+                                                boxShadow: "0 8px 24px rgba(10,60,194,0.35)", transition: "all 0.3s ease",
                                             }}
                                         >
-                                            {event.cta.secondaryLabel}
+                                            {event.cta?.primaryLabel || "Register Now"} <ArrowIcon />
                                         </a>
-                                    )}
-                                </div>
-                            )}
+                                        {event.cta?.secondaryLabel && event.cta?.secondaryUrl && (
+                                            <a
+                                                href={event.cta.secondaryUrl}
+                                                style={{
+                                                    display: "inline-flex", alignItems: "center", gap: "8px",
+                                                    background: "rgba(255,255,255,0.18)", backdropFilter: "blur(8px)",
+                                                    color: "#fff", padding: "14px 28px", borderRadius: "100px",
+                                                    fontWeight: 700, fontSize: "15px", textDecoration: "none",
+                                                    border: "1px solid rgba(255,255,255,0.35)", transition: "all 0.3s ease",
+                                                }}
+                                            >
+                                                {event.cta.secondaryLabel}
+                                            </a>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -294,7 +323,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                     {event.overview && event.overview.trim().length > 0 && (
                         <div style={{ marginBottom: "80px" }}>
                             <SectionTitle>Overview</SectionTitle>
-                            <p style={{ fontSize: "17px", color: "var(--tg-body-color)", lineHeight: 1.8, maxWidth: "980px" }}>{overviewText}</p>
+                            <p suppressHydrationWarning style={{ fontSize: "17px", color: "var(--tg-body-color)", lineHeight: 1.8, maxWidth: "980px" }}>{overviewText}</p>
                             {event.overview.length > 320 && (
                                 <button onClick={() => setOverviewExpanded(!overviewExpanded)} style={{ marginTop: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--tg-theme-primary)", fontWeight: 700, fontSize: "15px", padding: 0 }}>
                                     {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
@@ -366,35 +395,6 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                         );
                     })()}
 
-                    {/* Objectives */}
-                    {event.objectives && event.objectives.length > 0 && (
-                        <div style={{ marginBottom: "80px" }}>
-                            <SectionTitle>Key Takeaways &amp; Objectives</SectionTitle>
-                            <div className="row gutter-y-20">
-                                {event.objectives.map((obj, i) => (
-                                    <div key={i} className="col-md-6">
-                                        <div style={{
-                                            background: "#fff", borderRadius: "14px", padding: "20px 24px",
-                                            border: "1px solid var(--tg-border-1)", boxShadow: "0 4px 16px rgba(11,26,74,0.04)",
-                                            display: "flex", alignItems: "flex-start", gap: "14px", height: "100%",
-                                        }}>
-                                            <span style={{
-                                                background: "rgba(10,60,194,0.1)", color: "var(--tg-theme-primary)",
-                                                width: "28px", height: "28px", borderRadius: "50%",
-                                                display: "flex", alignItems: "center", justifyContent: "center",
-                                                fontWeight: 800, fontSize: "13px", flexShrink: 0,
-                                            }}>
-                                                {i + 1}
-                                            </span>
-                                            <p style={{ margin: 0, fontSize: "15px", color: "var(--tg-heading-color)", lineHeight: 1.6, fontWeight: 500 }}>
-                                                {obj}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
 
                     {/* Sponsors */}
                     {event.sponsors && event.sponsors.length > 0 && event.sponsors.some(s => s.logo || s.name) && (
@@ -551,7 +551,7 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     )}
 
                     {/* Banner */}
-                    {(event.bannerImage || event.heroImage) && (
+                    {event.bannerImage && (
                         <div style={{ maxWidth: "1000px", margin: "0 auto 80px" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={event.bannerImage || event.heroImage} alt={isCio100 ? "Proud sponsor flyer for CIO 100 Awards & Conference, August 17–19, 2026 at Omni PGA Frisco Resort, featuring Atomicwork, DevRev, Nanonets, the August 18 19th Hole Reception, and the August 19 Blue Carpet Welcome Reception." : `${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />

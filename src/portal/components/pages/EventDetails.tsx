@@ -40,7 +40,8 @@ const EventDetails = ({ previewEvent }: { previewEvent?: EventDetail }) => {
     getUserRegistrations,
   } = useAuth();
   const { slug } = useParams<{ slug?: string }>();
-  const resolvedSlug = slug || 'sri-lanka-2025';
+  const rawSlug = slug || 'sri-lanka-2025';
+  const resolvedSlug = rawSlug === 'cio-100' || rawSlug === 'cio100' ? 'cio-100-awards-conference' : rawSlug;
   const event = previewEvent ?? events.find(e => e.slug === resolvedSlug);
 
   // State for collapsible overview

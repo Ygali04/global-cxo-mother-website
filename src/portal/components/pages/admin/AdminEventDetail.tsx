@@ -826,11 +826,11 @@ function AttendeesTab({ slug }: { slug: string }): JSX.Element {
           </SelectContent>
         </Select>
         <Button variant="outline" size="sm" className="gap-1" onClick={() => fileInputRef.current?.click()}>
-          <Upload className="h-4 w-4" /> Import
+          <Download className="h-4 w-4" /> Import
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-1"><Download className="h-4 w-4" /> Export</Button>
+            <Button variant="outline" size="sm" className="gap-1"><Upload className="h-4 w-4" /> Export</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => handleExport('filtered', 'csv')}>Export filtered as CSV</DropdownMenuItem>
@@ -1842,10 +1842,10 @@ export default function AdminEventDetail(): JSX.Element {
   }, [form, speakers, sponsors, itinerary, highlightCards, slug, event?.date]);
 
   // Try to fetch real date_start/date_end from backend
-  const fetchedDates = useRef(false);
+  const fetchedSlugRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!slug || fetchedDates.current) return;
-    fetchedDates.current = true;
+    if (!slug || fetchedSlugRef.current === slug) return;
+    fetchedSlugRef.current = slug;
     void (async () => {
       try {
         const raw = await getEventBySlugApi(slug);
@@ -1861,17 +1861,25 @@ export default function AdminEventDetail(): JSX.Element {
     })();
   }, [slug]);
 
-  // Sync when event changes externally
+  // Sync when event changes externally or slug changes
+  const prevSlugRef = useRef<string | null>(null);
   useEffect(() => {
     if (!event) return;
-    const fresh = buildEditorState(event);
-    // Preserve dateStart/dateEnd if already fetched
-    setSavedForm((prev) => ({ ...fresh, dateStart: prev.dateStart, dateEnd: prev.dateEnd }));
-    setSavedSpeakers(event.speakers);
-    setSavedSponsors(event.sponsors);
-    setSavedItinerary(event.itinerary);
-    setSavedHighlightCards(event.highlightCards);
-  }, [event?.slug]);
+    if (prevSlugRef.current !== event.slug) {
+      prevSlugRef.current = event.slug;
+      const fresh = buildEditorState(event);
+      setForm(fresh);
+      setSavedForm(fresh);
+      setSpeakers(event.speakers);
+      setSavedSpeakers(event.speakers);
+      setSponsors(event.sponsors);
+      setSavedSponsors(event.sponsors);
+      setItinerary(event.itinerary);
+      setSavedItinerary(event.itinerary);
+      setHighlightCards(event.highlightCards);
+      setSavedHighlightCards(event.highlightCards);
+    }
+  }, [event]);
 
   const hasChanges = useMemo(() => {
     return (

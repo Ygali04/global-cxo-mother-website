@@ -15,6 +15,58 @@ interface ImageUploadProps {
   folder?: string;
 }
 
+function compressImageFile(file: File, maxWidth = 1600, maxHeight = 1600, quality = 0.85): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (file.type === 'image/svg+xml' || file.type.includes('icon')) {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxWidth || height > maxHeight) {
+        if (width / height > maxWidth / maxHeight) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        } else {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+      const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+      resolve(canvas.toDataURL(mime, quality));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    };
+    img.src = url;
+  });
+}
+
 export function ImageUpload({
   value,
   onChange,
@@ -27,21 +79,14 @@ export function ImageUpload({
   const [uploading, setUploading] = useState(false);
   const [mode, setMode] = useState<'url' | 'upload'>('url');
 
-  const readAsDataUrl = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   const handleFileChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (!file) return;
 
       setUploading(true);
+      let uploadedUrl: string | null = null;
+
       try {
         const formData = new FormData();
         formData.append('file', file);
@@ -55,26 +100,30 @@ export function ImageUpload({
           headers,
           body: formData,
           credentials: 'include',
-        });
+        }).catch(() => null);
 
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({ detail: 'Upload server returned an error' }));
-          throw new Error(err.detail || 'Upload server error');
+        if (res && res.ok) {
+          const data: { url?: string } = await res.json().catch(() => ({}));
+          if (data.url) {
+            uploadedUrl = data.url;
+          }
         }
+      } catch {
+        // Quietly fallback to client-side compressed image
+      }
 
-        const data: { url: string; ftp_synced?: boolean } = await res.json();
-        onChange(data.url);
-        toast.success(`Image uploaded: ${file.name}`);
-      } catch (err) {
-        console.warn('Backend image upload endpoint error, using client-side Data URL fallback:', err);
-        try {
-          const dataUrl = await readAsDataUrl(file);
+      try {
+        if (uploadedUrl) {
+          onChange(uploadedUrl);
+          toast.success(`Image uploaded: ${file.name}`);
+        } else {
+          const dataUrl = await compressImageFile(file);
           onChange(dataUrl);
-          toast.success(`Attached image file: ${file.name}`);
-        } catch (readErr) {
-          console.error('Failed to read image file:', readErr);
-          toast.error(`Could not read image file ${file.name}`);
+          toast.success(`Image attached: ${file.name}`);
         }
+      } catch (readErr) {
+        console.error('Failed to process image file:', readErr);
+        toast.error(`Could not process image file ${file.name}`);
       } finally {
         setUploading(false);
         if (fileRef.current) fileRef.current.value = '';

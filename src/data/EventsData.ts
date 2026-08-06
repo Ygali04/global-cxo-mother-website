@@ -159,9 +159,9 @@ export const eventsData: EventDetail[] = [
     lifecycleStatus: 'current',
     showHeroPromo: true,
     cta: {
-      primaryLabel: 'View Details',
-      primaryUrl: '/events/cio-100-awards-conference',
-      isExternal: false,
+      primaryLabel: 'Register Now',
+      primaryUrl: 'https://luma.com/cp6uhp3g',
+      isExternal: true,
     },
     metadata: {
       title: 'Global CXO Circle | CIO 100 Awards & Conference',
