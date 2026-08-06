@@ -126,15 +126,15 @@ export const eventsData: EventDetail[] = [
     slug: 'cio-100-awards-conference',
     title: 'CIO 100',
     tagline: '100 Award Winners | Fortune 500 CIOs | 50+ Speakers | 3 Days | One CIO Community',
-    date: '8/18/2026 – 8/20/2026',
+    date: '8/17/2026 – 8/19/2026',
     location: 'Frisco, TX',
     description:
       'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results. Global CxO Circle is a sponsor and is bringing 3 top-funded startups.',
     attendees: '400+ CIOs and CxOs',
-    heroImage: 'https://www.cio.com/wp-content/uploads/2025/05/2096110-0-25615700-1747025505-CIO-CSO-Nominate-2.png?w=1024',
-    heroImageMobile: 'https://www.cio.com/wp-content/uploads/2025/05/2096110-0-25615700-1747025505-CIO-CSO-Nominate-2.png?w=1024',
-    cardImage: 'https://www.cio.com/wp-content/uploads/2025/05/2096110-0-25615700-1747025505-CIO-CSO-Nominate-2.png?w=1024',
-    bannerImage: '/events/cio100banner.jpeg',
+    heroImage: '/events/cio100-hero.png',
+    heroImageMobile: '/events/cio100-hero.png',
+    cardImage: '/events/cio100-hero.png',
+    bannerImage: '/events/cio100-flyer.png',
     gallery: [],
     overview:
       'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results.\n\nFor more than four decades, the CIO 100 Awards has recognized organizations that use technology to drive business value, innovation, and competitive advantage. Today, the CIO 100 Awards & Conference brings together the leaders behind those achievements to share what’s working—and what’s next.',
@@ -167,8 +167,7 @@ export const eventsData: EventDetail[] = [
       title: 'Global CXO Circle | CIO 100 Awards & Conference',
       description:
         'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results.',
-      image:
-        'https://www.omnihotels.com/-/media/images/hotels/dalpga/photogallery/resort/omni_dalpga_exterior-1170x660.jpg?mw=1536&hash=A1D5BD9E622343C24ED00138BD0C4AF26A59D4B6',
+      image: '/events/cio100-hero.png',
     },
     venue: {
       name: 'Omni PGA Frisco Resort & Spa',

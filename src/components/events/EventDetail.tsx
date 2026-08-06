@@ -213,13 +213,14 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
     const overviewText = overviewExpanded || event.overview.length <= 320
         ? event.overview
         : `${event.overview.substring(0, 320)}...`
+    const isCio100 = event.slug === 'cio-100-awards-conference'
 
     return (
         <>
             <Header solidNavbar={true} />
             <main className="main-area fix">
                 {/* Hero */}
-                <section className="event-hero" style={{ position: "relative", overflow: "hidden" }}>
+                <section className={`event-hero${isCio100 ? ' event-hero--cio' : ''}`} style={{ position: "relative", overflow: "hidden" }}>
                     <picture className="event-hero-pic">
                         {event.heroImageMobile && (
                             <source media="(max-width: 991px)" srcSet={event.heroImageMobile} />
@@ -228,6 +229,13 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                         <img src={event.heroImage} alt={event.title} className="event-hero-img" />
                     </picture>
                     <div className="event-hero-overlay" />
+                    {isCio100 ? (
+                        <div className="cio-event-meta">
+                            <h1 className="visually-hidden">{event.title}</h1>
+                            <span><CalendarIcon s={18} />{event.date}</span>
+                            <span><PinIcon s={18} />{event.location}</span>
+                        </div>
+                    ) : (
                     <div className="event-hero-content">
                       <div className="container">
                         <div style={{ maxWidth: "820px", color: "#fff" }}>
@@ -278,6 +286,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                         </div>
                       </div>
                     </div>
+                    )}
                 </section>
 
                 <div className="container" style={{ paddingTop: "80px", paddingBottom: "40px" }}>
@@ -545,7 +554,7 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     {(event.bannerImage || event.heroImage) && (
                         <div style={{ maxWidth: "1000px", margin: "0 auto 80px" }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={event.bannerImage || event.heroImage} alt={`${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
+                            <img src={event.bannerImage || event.heroImage} alt={isCio100 ? "Proud sponsor flyer for CIO 100 Awards & Conference, August 17–19, 2026 at Omni PGA Frisco Resort, featuring Atomicwork, DevRev, Nanonets, the August 18 19th Hole Reception, and the August 19 Blue Carpet Welcome Reception." : `${event.title} banner`} style={{ width: "100%", borderRadius: "18px", boxShadow: "0 10px 40px rgba(11,26,74,0.12)" }} />
                         </div>
                     )}
 
@@ -645,12 +654,23 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     background: linear-gradient(to top, rgba(6,12,34,0.92) 0%, rgba(6,12,34,0.55) 42%, rgba(6,12,34,0) 78%);
                 }
                 .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
+                .event-hero.event-hero--cio { height: auto !important; background: #28163d; }
+                .event-hero--cio .event-hero-pic { position: relative; inset: auto; display: block; height: auto; }
+                .event-hero--cio .event-hero-img { height: auto; object-fit: contain; }
+                .event-hero--cio .event-hero-overlay { display: none; }
+                .cio-event-meta {
+                    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+                    gap: 10px 24px; padding: 12px 20px; color: #fff; background: #28163d;
+                    font-size: 14px; font-weight: 600;
+                }
+                .cio-event-meta span { display: inline-flex; align-items: center; gap: 8px; }
                 /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */
                 @media (max-width: 767px) {
                     .event-hero-h1 { font-size: 27px !important; margin-bottom: 10px !important; }
                     .event-hero-tagline { font-size: 14px !important; margin-bottom: 12px !important; }
                     .event-hero-meta { gap: 7px 16px !important; font-size: 13px !important; }
                     .event-hero-meta :global(svg) { width: 16px; height: 16px; }
+                    .cio-event-meta { gap: 8px 16px; padding: 10px 14px; font-size: 12px; }
                 }
                 @media (min-width: 992px) {
                     .event-hero { height: 100vh; }

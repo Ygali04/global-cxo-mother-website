@@ -50,6 +50,7 @@ function truncate(text: string, max = 155) {
 }
 
 function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?: number }) {
+    const isCio100 = ev.slug === "cio-100-awards-conference"
     const meta = [
         { icon: <CalendarIcon />, text: ev.date },
         { icon: <PinIcon />, text: ev.location },
@@ -60,10 +61,10 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
             border: "1px solid var(--tg-border-1)", boxShadow: "0 4px 20px rgba(11,26,74,0.05)",
             display: "flex", flexDirection: "column", transition: "all 0.3s ease",
         }}>
-            <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden" }}>
+            <div style={{ position: "relative", width: "100%", height: `${imageHeight}px`, overflow: "hidden", background: isCio100 ? "#28163d" : undefined }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ev.image} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }} />
+                    style={{ width: "100%", height: "100%", objectFit: isCio100 ? "contain" : "cover", transition: "transform 0.4s ease" }} />
             </div>
             <div style={{ padding: "26px 26px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
                 {ev.tagline && (

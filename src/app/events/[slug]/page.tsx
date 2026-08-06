@@ -23,10 +23,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const { slug } = await params
     const ev = eventsData.find((e) => e.slug === slug)
     if (!ev) return { title: "Events | Global CXO Circle" }
-    return {
-        title: ev.metadata?.title || `${ev.title} | Global CXO Circle`,
-        description: ev.metadata?.description || ev.description,
+    const title = ev.metadata?.title || `${ev.title} | Global CXO Circle`
+    const description = ev.metadata?.description || ev.description
+    const image = ev.metadata?.image
+    const metadata: Metadata = { title, description }
+    if (ev.slug === "cio-100-awards-conference" && image) {
+        metadata.openGraph = { title, description, images: [{ url: image, alt: ev.title }] }
+        metadata.twitter = { card: "summary_large_image", title, description, images: [image] }
     }
+    return metadata
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

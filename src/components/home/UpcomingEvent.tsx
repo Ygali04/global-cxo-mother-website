@@ -36,14 +36,14 @@ const UpcomingEvent = () => {
         description: string;
         bannerImage: string;
     }>({
-        slug: "cio-100",
+        slug: "cio-100-awards-conference",
         title: "CIO 100 Awards & Conference 2026",
-        tagline: "Recognizing Exceptional IT Leadership & Innovation",
-        date: "August 14, 2026",
-        location: "San Jose Convention Center, CA",
-        attendees: "250+ attendees expected",
-        description: "The premier annual gathering of top 100 CIOs, CTOs, and tech leaders recognizing game-changing technology implementations and executive leadership.",
-        bannerImage: "/assets/events/SF/banner.png",
+        tagline: "100 Award Winners | Fortune 500 CIOs | 50+ Speakers",
+        date: "August 17–19, 2026",
+        location: "Omni PGA Frisco Resort, Frisco, TX",
+        attendees: "400+ CIOs and CxOs expected",
+        description: "Global CXO Circle proudly sponsors CIO 100, bringing technology leaders together for enterprise insights, networking, and awards.",
+        bannerImage: "/events/cio100-flyer.png",
     });
 
     useEffect(() => {
@@ -113,11 +113,11 @@ const UpcomingEvent = () => {
                             transition: "all 0.3s ease",
                         }}>
                             {/* Landscape banner across the top */}
-                            <div style={{ position: "relative", width: "100%", aspectRatio: "1366 / 768", overflow: "hidden", background: "#0b1020" }}>
+                            <div style={{ position: "relative", width: "100%", aspectRatio: event.slug === "cio-100-awards-conference" ? "1502 / 711" : "1366 / 768", overflow: "hidden", background: "#0b1020" }}>
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={event.bannerImage} alt={event.title}
                                     className="upcoming-event-img"
-                                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }} />
+                                    style={{ width: "100%", height: "100%", objectFit: event.slug === "cio-100-awards-conference" ? "contain" : "cover", display: "block", transition: "transform 0.4s ease" }} />
                             </div>
                             <div style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
                                 {event.tagline && (

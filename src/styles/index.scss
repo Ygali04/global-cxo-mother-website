@@ -297,3 +297,66 @@ html, body {
         font-size: 10px;
     }
 }
+
+/* CIO100 promotion: reuse the existing event state, with one compact surface
+   per breakpoint instead of introducing another event component. */
+.hero-event-card.hero-event-card--desktop {
+    position: relative !important;
+    inset: auto !important;
+    display: grid !important;
+    width: min(100%, 560px) !important;
+    margin: 18px auto 0 !important;
+    padding: 13px 18px !important;
+    border: 2px solid #d4af37 !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    box-shadow: 0 8px 28px rgba(139, 105, 20, 0.2) !important;
+}
+.hero-event-card.hero-event-card--desktop:focus-visible,
+.hero-event-mobile-bar:focus-visible {
+    outline: 3px solid #0a3cc2;
+    outline-offset: 3px;
+}
+.hero-event-mobile-bar {
+    display: none;
+}
+
+@media (max-width: 991px) {
+    .hero-event-card.hero-event-card--desktop {
+        display: none !important;
+    }
+    .hero-event-mobile-bar {
+        position: absolute;
+        top: 88px;
+        left: 16px;
+        right: 16px;
+        z-index: 8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 48px;
+        padding: 10px 14px;
+        color: #211737;
+        background: #fff8dc;
+        border: 2px solid #d4af37;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(139, 105, 20, 0.2);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-decoration: none;
+    }
+    .hero-event-mobile-bar > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .hero-event-mobile-bar strong {
+        flex-shrink: 0;
+        color: #0a3cc2;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+}

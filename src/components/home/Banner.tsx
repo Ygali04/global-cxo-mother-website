@@ -51,7 +51,7 @@ const Banner = () => {
     const [upcoming, setUpcoming] = useState({
         slug: "cio-100-awards-conference",
         title: "CIO 100 Awards & Conference 2026",
-        date: "8/18/2026",
+        date: "8/17/2026",
         location: "Frisco, TX",
     });
 
@@ -120,7 +120,7 @@ const Banner = () => {
     }, []);
 
     return (
-        <section className="hero-section" style={{ minHeight: "clamp(760px, 100vh, 1040px)", position: "relative", overflow: "hidden", marginTop: "0" }}>
+        <section className="hero-section" style={{ minHeight: "clamp(560px, 65vh, 680px)", position: "relative", overflow: "hidden", marginTop: "0" }}>
             {/* Mobile gradient blobs - hidden on desktop, animated on mobile */}
             <div className="mobile-blobs">
                 <div className="mobile-blob mobile-blob--1"></div>
@@ -141,7 +141,7 @@ const Banner = () => {
                     <span className="planet planet-three"></span>
                 </div>
             </div>
-            <AuroraBackground className="hero-aurora-wrap" style={{ minHeight: "100vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <AuroraBackground className="hero-aurora-wrap" style={{ minHeight: "clamp(560px, 65vh, 680px)", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <motion.div
                     initial={{ opacity: 0.0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -190,6 +190,31 @@ const Banner = () => {
                                         Explore Circles
                                     </Link>
                                 </div>
+
+                                {isPromoLoading ? (
+                                    <div className="hero-event-card hero-event-card--desktop hero-event-card--skeleton" style={{ opacity: 0.75, pointerEvents: "none" }}>
+                                        <div className="hero-event-top" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                                            <span style={{ width: "85px", height: "16px", background: "rgba(10,60,194,0.12)", borderRadius: "100px", display: "inline-block" }} />
+                                            <span style={{ width: "65px", height: "14px", background: "rgba(10,60,194,0.08)", borderRadius: "4px", display: "inline-block" }} />
+                                        </div>
+                                        <div style={{ width: "180px", height: "18px", background: "rgba(10,60,194,0.12)", borderRadius: "4px", marginTop: "8px" }} />
+                                        <div style={{ width: "120px", height: "12px", background: "rgba(10,60,194,0.08)", borderRadius: "4px", marginTop: "6px" }} />
+                                    </div>
+                                ) : showToast && (
+                                    <Link href={`/events/${upcoming.slug}`} className="hero-event-card hero-event-card--desktop" aria-label={`${upcoming.title} — view event details`}>
+                                        <span className="hero-event-arrow" aria-hidden="true">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M5 12h14M13 5l7 7-7 7" />
+                                            </svg>
+                                        </span>
+                                        <div className="hero-event-top">
+                                            <span className="hero-event-badge">Upcoming Event</span>
+                                            <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
+                                        </div>
+                                        <span className="hero-event-title">{upcoming.title}</span>
+                                        <span className="hero-event-meta">{upcoming.location}</span>
+                                    </Link>
+                                )}
                                 
                                 <div className="mt-5 hero-stats">
                                     <div className="hero-stat-card">
@@ -211,29 +236,10 @@ const Banner = () => {
                 </motion.div>
             </AuroraBackground>
 
-            {/* Event promo card — desktop: absolute bottom-left; mobile: flows in at the bottom of the hero */}
-            {isPromoLoading ? (
-                <div className="hero-event-card hero-event-card--skeleton" style={{ opacity: 0.75, pointerEvents: "none" }}>
-                    <div className="hero-event-top" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                        <span style={{ width: "85px", height: "16px", background: "rgba(255,255,255,0.22)", borderRadius: "100px", display: "inline-block" }} />
-                        <span style={{ width: "65px", height: "14px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", display: "inline-block" }} />
-                    </div>
-                    <div style={{ width: "180px", height: "18px", background: "rgba(255,255,255,0.25)", borderRadius: "4px", marginTop: "8px" }} />
-                    <div style={{ width: "120px", height: "12px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", marginTop: "6px" }} />
-                </div>
-            ) : showToast && (
-                <Link href={`/events/${upcoming.slug}`} className="hero-event-card" aria-label={`${upcoming.title} — view event details`}>
-                    <span className="hero-event-arrow" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 12h14M13 5l7 7-7 7" />
-                        </svg>
-                    </span>
-                    <div className="hero-event-top">
-                        <span className="hero-event-badge">Upcoming Event</span>
-                        <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
-                    </div>
-                    <span className="hero-event-title">{upcoming.title}</span>
-                    <span className="hero-event-meta">{upcoming.location}</span>
+            {showToast && (
+                <Link href={`/events/${upcoming.slug}`} className="hero-event-mobile-bar" aria-label={`${upcoming.title} — view event details`}>
+                    <span>{upcoming.title}</span>
+                    <strong>View Event <span aria-hidden="true">→</span></strong>
                 </Link>
             )}
 
@@ -277,16 +283,16 @@ const Banner = () => {
             <style jsx>{`
                 .hero-section {
                     margin-top: 0;
-                    min-height: 100vh;
+                    min-height: clamp(560px, 65vh, 680px);
                 }
                 @media (min-width: 992px) {
                     .hero-section {
-                        height: 100vh;
-                        min-height: auto;
+                        height: auto;
+                        min-height: clamp(560px, 65vh, 680px);
                     }
                     .hero-aurora-wrap {
-                        min-height: 100vh !important;
-                        height: 100vh !important;
+                        min-height: clamp(560px, 65vh, 680px) !important;
+                        height: auto !important;
                     }
                 }
                 .orbit-scene {
@@ -536,7 +542,13 @@ const Banner = () => {
                 /* Mobile Responsive Styles */
                 @media (max-width: 991px) {
                     .hero-section {
+                        min-height: auto !important;
                         margin-top: 0 !important;
+                    }
+                    .hero-aurora-wrap {
+                        min-height: auto !important;
+                        padding-top: 154px !important;
+                        padding-bottom: 40px !important;
                     }
                     /* The event card flows in-flow at the bottom of the hero on
                        mobile/tablet; the absolute scroll indicator (bottom:32px)
@@ -577,7 +589,7 @@ const Banner = () => {
                 }
                 @media (max-width: 768px) {
                     .hero-section {
-                        min-height: 100vh !important;
+                        min-height: auto !important;
                         margin-top: 0 !important;
                         background: linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #f0f2ff 100%);
                     }
@@ -608,9 +620,9 @@ const Banner = () => {
                         box-shadow: 0 0 0 2px rgba(255,255,255,0.14), 0 0 14px rgba(10, 60, 194, 0.22);
                     }
                     .hero-aurora-wrap {
-                        min-height: 100vh !important;
-                        padding-top: 48px !important;
-                        padding-bottom: 32px !important;
+                        min-height: auto !important;
+                        padding-top: 154px !important;
+                        padding-bottom: 40px !important;
                         background: transparent !important;
                     }
                     .hero-content-wrap {
