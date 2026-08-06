@@ -205,7 +205,20 @@ const UpcomingEvent = () => {
                     background: var(--tg-color-gradient) !important;
                     color: #fff !important;
                     border-color: transparent !important;
-                    box-shadow: 0 8px 22px rgba(10,60,194,0.25);
+                    box-shadow: 0 8px 24px rgba(10,60,194,0.3) !important;
+                }
+                @media (max-width: 767px) {
+                    :global(.upcoming-event-banner-wrap) {
+                        aspect-ratio: 16 / 9 !important;
+                        max-height: 210px !important;
+                    }
+                    :global(.upcoming-event-img) {
+                        object-fit: contain !important;
+                        background: #0b1020;
+                    }
+                    :global(.upcoming-event-card-body) {
+                        padding: 20px 18px !important;
+                    }
                 }
             `}</style>
         </section>

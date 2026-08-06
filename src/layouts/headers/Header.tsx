@@ -181,9 +181,13 @@ const Header = ({ hideSignIn = false, solidNavbar = false }: { hideSignIn?: bool
                                     </li>
                                  </ul>
                               </div>
-                              <div className="mobile-nav-toggler" onClick={() => setSidebar(true)}>
-                                 <i className="tg-flaticon-menu-1"></i>
-                              </div>
+                               <div className="mobile-nav-toggler" onClick={() => setSidebar(true)} aria-label="Open mobile menu" style={{ cursor: "pointer", color: "#0B1A4A" }}>
+                                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                     <line x1="3" y1="6" x2="21" y2="6" />
+                                     <line x1="3" y1="12" x2="21" y2="12" />
+                                     <line x1="3" y1="18" x2="21" y2="18" />
+                                  </svg>
+                               </div>
                            </nav>
                         </div>
                          <MobileSidebar

@@ -545,6 +545,24 @@ const Banner = () => {
                     .hero-section {
                         min-height: auto !important;
                         margin-top: 0 !important;
+                        min-height: 100vh !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        justify-content: flex-start !important;
+                    }
+                    .hero-aurora-wrap {
+                        flex: 1 !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        justify-content: flex-start !important;
+                        align-items: center !important;
+                        min-height: auto !important;
+                        padding-top: 68px !important;
+                        padding-bottom: 24px !important;
+                        margin-top: 0 !important;
+                    }
+                    .hero-container {
+                        margin: 0 auto !important;
                     }
                     .hero-aurora-wrap {
                         min-height: auto !important;
@@ -562,7 +580,7 @@ const Banner = () => {
                         opacity: 0.48;
                     }
                     .orbit-core {
-                        top: 52%;
+                        top: 50%;
                         width: 76px;
                         height: 76px;
                     }
@@ -575,14 +593,6 @@ const Banner = () => {
                     .orbit-ring-three {
                         --orbit-size: 600px;
                     }
-                    /* .hero-event-card switches to mobile in-flow layout at
-                       1279px (see index.scss), but this title kept
-                       white-space: nowrap until 768px — leaving a gap where
-                       "Where Global CXOs"/"Converge" could force the line
-                       wider than the viewport and push the whole page's
-                       layout viewport out, breaking max-width media queries
-                       (incl. the event card's) even though the device itself
-                       is narrow. Relax it at the same 991px breakpoint. */
                     .hero-title-line-one,
                     .hero-title-line-two {
                         white-space: normal;
@@ -632,7 +642,7 @@ const Banner = () => {
                      .hero-subtitle {
                         font-size: 10px !important;
                         letter-spacing: 2px !important;
-                        margin-bottom: 14px !important;
+                        margin-bottom: 10px !important;
                         padding: 5px 14px !important;
                         border: 1px solid rgba(10, 60, 194, 0.2) !important;
                         color: #0A3CC2 !important; /* Fallback */
@@ -646,11 +656,11 @@ const Banner = () => {
                         }
                      }
                     .hero-title {
-                        font-size: 30px !important;
+                        font-size: 28px !important;
                         text-align: center !important;
                         max-width: 100% !important;
                         line-height: 1.2 !important;
-                        margin-bottom: 16px !important;
+                        margin-bottom: 12px !important;
                         color: #0f172a !important;
                      }
                      .hero-title .hero-title-gradient {
@@ -666,11 +676,11 @@ const Banner = () => {
                         white-space: normal;
                     }
                     .hero-desc {
-                        font-size: 15px !important;
-                        margin-bottom: 28px !important;
+                        font-size: 14.5px !important;
+                        margin-bottom: 20px !important;
                         text-align: center !important;
                         color: #475569 !important;
-                        line-height: 1.65 !important;
+                        line-height: 1.6 !important;
                         padding: 0 8px;
                     }
                     .hero-btn-group {
@@ -691,17 +701,18 @@ const Banner = () => {
                     .hero-stats {
                         gap: 10px;
                         flex-wrap: nowrap !important;
+                        margin-top: 0.75rem !important;
                     }
                     .hero-stat-card {
                         min-width: 0 !important;
-                        padding: 16px 10px !important;
+                        padding: 14px 10px !important;
                         border-radius: 14px !important;
                         background: rgba(255,255,255,0.85) !important;
                         border: 1px solid rgba(10, 60, 194, 0.08) !important;
                         box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
                     }
                     .hero-stat-card h3 {
-                        font-size: 22px !important;
+                        font-size: 21px !important;
                     }
                     .hero-stat-card span {
                         font-size: 11px !important;
@@ -713,14 +724,19 @@ const Banner = () => {
                         padding-top: 8px !important;
                         padding-bottom: 16px !important;
                     }
+                     .hero-subtitle {
+                        margin-bottom: 8px !important;
+                     }
                      .hero-title {
-                        font-size: 26px !important;
+                        font-size: 25px !important;
+                        margin-bottom: 10px !important;
                      }
                      .hero-title .hero-title-gradient {
-                        font-size: 28px !important;
+                        font-size: 26px !important;
                      }
                     .hero-desc {
-                        font-size: 14px !important;
+                        font-size: 13.5px !important;
+                        margin-bottom: 16px !important;
                     }
                     .hero-btn-main {
                         padding: 11px 18px !important;
@@ -730,10 +746,10 @@ const Banner = () => {
                         gap: 8px !important;
                     }
                     .hero-stat-card {
-                        padding: 14px 6px !important;
+                        padding: 12px 6px !important;
                     }
                     .hero-stat-card h3 {
-                        font-size: 19px !important;
+                        font-size: 18px !important;
                     }
                     .hero-stat-card span {
                         font-size: 10px !important;
@@ -745,10 +761,10 @@ const Banner = () => {
                         padding-top: 6px !important;
                     }
                      .hero-title {
-                        font-size: 24px !important;
+                        font-size: 23px !important;
                      }
                      .hero-title .hero-title-gradient {
-                        font-size: 26px !important;
+                        font-size: 24px !important;
                      }
                     .hero-btn-group {
                         flex-direction: column !important;

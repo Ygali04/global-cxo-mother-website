@@ -1,6 +1,7 @@
-import Link from "next/link"
+import { useEffect } from "react";
+import Link from "next/link";
 import MobileMenus from "./MobileMenu";
-import type { MockUser } from "@/portal/data/mock/types"
+import type { MockUser } from "@/portal/data/mock/types";
 
 
 interface MobileSidebarProps {
@@ -20,6 +21,17 @@ const MobileSidebar = ({
    onLogout,
    hideSignIn = false,
 }: MobileSidebarProps) => {
+
+   useEffect(() => {
+      if (sidebar) {
+         document.body.classList.add('mobile-menu-visible');
+      } else {
+         document.body.classList.remove('mobile-menu-visible');
+      }
+      return () => {
+         document.body.classList.remove('mobile-menu-visible');
+      };
+   }, [sidebar]);
 
    const close = () => setSidebar(false);
 

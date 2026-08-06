@@ -40,11 +40,29 @@ export function loadMockDatabaseSnapshot(): MockDatabaseSnapshot {
     }
 
     const parsed = JSON.parse(raw) as Partial<MockDatabaseSnapshot>;
+    const staticMap = new Map(fallback.events.map((e) => [e.slug, e]));
+    const mergedEvents = (parsed.events ?? fallback.events)
+      .filter((e) => e.slug !== 'gcio-demo-salon-2026')
+      .map((ev) => {
+        const staticEv = staticMap.get(ev.slug);
+        if (staticEv) {
+          return {
+            ...ev,
+            ...staticEv,
+            heroImage: staticEv.heroImage || ev.heroImage,
+            heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile,
+            cardImage: staticEv.cardImage || ev.cardImage,
+            bannerImage: staticEv.bannerImage || ev.bannerImage,
+          };
+        }
+        return ev;
+      });
+
     return {
       ...fallback,
       ...parsed,
       currentUserId: null,
-      events: (parsed.events ?? fallback.events).filter((e) => e.slug !== 'gcio-demo-salon-2026'),
+      events: mergedEvents,
       users: parsed.users ?? fallback.users,
       startups: parsed.startups ?? fallback.startups,
       userStartupLinks: parsed.userStartupLinks ?? fallback.userStartupLinks,

@@ -44,6 +44,16 @@ const ExternalIcon = () => (
     </svg>
 )
 
+function sanitizeImageUrl(url: string | undefined | null): string {
+    if (!url) return '';
+    try {
+        const decoded = decodeURIComponent(url);
+        return encodeURI(decoded);
+    } catch {
+        return encodeURI(url);
+    }
+}
+
 function truncate(text: string, max = 155) {
     if (text.length <= max) return text
     return `${text.slice(0, max).trimEnd()}…`
