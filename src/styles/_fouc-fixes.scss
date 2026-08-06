@@ -298,3 +298,17 @@ body.mobile-menu-visible {
         visibility: visible !important;
     }
 }
+
+/* Ensure mobile-nav-toggler is strictly hidden on desktop (>=992px) and visible only on mobile (<=991px) */
+@media (min-width: 992px) {
+    .mobile-nav-toggler {
+        display: none !important;
+    }
+}
+@media (max-width: 991px) {
+    .mobile-nav-toggler {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
