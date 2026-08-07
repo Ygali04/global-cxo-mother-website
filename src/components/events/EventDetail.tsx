@@ -55,6 +55,13 @@ const UsersIcon = ({ s = 22 }: { s?: number }) => (
     </svg>
 )
 const ArrowIcon = () => <span aria-hidden="true">→</span>
+const DownloadIcon = ({ s = 18 }: { s?: number }) => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="7 10 12 15 17 10" />
+        <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+)
 
 const typeColor = (type: string) => {
     switch (type) {
@@ -354,7 +361,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                     }}>
                                         <img
                                             suppressHydrationWarning
-                                            src={event.slug === 'cio-100-awards-conference' ? '/events/cio100flyer.jpeg' : event.heroImage}
+                                            src={event.slug === 'cio-100-awards-conference' ? '/events/cio100flyer.png' : event.heroImage}
                                             alt={event.title}
                                             style={{ width: "100%", height: "auto", display: "block", objectFit: event.slug === 'cio-100-awards-conference' ? "contain" : "cover" }}
                                         />
@@ -436,6 +443,34 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                 <button onClick={() => setOverviewExpanded(!overviewExpanded)} style={{ marginTop: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--tg-theme-primary)", fontWeight: 700, fontSize: "15px", padding: 0 }}>
                                     {overviewExpanded ? "Read Less ↑" : "Read More ↓"}
                                 </button>
+                            )}
+
+                            {(event.brochureUrl || event.slug === 'cio-100-awards-conference') && (
+                                <div style={{ marginTop: "24px" }}>
+                                    <a
+                                        href={event.brochureUrl || "/resources/gcxo-cio100-Brochure.pdf"}
+                                        download="CIO_100_Brochure.pdf"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="cio-action-btn"
+                                        style={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            background: "var(--tg-color-gradient)",
+                                            color: "#ffffff",
+                                            padding: "12px 26px",
+                                            borderRadius: "100px",
+                                            fontWeight: 700,
+                                            fontSize: "15px",
+                                            textDecoration: "none",
+                                            boxShadow: "0 4px 15px rgba(10, 60, 194, 0.2)",
+                                            transition: "all 0.3s ease"
+                                        }}
+                                    >
+                                        <DownloadIcon s={18} /> Download Brochure
+                                    </a>
+                                </div>
                             )}
                         </div>
                     )}
