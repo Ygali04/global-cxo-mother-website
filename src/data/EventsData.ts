@@ -167,8 +167,7 @@ export const eventsData: EventDetail[] = [
       title: 'Global CXO Circle | CIO 100 Awards & Conference',
       description:
         'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results.',
-      image:
-        'https://www.omnihotels.com/-/media/images/hotels/dalpga/photogallery/resort/omni_dalpga_exterior-1170x660.jpg?mw=1536&hash=A1D5BD9E622343C24ED00138BD0C4AF26A59D4B6',
+      image: '/events/cio100-hero.png',
     },
     venue: {
       name: 'Omni PGA Frisco Resort & Spa',

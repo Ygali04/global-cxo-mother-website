@@ -192,7 +192,7 @@ const Banner = () => {
                                         Explore Circles
                                     </Link>
                                 </div>
-                                
+
                                 <div className="mt-5 hero-stats">
                                     <div className="hero-stat-card">
                                         <h3>500+</h3>
