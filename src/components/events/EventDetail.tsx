@@ -357,7 +357,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                         overflow: "hidden",
                                         boxShadow: "0 20px 50px rgba(10, 60, 194, 0.16)",
                                         border: "1px solid rgba(255, 255, 255, 0.9)",
-                                        background: event.slug === 'cio-100-awards-conference' ? "#060179" : "#ffffff",
+                                        background: "#ffffff",
                                         maxWidth: event.slug === 'cio-100-awards-conference' ? "440px" : "100%",
                                         margin: "0 auto"
                                     }}>

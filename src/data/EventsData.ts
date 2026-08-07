@@ -131,10 +131,10 @@ export const eventsData: EventDetail[] = [
     description:
       'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results. Global CxO Circle is a sponsor and is bringing 3 top-funded startups.',
     attendees: '400+ CIOs and CxOs',
-    heroImage: '/events/cio100flyer.jpeg',
-    heroImageMobile: '/events/cio100flyer.jpeg',
+    heroImage: '/events/cio100-banner.png',
+    heroImageMobile: '/events/cio100-banner.png',
     cardImage: '/events/cio100Step&Repeat Banner.png',
-    bannerImage: '/events/cio100flyer.jpeg',
+    bannerImage: '/events/cio100-banner.png',
     gallery: [],
     overview:
       'See what’s working inside leading enterprises as CIO Hall of Fame inductees, CIO 100 honorees, and technology leaders share how they’re scaling AI, accelerating transformation, and delivering measurable business results.\n\nFor more than four decades, the CIO 100 Awards has recognized organizations that use technology to drive business value, innovation, and competitive advantage. Today, the CIO 100 Awards & Conference brings together the leaders behind those achievements to share what’s working—and what’s next.',
