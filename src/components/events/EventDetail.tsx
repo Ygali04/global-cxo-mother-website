@@ -214,6 +214,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
     const overviewText = overviewExpanded || event.overview.length <= 320
         ? event.overview
         : `${event.overview.substring(0, 320)}...`
+    const isCio100 = event.slug === 'cio-100-awards-conference'
 
     return (
         <>
@@ -761,6 +762,16 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                     background: linear-gradient(to top, rgba(6,12,34,0.92) 0%, rgba(6,12,34,0.55) 42%, rgba(6,12,34,0) 78%);
                 }
                 .event-hero-content { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 36px; }
+                .event-hero.event-hero--cio { height: auto !important; background: #28163d; }
+                .event-hero--cio .event-hero-pic { position: relative; inset: auto; display: block; height: auto; }
+                .event-hero--cio .event-hero-img { height: auto; object-fit: contain; }
+                .event-hero--cio .event-hero-overlay { display: none; }
+                .cio-event-meta {
+                    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+                    gap: 10px 24px; padding: 12px 20px; color: #fff; background: #28163d;
+                    font-size: 14px; font-weight: 600;
+                }
+                .cio-event-meta span { display: inline-flex; align-items: center; gap: 8px; }
                 /* Mobile: keep the title readable but pull the tagline + meta in tighter and smaller. */
                 @media (max-width: 767px) {
                     .event-hero-2col {
