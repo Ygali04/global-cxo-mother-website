@@ -51,7 +51,7 @@ const Banner = () => {
     const [upcoming, setUpcoming] = useState({
         slug: "cio-100-awards-conference",
         title: "CIO 100 Awards & Conference 2026",
-        date: "8/17/2026",
+        date: "17-19 August, 2026",
         location: "Frisco, Texas",
         heroImage: "",
     });

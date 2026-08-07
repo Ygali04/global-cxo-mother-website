@@ -36,6 +36,7 @@ const UpcomingEvent = () => {
         attendees: string;
         description: string;
         heroImage: string;
+        bannerImage?: string;
     } | null>(null);
 
     useEffect(() => {
@@ -113,12 +114,12 @@ const UpcomingEvent = () => {
                                 border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
                                 transition: "all 0.3s ease",
                             }}>
-                                {event.heroImage && (
-                                    <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", overflow: "hidden", background: "#0b1020" }}>
+                                {(event.heroImage || event.bannerImage) && (
+                                    <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: event.slug === 'cio-100-awards-conference' ? "1502 / 711" : "16 / 10", overflow: "hidden", background: "#0b1020" }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={event.heroImage} alt={event.title}
+                                        <img src={event.slug === 'cio-100-awards-conference' ? '/events/cio100Step&Repeat Banner.png' : (event.heroImage || event.bannerImage || '')} alt={event.title}
                                             className="upcoming-event-img"
-                                            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }} />
+                                            style={{ width: "100%", height: "100%", objectFit: event.slug === 'cio-100-awards-conference' ? "contain" : "cover", display: "block", transition: "transform 0.4s ease" }} />
                                     </div>
                                 )}
                                 <div className="upcoming-event-card-body" style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
