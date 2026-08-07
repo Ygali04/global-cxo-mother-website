@@ -95,6 +95,7 @@ export interface EventDetail {
   metadata: EventMetadata;
   venue: VenueInfo;
   livestreamUrl?: string;
+  brochureUrl?: string;
 }
 
 const sriLankaHighlightCards: HighlightCard[] = [
@@ -158,6 +159,7 @@ export const eventsData: EventDetail[] = [
     registrationOpen: true,
     lifecycleStatus: 'current',
     showHeroPromo: true,
+    brochureUrl: '/resources/gcxo-cio100-Brochure.pdf',
     cta: {
       primaryLabel: 'Register Now',
       primaryUrl: 'https://luma.com/cp6uhp3g',

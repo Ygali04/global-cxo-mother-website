@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { useParams, Navigate, useLocation, Link } from 'react-router-dom';
-import { Calendar, MapPin, Users, Star, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { Calendar, MapPin, Users, Star, ArrowRight, ChevronDown, ChevronUp, Download } from 'lucide-react';
 import SponsorsGallery from '../SponsorsGallery';
 import { EventDetail } from '../../data/EventsData';
 import type { ItineraryItem, SubEvent } from '../../data/itinerary';
@@ -420,6 +420,20 @@ const EventDetails = ({ previewEvent }: { previewEvent?: EventDetail }) => {
                   {isOverviewExpanded ? 'Read Less' : 'Read More'}
                   {isOverviewExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </button>
+              )}
+
+              {(event.brochureUrl || event.slug === 'cio-100-awards-conference') && (
+                <div className="mt-6">
+                  <a
+                    href={event.brochureUrl || "/resources/gcxo-cio100-Brochure.pdf"}
+                    download="CIO_100_Brochure.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-700 to-indigo-600 text-white font-bold hover:opacity-95 transition-all shadow-md"
+                  >
+                    <Download size={18} /> Download Brochure
+                  </a>
+                </div>
               )}
             </div>
           </div>
