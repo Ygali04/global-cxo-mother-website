@@ -263,14 +263,9 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                                                     flex: "1 1 240px",
                                                                     maxWidth: "320px"
                                                                 }}>
-                                                                    <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
-                                                                        <span style={{ fontSize: "16px", display: "inline-flex", alignItems: "center", justifyContent: "center", width: "30px", height: "30px", borderRadius: "8px", background: "rgba(10, 60, 194, 0.08)", color: "#0a3cc2", flexShrink: 0 }}>
-                                                                            🎥
-                                                                        </span>
-                                                                        <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a", lineHeight: 1.35 }}>
-                                                                            Book your Executive Video Byte session
-                                                                        </span>
-                                                                    </div>
+                                                                    <span style={{ fontSize: "13.5px", fontWeight: 500, color: "#334155", lineHeight: 1.4 }}>
+                                                                        Book your Executive Video Byte session
+                                                                    </span>
                                                                     <a
                                                                         href="https://calendly.com/leningali/cio100"
                                                                         target="_blank"
@@ -301,14 +296,9 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                                                     flex: "1 1 240px",
                                                                     maxWidth: "320px"
                                                                 }}>
-                                                                    <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
-                                                                        <span style={{ fontSize: "16px", display: "inline-flex", alignItems: "center", justifyContent: "center", width: "30px", height: "30px", borderRadius: "8px", background: "rgba(10, 60, 194, 0.08)", color: "#0a3cc2", flexShrink: 0 }}>
-                                                                            ⛳
-                                                                        </span>
-                                                                        <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a", lineHeight: 1.35 }}>
-                                                                            Golf at PGA Frisco
-                                                                        </span>
-                                                                    </div>
+                                                                    <span style={{ fontSize: "13.5px", fontWeight: 500, color: "#334155", lineHeight: 1.4 }}>
+                                                                        Golf at PGA Frisco
+                                                                    </span>
                                                                     <a
                                                                         href="https://luma.com/cp6uhp3g"
                                                                         target="_blank"
