@@ -251,33 +251,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
                             </div>
-                        </div>
-                    </section>
-                ) : (
-                    <section className="event-hero" style={{ position: "relative", overflow: "hidden" }}>
-                        <picture className="event-hero-pic">
-                            {event.heroImageMobile && (
-                                <source media="(max-width: 991px)" srcSet={event.heroImageMobile} />
-                            )}
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={event.heroImage} alt={event.title} className="event-hero-img" />
-                        </picture>
-                        <div className="event-hero-overlay" />
-                        <div className="event-hero-content">
-                          <div className="container">
-                            <div style={{ maxWidth: "820px", color: "#fff" }}>
-                                <h1 className="event-hero-h1" style={{ fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 800, color: "#fff", lineHeight: 1.12, marginBottom: "16px" }}>
-                                    {event.title}
-                                </h1>
-                                {event.tagline && (
-                                    <p className="event-hero-tagline" style={{ fontSize: "clamp(16px, 2vw, 21px)", color: "rgba(255,255,255,0.9)", marginBottom: "22px" }}>{event.tagline}</p>
-                                )}
-                                <div className="event-hero-meta" style={{ display: "flex", flexWrap: "wrap", gap: "22px", fontSize: "16px", color: "rgba(255,255,255,0.95)", marginBottom: (event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl)) ? "26px" : 0 }}>
-                                    <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><CalendarIcon s={20} />{event.date}</span>
-                                    <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><PinIcon s={20} />{event.location}</span>
-                                    <span style={{ display: "flex", alignItems: "center", gap: "9px" }}><UsersIcon s={20} />{event.attendees} attendees{event.registrationOpen ? " expected" : ""}</span>
-                                </div>
-                                {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
+                            {event.registrationOpen !== false && (event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl) && (
                                     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px", marginTop: "24px" }}>
                                         <a
                                             href={event.cta?.primaryUrl || (event as any).lumaUrl || (event as any).lumaEventUrl}
@@ -313,8 +287,6 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
                     )}
                 </section>
 

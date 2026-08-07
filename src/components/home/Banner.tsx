@@ -104,7 +104,6 @@ const Banner = () => {
                             title: found.title,
                             date: found.date,
                             location: found.location,
-                            heroImage: found.heroImage || '',
                         });
                         setShowToast(true);
                     } else {
