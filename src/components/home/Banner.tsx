@@ -207,6 +207,41 @@ const Banner = () => {
                                         <span>Countries</span>
                                     </div>
                                 </div>
+
+                                {/* Subtle Scroll to Continue indicator */}
+                                <div
+                                    className="hero-scroll-indicator"
+                                    onClick={() => {
+                                        const hero = document.querySelector('.hero-section');
+                                        if (hero && hero.nextElementSibling) {
+                                            (hero.nextElementSibling as HTMLElement).scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                    }}
+                                    style={{
+                                        marginTop: "22px",
+                                        display: "inline-flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        gap: "5px",
+                                        cursor: "pointer",
+                                        zIndex: 10,
+                                        opacity: 0.65,
+                                        transition: "opacity 0.25s ease",
+                                    }}
+                                >
+                                    <span style={{
+                                        fontSize: "10.5px",
+                                        fontWeight: 600,
+                                        letterSpacing: "1.8px",
+                                        textTransform: "uppercase",
+                                        color: "rgba(10, 60, 194, 0.75)",
+                                    }}>Scroll to continue</span>
+                                    <div className="scroll-arrow-bounce" style={{ color: "#0a3cc2" }}>
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M6 9l6 6 6-6" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -239,43 +274,6 @@ const Banner = () => {
                 </Link>
             )}
 
-            {/* Scroll indicator */}
-            <div
-                className="hero-scroll-indicator"
-                onClick={() => {
-                    const hero = document.querySelector('.hero-section');
-                    if (hero && hero.nextElementSibling) {
-                        (hero.nextElementSibling as HTMLElement).scrollIntoView({ behavior: 'smooth' });
-                    }
-                }}
-                style={{
-                    position: "absolute",
-                    bottom: "32px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "6px",
-                    cursor: "pointer",
-                    zIndex: 10,
-                    opacity: 0.4,
-                }}
-            >
-                <span style={{
-                    fontSize: "10px",
-                    fontWeight: 500,
-                    letterSpacing: "1.5px",
-                    textTransform: "uppercase",
-                    color: "var(--tg-body-color)",
-                }}>Scroll to explore</span>
-                <div className="scroll-arrow-bounce" style={{ color: "var(--tg-body-color)" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 5v14M19 12l-7 7-7-7" />
-                    </svg>
-                </div>
-            </div>
-            
             <style jsx>{`
                 .hero-section {
                     margin-top: 0;
@@ -539,7 +537,7 @@ const Banner = () => {
                 @media (max-width: 991px) {
                     .hero-section {
                         margin-top: 0 !important;
-                        min-height: 100vh !important;
+                        min-height: auto !important;
                         display: flex !important;
                         flex-direction: column !important;
                         justify-content: flex-start !important;
@@ -552,18 +550,15 @@ const Banner = () => {
                         align-items: center !important;
                         min-height: auto !important;
                         padding-top: 68px !important;
-                        padding-bottom: 24px !important;
+                        padding-bottom: 16px !important;
                         margin-top: 0 !important;
                     }
                     .hero-container {
                         margin: 0 auto !important;
                     }
-                    /* The event card flows in-flow at the bottom of the hero on
-                       mobile/tablet; the absolute scroll indicator (bottom:32px)
-                       would sit on top of it. Hide it — it's decorative and
-                       redundant on touch devices. */
                     .hero-scroll-indicator {
-                        display: none !important;
+                        display: inline-flex !important;
+                        margin-top: 18px !important;
                     }
                     .orbit-scene {
                         opacity: 0.48;
@@ -589,8 +584,9 @@ const Banner = () => {
                 }
                 @media (max-width: 768px) {
                     .hero-section {
-                        min-height: 100vh !important;
+                        min-height: auto !important;
                         margin-top: 0 !important;
+                        padding-bottom: 12px !important;
                         background: linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #f0f2ff 100%);
                     }
                     .orbit-scene {
@@ -623,7 +619,7 @@ const Banner = () => {
                         flex: 1 !important;
                         min-height: auto !important;
                         padding-top: 68px !important;
-                        padding-bottom: 24px !important;
+                        padding-bottom: 12px !important;
                         margin-top: 0 !important;
                         background: transparent !important;
                     }

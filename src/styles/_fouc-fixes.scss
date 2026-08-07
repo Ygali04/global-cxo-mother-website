@@ -164,11 +164,11 @@
 
 @media (max-width: 991px) {
     .hero-section {
-        min-height: 100vh !important;
-        padding: 0;
+        min-height: auto !important;
+        padding: 0 0 16px 0 !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-between !important;
+        justify-content: flex-start !important;
         background: transparent !important;
     }
 

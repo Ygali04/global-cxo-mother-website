@@ -243,7 +243,7 @@ html, body {
     .hero-section {
         display: flex !important;
         flex-direction: column !important;
-        min-height: 100vh !important;
+        min-height: auto !important;
         justify-content: flex-start !important;
     }
     .hero-aurora-wrap {
