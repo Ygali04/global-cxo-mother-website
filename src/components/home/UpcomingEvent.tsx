@@ -115,7 +115,7 @@ const UpcomingEvent = () => {
                                 transition: "all 0.3s ease",
                             }}>
                                 {(event.heroImage || event.bannerImage) && (
-                                    <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: event.slug === 'cio-100-awards-conference' ? "1502 / 711" : "16 / 10", overflow: "hidden", background: "#0b1020" }}>
+                                    <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: event.slug === 'cio-100-awards-conference' ? "1502 / 711" : "16 / 10", overflow: "hidden", background: event.slug === 'cio-100-awards-conference' ? "#0d0249" : "#0b1020" }}>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img src={event.slug === 'cio-100-awards-conference' ? '/events/cio100Step&Repeat Banner.png' : (event.heroImage || event.bannerImage || '')} alt={event.title}
                                             className="upcoming-event-img"

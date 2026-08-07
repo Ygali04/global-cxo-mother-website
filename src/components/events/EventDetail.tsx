@@ -307,7 +307,7 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-12">
-                                    <div style={{ borderRadius: "20px", overflow: "hidden", boxShadow: "0 20px 50px rgba(10, 60, 194, 0.16)", border: "1px solid rgba(255, 255, 255, 0.9)", background: event.slug === 'cio-100-awards-conference' ? "#060c22" : "#ffffff" }}>
+                                    <div style={{ borderRadius: "20px", overflow: "hidden", boxShadow: "0 20px 50px rgba(10, 60, 194, 0.16)", border: "1px solid rgba(255, 255, 255, 0.9)", background: event.slug === 'cio-100-awards-conference' ? "#0d0249" : "#ffffff" }}>
                                         <img
                                             suppressHydrationWarning
                                             src={event.heroImage}
