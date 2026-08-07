@@ -421,7 +421,7 @@ const isExternalLuma = /^https?:\/\//.test(lumaHref);
                                 {/* Video Bites */}
                                 <div style={cardBoxStyle}>
                                     <p style={{ margin: 0, fontWeight: 700, fontSize: "11px", textTransform: "uppercase", letterSpacing: "1.2px", color: "var(--tg-theme-primary)" }}>🎥 Video Bites</p>
-                                    <h3 style={{ margin: 0, fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3 }}>Book a 1-on-1 Video Call</h3>
+                                    <h3 style={{ margin: 0, fontSize: "20px", fontWeight: 700, color: "var(--tg-heading-color)", lineHeight: 1.3 }}>Book your Executive Video Byte session</h3>
                                     <p style={{ margin: 0, fontSize: "14px", color: "var(--tg-body-color)", lineHeight: 1.6 }}>
                                         Schedule a short video meeting with our team ahead of CIO 100.
                                     </p>
