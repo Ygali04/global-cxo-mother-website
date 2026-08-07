@@ -36,16 +36,8 @@ const UpcomingEvent = () => {
         attendees: string;
         description: string;
         heroImage: string;
-    }>({
-        slug: "cio-100-awards-conference",
-        title: "CIO 100 Awards & Conference 2026",
-        tagline: "100 Award Winners | Fortune 500 CIOs | 50+ Speakers",
-        date: "August 17–19, 2026",
-        location: "Omni PGA Frisco Resort, Frisco, TX",
-        attendees: "400+ CIOs and CxOs expected",
-        description: "Global CXO Circle proudly sponsors CIO 100, bringing technology leaders together for enterprise insights, networking, and awards.",
-        heroImage: "/events/cio100-flyer.png",
-    });
+        bannerImage?: string;
+    } | null>(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -108,22 +100,29 @@ const UpcomingEvent = () => {
                     </div>
                 </AnimateOnScroll>
 
-                {!isLoading ? (
-                <AnimateOnScroll delay={0.1}>
-                    <Link href={`/events/${event.slug}`} className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "560px", margin: "0 auto" }}>
-                        <div className="upcoming-event-card" style={{
-                            background: "#fff", borderRadius: "20px", overflow: "hidden",
-                            border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
-                            transition: "all 0.3s ease",
-                        }}>
-                            {/* Landscape banner across the top */}
-                            <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: event.slug === "cio-100-awards-conference" ? "1502 / 711" : "1366 / 768", overflow: "hidden", background: "#0b1020" }}>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={event.heroImage} alt={event.title}
-                                    className="upcoming-event-img"
-                                    style={{ width: "100%", height: "100%", objectFit: event.slug === "cio-100-awards-conference" ? "contain" : "cover", display: "block", transition: "transform 0.4s ease" }} />
-                            </div>
-                            <div className="upcoming-event-card-body" style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
+                {isLoading ? (
+                    <div style={{ maxWidth: "560px", margin: "0 auto", padding: "40px", textAlign: "center", background: "#f8fafc", borderRadius: "20px", border: "1px solid var(--tg-border-1)" }}>
+                        <div className="spinner-border text-primary" role="status" style={{ width: "2.5rem", height: "2.5rem" }}>
+                            <span className="visually-hidden">Loading upcoming event...</span>
+                        </div>
+                    </div>
+                ) : event ? (
+                    <AnimateOnScroll delay={0.1}>
+                        <Link href={`/events/${event.slug}`} className="upcoming-event-link" style={{ display: "block", textDecoration: "none", color: "inherit", maxWidth: "560px", margin: "0 auto" }}>
+                            <div className="upcoming-event-card" style={{
+                                background: "#fff", borderRadius: "20px", overflow: "hidden",
+                                border: "1px solid var(--tg-border-1)", boxShadow: "0 6px 28px rgba(11,26,74,0.06)",
+                                transition: "all 0.3s ease",
+                            }}>
+                                {(event.heroImage || event.bannerImage) && (
+                                    <div className="upcoming-event-banner-wrap" style={{ position: "relative", width: "100%", aspectRatio: event.slug === 'cio-100-awards-conference' ? "1502 / 711" : "16 / 10", overflow: "hidden", background: event.slug === 'cio-100-awards-conference' ? "#060179" : "#0b1020" }}>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img src={event.slug === 'cio-100-awards-conference' ? '/events/cio100Step&Repeat Banner.png' : (event.heroImage || event.bannerImage || '')} alt={event.title}
+                                            className="upcoming-event-img"
+                                            style={{ width: "100%", height: "100%", objectFit: event.slug === 'cio-100-awards-conference' ? "contain" : "cover", display: "block", transition: "transform 0.4s ease" }} />
+                                    </div>
+                                )}
+                                <div className="upcoming-event-card-body" style={{ padding: "clamp(26px, 3.6vw, 42px)" }}>
                                     {event.tagline && (
                                         <span style={{
                                             background: "var(--tg-color-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
@@ -159,8 +158,8 @@ const UpcomingEvent = () => {
                                     }}>
                                         Learn More <span aria-hidden="true">→</span>
                                     </span>
+                                </div>
                             </div>
-                        </div>
                         </Link>
                     </AnimateOnScroll>
                 ) : null}

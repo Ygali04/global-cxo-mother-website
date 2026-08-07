@@ -190,9 +190,11 @@ html, body {
         padding: 16px 48px 16px 20px;
         border-radius: 18px;
         overflow: hidden;
-        background: #ffffff;
-        border: 1px solid rgba(10, 60, 194, 0.16);
-        box-shadow: 0 12px 32px rgba(11, 26, 74, 0.12);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 246, 240, 0.96) 50%, rgba(238, 242, 254, 0.98) 100%);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(212, 160, 23, 0.42);
+        box-shadow: 0 16px 42px rgba(10, 60, 194, 0.14), 0 0 20px rgba(212, 160, 23, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
     .hero-event-card:hover {
         transform: translateY(-4px);
@@ -241,20 +243,37 @@ html, body {
     .hero-section {
         display: flex !important;
         flex-direction: column !important;
+        min-height: auto !important;
+        justify-content: flex-start !important;
+    }
+    .hero-aurora-wrap {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding-top: 68px !important;
+        padding-bottom: 24px !important;
+        margin: 0 !important;
+    }
+    .hero-container {
+        margin: 0 auto !important;
     }
     .hero-event-card {
         order: -1;
         position: relative;
         z-index: 10;
         width: min(calc(100% - 28px), 520px);
-        margin: 66px auto 10px auto;
-        padding: 10px 14px;
+        margin: 72px auto 10px auto;
+        padding: 14px 18px;
         row-gap: 3px;
         column-gap: 12px;
-        background: rgba(255, 255, 255, 0.96);
-        border: 1px solid rgba(10, 60, 194, 0.2);
-        box-shadow: 0 8px 24px rgba(10, 60, 194, 0.12);
-        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 246, 240, 0.96) 50%, rgba(238, 242, 254, 0.98) 100%);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(212, 160, 23, 0.42);
+        box-shadow: 0 14px 38px rgba(10, 60, 194, 0.12), 0 0 18px rgba(212, 160, 23, 0.14), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
     }
     .hero-event-badge {
         font-size: 9.5px;
@@ -276,8 +295,8 @@ html, body {
 @media (max-width: 580px) {
     .hero-event-card {
         width: min(calc(100% - 24px), 460px);
-        margin: 64px auto 8px auto;
-        padding: 9px 12px;
+        margin: 70px auto 8px auto;
+        padding: 11px 14px;
         row-gap: 3px;
         column-gap: 10px;
     }
@@ -301,8 +320,8 @@ html, body {
 @media (max-width: 420px) {
     .hero-event-card {
         width: min(calc(100% - 20px), 380px);
-        margin: 62px auto 6px auto;
-        padding: 8px 10px;
+        margin: 68px auto 6px auto;
+        padding: 10px 12px;
     }
     .hero-event-top {
         gap: 6px;
@@ -320,35 +339,6 @@ html, body {
     }
     .hero-event-meta {
         font-size: 10.5px;
-    }
-}
-
-/* CIO100 promotion: reuse the existing event state, with one compact surface
-   per breakpoint instead of introducing another event component. */
-.hero-event-card.hero-event-card--desktop {
-    position: relative !important;
-    inset: auto !important;
-    display: grid !important;
-    width: min(100%, 560px) !important;
-    margin: 18px auto 0 !important;
-    padding: 13px 18px !important;
-    border: 2px solid #d4af37 !important;
-    border-radius: 14px !important;
-    background: rgba(255, 255, 255, 0.92) !important;
-    box-shadow: 0 8px 28px rgba(139, 105, 20, 0.2) !important;
-}
-.hero-event-card.hero-event-card--desktop:focus-visible,
-.hero-event-mobile-bar:focus-visible {
-    outline: 3px solid #0a3cc2;
-    outline-offset: 3px;
-}
-.hero-event-mobile-bar {
-    display: none;
-}
-
-@media (max-width: 991px) {
-    .hero-event-card.hero-event-card--desktop {
-        display: none !important;
     }
     .hero-event-mobile-bar {
         position: absolute;

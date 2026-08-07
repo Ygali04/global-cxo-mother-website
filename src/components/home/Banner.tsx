@@ -23,15 +23,15 @@ function mergeWithStaticEvents(loaded: any[]): any[] {
             merged.set(ev.slug, {
                 ...staticEv,
                 ...ev,
-                heroImage: ev.heroImage || staticEv.heroImage,
-                heroImageMobile: ev.heroImageMobile || ev.heroImage || staticEv.heroImageMobile,
-                cardImage: ev.cardImage || ev.heroImage || staticEv.cardImage,
-                bannerImage: ev.bannerImage || staticEv.bannerImage,
-                gallery: ev.gallery?.length ? ev.gallery : staticEv.gallery,
-                speakers: ev.speakers?.length ? ev.speakers : staticEv.speakers,
-                sponsors: ev.sponsors?.length ? ev.sponsors : staticEv.sponsors,
-                itinerary: ev.itinerary?.length ? ev.itinerary : staticEv.itinerary,
-                highlightCards: ev.highlightCards?.length ? ev.highlightCards : staticEv.highlightCards,
+                heroImage: staticEv.heroImage || ev.heroImage,
+                heroImageMobile: staticEv.heroImageMobile || ev.heroImageMobile || staticEv.heroImage,
+                cardImage: staticEv.cardImage || ev.cardImage || staticEv.heroImage,
+                bannerImage: staticEv.bannerImage || ev.bannerImage,
+                gallery: staticEv.gallery?.length ? staticEv.gallery : ev.gallery,
+                speakers: staticEv.speakers?.length ? staticEv.speakers : ev.speakers,
+                sponsors: staticEv.sponsors?.length ? staticEv.sponsors : ev.sponsors,
+                itinerary: staticEv.itinerary?.length ? staticEv.itinerary : ev.itinerary,
+                highlightCards: staticEv.highlightCards?.length ? staticEv.highlightCards : ev.highlightCards,
             })
         } else {
             merged.set(ev.slug, ev)
@@ -51,8 +51,9 @@ const Banner = () => {
     const [upcoming, setUpcoming] = useState({
         slug: "cio-100-awards-conference",
         title: "CIO 100 Awards & Conference 2026",
-        date: "8/17/2026",
-        location: "Frisco, TX",
+        date: "17-19 August, 2026",
+        location: "Frisco, Texas",
+        heroImage: "",
     });
 
     useEffect(() => {
@@ -104,6 +105,7 @@ const Banner = () => {
                             title: found.title,
                             date: found.date,
                             location: found.location,
+                            heroImage: found.heroImage || '',
                         });
                         setShowToast(true);
                     } else {
@@ -230,56 +232,73 @@ const Banner = () => {
                                         <span>Countries</span>
                                     </div>
                                 </div>
+
+                                {/* Subtle Scroll to Continue indicator */}
+                                <div
+                                    className="hero-scroll-indicator"
+                                    onClick={() => {
+                                        const hero = document.querySelector('.hero-section');
+                                        if (hero && hero.nextElementSibling) {
+                                            (hero.nextElementSibling as HTMLElement).scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                    }}
+                                    style={{
+                                        marginTop: "22px",
+                                        display: "inline-flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        gap: "5px",
+                                        cursor: "pointer",
+                                        zIndex: 10,
+                                        opacity: 0.65,
+                                        transition: "opacity 0.25s ease",
+                                    }}
+                                >
+                                    <span style={{
+                                        fontSize: "10.5px",
+                                        fontWeight: 600,
+                                        letterSpacing: "1.8px",
+                                        textTransform: "uppercase",
+                                        color: "rgba(10, 60, 194, 0.75)",
+                                    }}>Scroll to continue</span>
+                                    <div className="scroll-arrow-bounce" style={{ color: "#0a3cc2" }}>
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M6 9l6 6 6-6" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </motion.div>
             </AuroraBackground>
 
-            {showToast && (
-                <Link href={`/events/${upcoming.slug}`} className="hero-event-mobile-bar" aria-label={`${upcoming.title} — view event details`}>
-                    <span>{upcoming.title}</span>
-                    <strong>View Event <span aria-hidden="true">→</span></strong>
+            {/* Event promo card — desktop: absolute bottom-left; mobile: flows at top */}
+            {isPromoLoading ? (
+                <div className="hero-event-card hero-event-card--skeleton" style={{ opacity: 0.75, pointerEvents: "none" }}>
+                    <div className="hero-event-top" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <span style={{ width: "85px", height: "16px", background: "rgba(255,255,255,0.22)", borderRadius: "100px", display: "inline-block" }} />
+                        <span style={{ width: "65px", height: "14px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", display: "inline-block" }} />
+                    </div>
+                    <div style={{ width: "180px", height: "18px", background: "rgba(255,255,255,0.25)", borderRadius: "4px", marginTop: "8px" }} />
+                    <div style={{ width: "120px", height: "12px", background: "rgba(255,255,255,0.15)", borderRadius: "4px", marginTop: "6px" }} />
+                </div>
+            ) : showToast && (
+                <Link href={`/events/${upcoming.slug}`} className="hero-event-card" aria-label={`${upcoming.title} — view event details`}>
+                    <span className="hero-event-arrow" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14M13 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                    <div className="hero-event-top">
+                        <span className="hero-event-badge">Upcoming Event</span>
+                        <span className="hero-event-date">{formatCardDate(upcoming.date)}</span>
+                    </div>
+                    <span className="hero-event-title">{upcoming.title}</span>
+                    <span className="hero-event-meta">{upcoming.location}</span>
                 </Link>
             )}
 
-            {/* Scroll indicator */}
-            <div
-                className="hero-scroll-indicator"
-                onClick={() => {
-                    const hero = document.querySelector('.hero-section');
-                    if (hero && hero.nextElementSibling) {
-                        (hero.nextElementSibling as HTMLElement).scrollIntoView({ behavior: 'smooth' });
-                    }
-                }}
-                style={{
-                    position: "absolute",
-                    bottom: "32px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "6px",
-                    cursor: "pointer",
-                    zIndex: 10,
-                    opacity: 0.4,
-                }}
-            >
-                <span style={{
-                    fontSize: "10px",
-                    fontWeight: 500,
-                    letterSpacing: "1.5px",
-                    textTransform: "uppercase",
-                    color: "var(--tg-body-color)",
-                }}>Scroll to explore</span>
-                <div className="scroll-arrow-bounce" style={{ color: "var(--tg-body-color)" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 5v14M19 12l-7 7-7-7" />
-                    </svg>
-                </div>
-            </div>
-            
             <style jsx>{`
                 .hero-section {
                     margin-top: 0;
@@ -544,7 +563,7 @@ const Banner = () => {
                     .hero-section {
                         min-height: auto !important;
                         margin-top: 0 !important;
-                        min-height: 100vh !important;
+                        min-height: auto !important;
                         display: flex !important;
                         flex-direction: column !important;
                         justify-content: flex-start !important;
@@ -557,23 +576,15 @@ const Banner = () => {
                         align-items: center !important;
                         min-height: auto !important;
                         padding-top: 68px !important;
-                        padding-bottom: 24px !important;
+                        padding-bottom: 16px !important;
                         margin-top: 0 !important;
                     }
                     .hero-container {
                         margin: 0 auto !important;
                     }
-                    .hero-aurora-wrap {
-                        min-height: auto !important;
-                        padding-top: 154px !important;
-                        padding-bottom: 40px !important;
-                    }
-                    /* The event card flows in-flow at the bottom of the hero on
-                       mobile/tablet; the absolute scroll indicator (bottom:32px)
-                       would sit on top of it. Hide it — it's decorative and
-                       redundant on touch devices. */
                     .hero-scroll-indicator {
-                        display: none !important;
+                        display: inline-flex !important;
+                        margin-top: 18px !important;
                     }
                     .orbit-scene {
                         opacity: 0.48;
@@ -601,6 +612,7 @@ const Banner = () => {
                     .hero-section {
                         min-height: auto !important;
                         margin-top: 0 !important;
+                        padding-bottom: 12px !important;
                         background: linear-gradient(160deg, #f0f4ff 0%, #f5f7ff 50%, #f0f2ff 100%);
                     }
                     .orbit-scene {
@@ -630,9 +642,11 @@ const Banner = () => {
                         box-shadow: 0 0 0 2px rgba(255,255,255,0.14), 0 0 14px rgba(10, 60, 194, 0.22);
                     }
                     .hero-aurora-wrap {
+                        flex: 1 !important;
                         min-height: auto !important;
-                        padding-top: 154px !important;
-                        padding-bottom: 40px !important;
+                        padding-top: 68px !important;
+                        padding-bottom: 12px !important;
+                        margin-top: 0 !important;
                         background: transparent !important;
                     }
                     .hero-content-wrap {
@@ -720,7 +734,7 @@ const Banner = () => {
                 
                 @media (max-width: 480px) {
                     .hero-aurora-wrap {
-                        padding-top: 8px !important;
+                        padding-top: 2px !important;
                         padding-bottom: 16px !important;
                     }
                      .hero-subtitle {
@@ -757,7 +771,7 @@ const Banner = () => {
                 
                 @media (max-width: 360px) {
                     .hero-aurora-wrap {
-                        padding-top: 6px !important;
+                        padding-top: 2px !important;
                     }
                      .hero-title {
                         font-size: 23px !important;
