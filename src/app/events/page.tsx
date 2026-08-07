@@ -76,7 +76,7 @@ function EventCard({ ev, imageHeight = 220 }: { ev: EventCardData; imageHeight?:
                 width: "100%",
                 height: `${imageHeight}px`,
                 overflow: "hidden",
-                background: isCio100 ? "#0d0249" : "transparent"
+                background: isCio100 ? "#060179" : "transparent"
             }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={sanitizeImageUrl(ev.image)} alt={ev.title} className="event-card-img" loading="lazy" decoding="async"

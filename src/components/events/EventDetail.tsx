@@ -249,40 +249,50 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                                 </div>
                                             </div>
                                         {event.registrationOpen !== false && (
-                                            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px" }}>
+                                            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "20px 24px" }}>
                                                 {event.slug === 'cio-100-awards-conference' ? (
                                                     <>
-                                                        <a
-                                                            href="https://calendly.com/leningali/cio100"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="hero-cta-btn"
-                                                            style={{
-                                                                display: "inline-flex", alignItems: "center", gap: "10px",
-                                                                background: "var(--tg-color-gradient)", color: "#fff",
-                                                                padding: "14px 34px", borderRadius: "100px", fontWeight: 700,
-                                                                fontSize: "15px", textDecoration: "none",
-                                                                boxShadow: "0 8px 24px rgba(10,60,194,0.28)", transition: "all 0.3s ease",
-                                                            }}
-                                                        >
-                                                            Register via Calendly <ArrowIcon />
-                                                        </a>
-                                                        <a
-                                                            href="https://luma.com/cp6uhp3g"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="hero-cta-btn"
-                                                            style={{
-                                                                display: "inline-flex", alignItems: "center", gap: "10px",
-                                                                background: "#fff", color: "#0a3cc2",
-                                                                padding: "14px 34px", borderRadius: "100px", fontWeight: 700,
-                                                                fontSize: "15px", textDecoration: "none",
-                                                                border: "2px solid #0a3cc2",
-                                                                boxShadow: "0 4px 16px rgba(10,60,194,0.12)", transition: "all 0.3s ease",
-                                                            }}
-                                                        >
-                                                            Register via Luma <ArrowIcon />
-                                                        </a>
+                                                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                                                            <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#0a3cc2", letterSpacing: "0.4px", textTransform: "uppercase" }}>
+                                                                Book your Executive Video Byte session
+                                                            </span>
+                                                            <a
+                                                                href="https://calendly.com/leningali/cio100"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="hero-cta-btn"
+                                                                style={{
+                                                                    display: "inline-flex", alignItems: "center", gap: "10px",
+                                                                    background: "var(--tg-color-gradient)", color: "#fff",
+                                                                    padding: "13px 30px", borderRadius: "100px", fontWeight: 700,
+                                                                    fontSize: "14.5px", textDecoration: "none",
+                                                                    boxShadow: "0 8px 24px rgba(10,60,194,0.28)", transition: "all 0.3s ease",
+                                                                }}
+                                                            >
+                                                                Register via Calendly <ArrowIcon />
+                                                            </a>
+                                                        </div>
+                                                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                                                            <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#0a3cc2", letterSpacing: "0.4px", textTransform: "uppercase" }}>
+                                                                Golf at PGA Frisco
+                                                            </span>
+                                                            <a
+                                                                href="https://luma.com/cp6uhp3g"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="hero-cta-btn"
+                                                                style={{
+                                                                    display: "inline-flex", alignItems: "center", gap: "10px",
+                                                                    background: "#fff", color: "#0a3cc2",
+                                                                    padding: "13px 30px", borderRadius: "100px", fontWeight: 700,
+                                                                    fontSize: "14.5px", textDecoration: "none",
+                                                                    border: "2px solid #0a3cc2",
+                                                                    boxShadow: "0 4px 16px rgba(10,60,194,0.12)", transition: "all 0.3s ease",
+                                                                }}
+                                                            >
+                                                                Register via Luma <ArrowIcon />
+                                                            </a>
+                                                        </div>
                                                     </>
                                                 ) : (
                                                     <a
@@ -306,8 +316,16 @@ const EventDetail = ({ slug, previewEvent }: { slug?: string; previewEvent?: Eve
                                         )}
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-12">
-                                    <div style={{ borderRadius: "20px", overflow: "hidden", boxShadow: "0 20px 50px rgba(10, 60, 194, 0.16)", border: "1px solid rgba(255, 255, 255, 0.9)", background: event.slug === 'cio-100-awards-conference' ? "#0d0249" : "#ffffff" }}>
+                                <div className="col-lg-6 col-md-12 text-center">
+                                    <div style={{
+                                        borderRadius: "20px",
+                                        overflow: "hidden",
+                                        boxShadow: "0 20px 50px rgba(10, 60, 194, 0.16)",
+                                        border: "1px solid rgba(255, 255, 255, 0.9)",
+                                        background: event.slug === 'cio-100-awards-conference' ? "#060179" : "#ffffff",
+                                        maxWidth: event.slug === 'cio-100-awards-conference' ? "440px" : "100%",
+                                        margin: "0 auto"
+                                    }}>
                                         <img
                                             suppressHydrationWarning
                                             src={event.heroImage}
